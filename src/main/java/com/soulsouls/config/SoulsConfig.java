@@ -64,6 +64,12 @@ public class SoulsConfig {
     /** Determination's death-refusal chance, in percent. Also settable with /souls settings refuse. */
     public double determination_refuse_chance = 40.0;
 
+    /** Let ordinary players pick their own Soul with /souls give <soul>. Operators always can. */
+    public boolean allow_player_give = true;
+
+    /** Let ordinary players re-roll with /souls reset. Operators always can. */
+    public boolean allow_player_reset = true;
+
     // ------------------------------------------------------------------ per-Soul settings
 
     public Map<String, SoulConfig> souls = new LinkedHashMap<>();
