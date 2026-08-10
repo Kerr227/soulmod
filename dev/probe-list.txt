@@ -1,0 +1,56 @@
+# Development aid: classes whose real Yarn signatures we want to confirm for the
+# pinned Minecraft version. Format: <fully.qualified.ClassName> [regex filter]
+# Run with: ./gradlew probe --no-configuration-cache
+
+net.minecraft.server.network.ServerPlayerEntity (PlayerListName|ServerWorld|getWorld|playSound|networkHandler|changeGameMode|getStatHandler|teleport|sendMessage)
+net.minecraft.entity.player.PlayerEntity (getDisplayName|getName|damage|heal|getHealth|getMaxHealth|isCreative|isSpectator|getInventory)
+net.minecraft.entity.LivingEntity (damage\(|heal|addStatusEffect|removeStatusEffect|hasStatusEffect|getStatusEffect|setHealth|getHealth|getMaxHealth|getAttributeInstance|getAttributes|getRecentDamageSource|isDead|onDeath|takeKnockback|getAttacker)
+net.minecraft.entity.Entity (getWorld|getEntityWorld|damage\(|setVelocity|getVelocity|velocityModified|getPos|getX\(|getY\(|getZ\(|getRotationVec|getNameForScoreboard|getUuid|getDisplayName|extinguish|setOnFire|getServer)
+net.minecraft.entity.attribute.EntityAttributes (MAX_HEALTH|ATTACK_DAMAGE|MOVEMENT_SPEED|KNOCKBACK|ARMOR)
+net.minecraft.entity.attribute.EntityAttributeModifier .
+net.minecraft.entity.attribute.EntityAttributeInstance .
+net.minecraft.entity.attribute.AttributeContainer (getCustomInstance|hasModifier)
+net.minecraft.scoreboard.Scoreboard (Team|ScoreHolder)
+net.minecraft.scoreboard.Team (setColor|setPrefix|setSuffix|setDisplayName|setFriendlyFire|setShowFriendlyInvisibles|getName|CollisionRule|NameTagVisibility)
+net.minecraft.scoreboard.AbstractTeam .
+net.minecraft.server.world.ServerWorld (spawnParticles|playSound|getServer|getPlayers)
+net.minecraft.world.World (playSound|getTime|isThundering|isRaining|getDamageSources|getRandom)
+net.minecraft.entity.damage.DamageSource (getAttacker|getSource|getName|isIn|getTypeRegistryEntry|isOf)
+net.minecraft.entity.damage.DamageSources (generic|genericKill|magic|outOfWorld|playerAttack|mobAttack|fall)
+net.minecraft.entity.projectile.PersistentProjectileEntity (setDamage|getDamage|getOwner|setPunch|setCritical)
+net.minecraft.entity.projectile.ProjectileEntity (getOwner|setOwner|setVelocity)
+net.minecraft.network.packet.s2c.play.TitleS2CPacket .
+net.minecraft.network.packet.s2c.play.SubtitleS2CPacket .
+net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket .
+net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket .
+net.minecraft.network.packet.s2c.play.PlayerListS2CPacket (PlayerListS2CPacket\(|Action)
+net.minecraft.text.Text (literal|empty|translatable|copy|getString)
+net.minecraft.text.MutableText (formatted|styled|withColor|append|setStyle)
+net.minecraft.text.Style (withColor|withBold|withItalic|EMPTY)
+net.minecraft.text.TextColor (fromRgb|fromFormatting|getRgb)
+net.minecraft.util.Identifier (of|ofVanilla|tryParse)
+net.minecraft.util.Formatting (byName|getColorValue|getName|values)
+net.minecraft.registry.tag.DamageTypeTags (IS_FALL|IS_FIRE|IS_DROWNING|IS_EXPLOSION|BYPASSES)
+net.minecraft.server.MinecraftServer (getSavePath|getPlayerManager|getScoreboard|getTicks|execute|getOverworld)
+net.minecraft.util.WorldSavePath .
+net.minecraft.server.PlayerManager (getPlayer|getPlayerList|broadcast|sendToAll)
+net.minecraft.entity.effect.StatusEffectInstance (StatusEffectInstance\()
+net.minecraft.entity.effect.StatusEffects (SPEED|STRENGTH|RESISTANCE|REGENERATION|WITHER|ABSORPTION|LUCK|GLOWING|FIRE_RESISTANCE|SLOWNESS|WEAKNESS|INSTANT_HEALTH|NAUSEA|JUMP_BOOST|HASTE|SATURATION)
+net.minecraft.particle.ParticleTypes (HEART|CRIT|FLAME|SOUL|ANGRY_VILLAGER|HAPPY_VILLAGER|DUST|END_ROD|TOTEM_OF_UNDYING|SMOKE|ENCHANTED_HIT|ELECTRIC_SPARK|SCULK_SOUL|DAMAGE_INDICATOR)
+net.minecraft.sound.SoundEvents (ENTITY_ENDER_DRAGON_GROWL|ENTITY_ENDER_DRAGON_DEATH|ITEM_TOTEM_USE|ENTITY_PLAYER_LEVELUP|BLOCK_BEACON_ACTIVATE|ENTITY_FIREWORK_ROCKET|ENTITY_WITHER_SPAWN|ENTITY_EXPERIENCE_ORB)
+net.minecraft.sound.SoundCategory .
+net.minecraft.server.command.ServerCommandSource (getPlayer|getEntity|sendFeedback|sendError|hasPermissionLevel|getServer|getName)
+net.minecraft.command.argument.EntityArgumentType (player|getPlayer|players|getPlayers)
+net.minecraft.entity.mob.HostileEntity (HostileEntity)
+net.minecraft.util.math.Vec3d (multiply|normalize|add|length)
+net.minecraft.registry.entry.RegistryEntry (of)
+net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents .
+net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents .
+net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents .
+net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents .
+net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents .
+net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents .
+net.fabricmc.fabric.api.event.player.AttackEntityCallback .
+net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback .
+net.fabricmc.fabric.api.message.v1.ServerMessageEvents .
+net.fabricmc.loader.api.FabricLoader (getConfigDir|getInstance)

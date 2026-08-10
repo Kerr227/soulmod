@@ -1,0 +1,105 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    // Add repositories to retrieve artifacts from in here.
+    // You should only use this when depending on other mods because
+    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "loader_version", project.loader_version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "minecraft_version": project.minecraft_version,
+                "loader_version": project.loader_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+    it.options.encoding = "UTF-8"
+}
+
+java {
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Development helper.
+//
+// Minecraft's Yarn mappings change between versions, so before using an API it
+// is useful to print the *actual* signatures available for the Minecraft
+// version this project is pinned to. Run:
+//
+//   ./gradlew probe --no-configuration-cache
+//
+// It reads `dev/probe-list.txt` (one "fully.qualified.ClassName optional-regex"
+// per line) and javaps each class against the remapped compile classpath.
+// ---------------------------------------------------------------------------
+tasks.register('probe') {
+    description = 'Prints javap output for classes listed in dev/probe-list.txt (development aid).'
+    group = 'help'
+
+    doLast {
+        def classpath = sourceSets.main.compileClasspath.asPath
+        def listFile = file(project.findProperty('probeList') ?: 'dev/probe-list.txt')
+        if (!listFile.exists()) {
+            println "No probe list at ${listFile}"
+            return
+        }
+
+        listFile.eachLine { rawLine ->
+            def line = rawLine.trim()
+            if (line.isEmpty() || line.startsWith('#')) {
+                return
+            }
+
+            def parts = line.split(/\s+/, 2)
+            def className = parts[0]
+            def filter = parts.length > 1 ? parts[1] : null
+
+            println "===== ${className}${filter ? '   ~/' + filter + '/' : ''}"
+            def process = new ProcessBuilder(['javap', '-classpath', classpath, className])
+                    .redirectErrorStream(true)
+                    .start()
+            def output = process.inputStream.text
+            process.waitFor()
+
+            output.readLines().each { outputLine ->
+                if (filter == null || outputLine =~ filter) {
+                    println '  ' + outputLine.trim()
+                }
+            }
+        }
+    }
+}
