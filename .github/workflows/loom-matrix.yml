@@ -2,6 +2,9 @@ name: Loom matrix
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/loom-matrix.yml'
 
 jobs:
   loom:
