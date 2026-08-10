@@ -12,8 +12,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        loom: ['1.13.6', '1.14.10', '1.15.5', '1.16.3']
-    name: loom-${{ matrix.loom }}
+        include:
+          - loom: '1.16.3'
+            extra: ''
+          - loom: '1.17.19'
+            extra: ''
+          - loom: '1.15.5'
+            extra: ''
+          - loom: '1.16.3'
+            extra: '-Pfull_api=true'
+    name: loom-${{ matrix.loom }}${{ matrix.extra }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -22,4 +30,15 @@ jobs:
           java-version: '21'
       - run: chmod +x ./gradlew
       - name: Try to set up Minecraft 1.21.11
-        run: ./gradlew classes -Ploom_version=${{ matrix.loom }} --console=plain --stacktrace
+        run: |
+          set +e
+          ./gradlew classes -Ploom_version=${{ matrix.loom }} ${{ matrix.extra }} --console=plain > out.txt 2>&1
+          code=$?
+          echo "=================== SUMMARY (exit $code) ==================="
+          if [ $code -eq 0 ]; then
+            echo "PASS loom=${{ matrix.loom }} ${{ matrix.extra }}"
+          else
+            grep -E "What went wrong" -A 6 out.txt | head -20
+            grep -iE "error:|Caused by" out.txt | head -10
+          fi
+          exit $code
