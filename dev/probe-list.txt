@@ -54,3 +54,31 @@ net.fabricmc.fabric.api.event.player.AttackEntityCallback .
 net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback .
 net.fabricmc.fabric.api.message.v1.ServerMessageEvents .
 net.fabricmc.loader.api.FabricLoader (getConfigDir|getInstance)
+
+# --- round 2: event functional interfaces and remaining details ---
+net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDamage .
+net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDamage .
+net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDeath .
+net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDeath .
+net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AfterRespawn .
+net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Join .
+net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Leave .
+net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AllowDeath .
+net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Load .
+net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$EndTick .
+net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarted .
+net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopping .
+net.minecraft.entity.attribute.EntityAttributeModifier$Operation .
+net.minecraft.entity.projectile.PersistentProjectileEntity (damage|Damage|getOwner|isCritical|setPierceLevel)
+net.minecraft.entity.projectile.ArrowEntity (ArrowEntity\()
+net.minecraft.entity.player.PlayerEntity (giveItemStack|dropItem|getItemCooldownManager)
+net.minecraft.server.network.ServerPlayNetworkHandler (sendPacket)
+net.minecraft.registry.Registries (SOUND_EVENT|PARTICLE_TYPE)
+net.minecraft.util.ActionResult (PASS|SUCCESS|FAIL)
+net.minecraft.server.command.CommandManager (literal|argument)
+net.minecraft.entity.LivingEntity (isAlive|getLastAttacker|setAttacker|clearStatusEffects|getArmor)
+net.minecraft.entity.Entity (isAlive|squaredDistanceTo|distanceTo|getBoundingBox|isOnGround|isTouchingWater)
+net.minecraft.item.Items (DIAMOND|GOLDEN_APPLE|COOKIE|CAKE|EMERALD|EXPERIENCE_BOTTLE)
+net.minecraft.item.ItemStack (ItemStack\()
+net.minecraft.entity.mob.Monster .
+net.minecraft.util.math.Box (Box\(|expand)
