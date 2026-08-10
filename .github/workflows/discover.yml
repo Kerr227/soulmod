@@ -10,9 +10,12 @@ jobs:
   discover:
     runs-on: ubuntu-latest
     steps:
-      - name: Loom plugin versions
-        run: curl -s https://maven.fabricmc.net/net/fabricmc/loom/net.fabricmc.loom.gradle.plugin/maven-metadata.xml | tail -30
-      - name: Loom artifact versions
-        run: curl -s https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml | tail -30
-      - name: Loom directory listing
-        run: curl -s https://maven.fabricmc.net/net/fabricmc/ | grep -io 'loom[^<"]*' | sort -u | head -20
+      - name: All loom versions
+        run: |
+          curl -s https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml \
+            | grep -o '<version>[^<]*</version>' | sed 's/<[^>]*>//g' | tr '\n' ' '
+      - name: Latest patch per loom minor
+        run: |
+          curl -s https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml \
+            | grep -o '<version>[^<]*</version>' | sed 's/<[^>]*>//g' | grep -E '^1\.[0-9]+\.[0-9]+$' \
+            | awk -F. '{print $1"."$2, $0}' | sort -k1,1V -k2,2V | awk '{a[$1]=$2} END {for (k in a) print k" -> "a[k]}' | sort -V

@@ -73,12 +73,12 @@ jobs:
       - name: Publish CI output to ci-logs branch
         if: always()
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           rm -rf /tmp/ci-logs && mkdir -p /tmp/ci-logs
           cp -r ci-out/* /tmp/ci-logs/ 2>/dev/null || true
           cd /tmp/ci-logs
           git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -q -b ci-logs
           git add -A
           git commit -q -m "CI output for ${GITHUB_SHA} (run ${GITHUB_RUN_ID})"
