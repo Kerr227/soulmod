@@ -1,0 +1,29 @@
+name: Discover Fabric versions
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/discover.yml'
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Minecraft versions (latest stable)
+        run: curl -s https://meta.fabricmc.net/v2/versions/game | jq -r '[.[] | select(.stable == true)][0:8][] | .version'
+      - name: Yarn for 1.21.11
+        run: curl -s https://meta.fabricmc.net/v2/versions/yarn/1.21.11 | jq -r '.[0:5][] | .version' || echo "NO YARN FOR 1.21.11"
+      - name: Loader
+        run: curl -s https://meta.fabricmc.net/v2/versions/loader | jq -r '[.[] | select(.stable == true)][0:3][] | .version'
+      - name: Installer
+        run: curl -s https://meta.fabricmc.net/v2/versions/installer | jq -r '[.[] | select(.stable == true)][0].version'
+      - name: Fabric API versions
+        run: |
+          curl -s "https://api.modrinth.com/v2/project/fabric-api/version?game_versions=%5B%221.21.11%22%5D" \
+            | jq -r '.[0:5][] | "\(.version_number)  | loaders=\(.loaders|join(","))  | mc=\(.game_versions|join(","))"' \
+            || echo "NO FABRIC API FOR 1.21.11"
+      - name: Fabric API maven listing (tail)
+        run: curl -s https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml | tail -25
+      - name: Loom versions
+        run: curl -s https://maven.fabricmc.net/net/fabricmc/fabric-loom/fabric-loom.gradle.plugin/maven-metadata.xml | tail -20
