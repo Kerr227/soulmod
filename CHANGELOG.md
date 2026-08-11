@@ -4,6 +4,51 @@ All notable changes to Soul Souls are recorded here. The project follows
 `MAJOR.MINOR.PATCH`: PATCH for fixes, MINOR for new Souls and abilities, MAJOR for changes
 that need a config or save migration.
 
+## 1.3.0
+
+Reworks across most of the roster, and the removal of a few things that did not work.
+
+### Removed
+- **Double-sneak activation.** It was unreliable, so it is gone entirely along with every
+  mention of it. `/souls ability` is the only trigger again.
+- **`/souls give`.** Souls are handed out by `/souls set <player> <soul>` only.
+- **Name colouring.** Player names are plain again; only the hearts carry the Soul's colour,
+  in the nameplate and in the tab list alike.
+- **Levitation on assignment**, which fired far too often.
+- **Integrity's launch** and **Justice's Marksman** ability, both replaced below.
+
+### Reworked
+- **Integrity** loses its active ability. New passive: an explosion repairs your armour
+  instead of hurting you, paid for out of your experience, with a sound to match.
+- **Bravery** now stores every hit it takes. After 10 hits the next strike discharges the
+  whole stored total into the target's armour as durability damage - their gear suffers,
+  their health does not.
+- **Humility** is dark grey and works the other way round: enough damage from one person
+  leaves it cowed, with Resistance II and Weakness, until it hits that person back. Landing
+  that hit grants Strength for a minute, and then the cycle begins again.
+  Hearts: grey and white.
+- **Justice** hunts. `/justice target <player>` marks somebody and costs you a heart until
+  you kill them; `/justice location` points at them; the target glows red until you are
+  within 20 blocks. The kill returns your heart and adds one, stacking to 20 hearts.
+- **Memory** now charges its scan rather than firing instantly, ignores invisible players,
+  and is interrupted by damage with a 500 second penalty. `/memory list` shows everyone
+  remembered - green for alive, red for dead or offline - and `/memory reset` clears it.
+  `/memories` works as an alias. Hearts: blue and yellow.
+- **Determination** gains **TRUE PLAYER**: ten player kills in a row summon a Warden's roar,
+  slow everyone within 10 blocks and grant Strength V for ten seconds. Dying breaks the run.
+- **Perseverance** now reports who has been hurting you, worst first:
+  `john had damaged you 50.0 hearts.`
+- **Patience** gains a heart a minute up to 20, then sheds one every ten minutes.
+- **Fury** holds its victims twice as long and keeps its Strength for 20 seconds.
+- **Fun** spawns twice as many villagers, and clears them away when the cooldown ends.
+
+### Settings
+New tunables include `fury_hold_seconds`, `fury_strength_seconds`, `memory_scan_radius`,
+`memory_scan_charge_seconds`, `memory_interrupt_penalty_seconds`, `memory_max_remembered`,
+`justice_reveal_distance`, `justice_heart_cost`, `bravery_hits_to_charge`,
+`humility_threat_damage`, `humility_emboldened_seconds`, `true_player_kills_required`,
+`integrity_repair_per_xp` and `perseverance_report_window_seconds`.
+
 ## 1.2.0
 
 Four new Souls, an in-game way to fire abilities, and a reworked Hatred.

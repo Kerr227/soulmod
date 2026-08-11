@@ -34,7 +34,7 @@ server-side and survives disconnects, deaths, dimension changes and restarts.
 | Fabric API | 0.141.6+1.21.11 or newer |
 | Java | 21 |
 
-Download `soulsouls-1.2.0.jar` from the
+Download `soulsouls-1.3.0.jar` from the
 [Releases page](https://github.com/Kerr227/soulmod/releases), or build it yourself with the
 instructions below.
 
@@ -42,14 +42,14 @@ instructions below.
 
 1. Install Fabric Loader for 1.21.11 on your server.
 2. Put `fabric-api-0.141.6+1.21.11.jar` in the server's `mods/` folder.
-3. Put `soulsouls-1.2.0.jar` in the same `mods/` folder.
+3. Put `soulsouls-1.3.0.jar` in the same `mods/` folder.
 4. Start the server once. It creates `config/soulsouls.json` with every Soul and every
    tunable value filled in.
 5. Edit the config if you want, then run `/souls reload` (no restart needed).
 
 **Single player**
 
-Same idea: install Fabric for 1.21.11, drop Fabric API and `soulsouls-1.2.0.jar` into
+Same idea: install Fabric for 1.21.11, drop Fabric API and `soulsouls-1.3.0.jar` into
 `.minecraft/mods/`, and launch the Fabric profile.
 
 **Clients do not need the mod.** Everything runs on the server and vanilla clients see the
@@ -68,7 +68,7 @@ cd soulmod
 ./gradlew build          # Windows: gradlew.bat build
 ```
 
-The finished mod is `build/libs/soulsouls-1.2.0.jar`. Ignore `soulsouls-1.2.0-sources.jar`
+The finished mod is `build/libs/soulsouls-1.3.0.jar`. Ignore `soulsouls-1.3.0-sources.jar`
 and any `-dev`/`-remapped` files - only the plain one goes in `mods/`.
 
 The first build downloads Minecraft and the Fabric toolchain and takes a few minutes;
@@ -151,18 +151,19 @@ level 2 (operator).
 | `/souls list` | anyone | Every Soul with its difficulty and chance |
 | `/souls ability` | anyone | Uses your Soul's active ability, if it has one |
 | `/souls bond <player>` | anyone | Offers a Soul bond; both players must run it. Used by Retribution |
-| `/souls give <soul>` | anyone\* | Equips a Soul on yourself. Replies `success while equipping new soul!` |
 | `/souls reset` | anyone\* | Clears your Soul and immediately rolls a new one |
-| `/souls give <soul> <player>` | op | Gives another player a Soul. The Soul always comes first |
 | `/souls set <player> <soul>` | op | Same thing, spelled the way admins expect |
 | `/souls reload` | op | Re-reads `config/soulsouls.json` and applies it live |
 | `/souls debug [player]` | op | Soul, colour, health, refuse chance, cooldowns and raw ability state |
 | `/souls settings chance <soul> <percentage>` | op | Sets a Soul's roll weight |
 | `/souls settings refuse <percentage>` | op | Sets Determination's death-refusal chance |
 | `/souls settings difficulty <soul> <difficulty>` | op | EASY, NORMAL, HARD, EXTREME or LEGENDARY |
-| `/memory memories` | anyone | Memory only: everyone you have scanned, and where you last died |
+| `/memory list` | anyone | Memory only: everyone scanned, green alive / red dead, plus where you died |
+| `/memory reset` | anyone | Memory only: forget everybody. `/memories` works as an alias |
+| `/justice target <player>` | anyone | Justice only: mark a target, at the cost of a heart |
+| `/justice location` | anyone | Justice only: where your target is |
 
-Giving yourself a Soul you already have is refused with `cant have the soul twice!`.
+Setting a Soul somebody already has is refused with `cant have the soul twice!`.
 
 \* `/souls give <soul>` and `/souls reset` are player-usable because the brief asks for
 them. If you would rather Souls stayed random, set `allow_player_give` and
@@ -171,10 +172,9 @@ them. If you would rather Souls stayed random, set `allow_player_give` and
 `/souls settings ...` writes to the config file immediately, so the change survives a
 restart.
 
-**Active abilities: double-sneak.** Sneak twice quickly to fire your Soul's ability -
-Justice's Focus, Kindness's aura, Courage's charge, Integrity's launch, Fun's party trick,
-Curiosity's search, Memory's scan. `/souls ability` does exactly the same thing and stays
-available. The window is `double_sneak_window_millis` (400ms by default).
+**Active abilities.** `/souls ability` fires your Soul's ability - Kindness's aura,
+Courage's charge, Fun's party trick, Curiosity's search, Memory's scan. Players who want it
+on a key can bind one client-side to the command; Minecraft has no server-side keybind API.
 
 ---
 
@@ -264,12 +264,10 @@ Names are decorated in two different places, on purpose.
 **In the tab list** you get exactly the same thing, so a player looks identical wherever
 you see them.
 
-Configurable through `nameplate_hearts` and `nameplate_heart`. If the heart does not render
-in your font, replace it with anything you like.
-
-A Soul whose colour is too dark to read can colour its name separately - Hatred keeps black
-hearts but takes a white name, which is as close as vanilla text gets to an outline. Set
-`name_color` on any Soul in the config to do the same.
+Only the hearts are coloured - the name itself is left plain, so it stays readable whatever
+the Soul's colour is. Souls can use their own pair of characters instead of the default
+heart (Humility is grey and white, Memory blue and yellow); set `heart_left` and
+`heart_right` on any Soul in the config to do the same.
 
 ### How that works underneath
 
@@ -459,8 +457,8 @@ implementation was used. The differences that matter:
 - **MINOR** - new Souls or abilities, config gains keys but stays compatible (`1.1.0`)
 - **MAJOR** - save format or config format changes in a way that needs migration (`2.0.0`)
 
-Current release: **1.2.0** - 16 Souls, double-sneak abilities, the command tree, the config
-system and per-player persistence. See `CHANGELOG.md` for what changed when.
+Current release: **1.3.0** - 16 Souls, the command tree, the config system and per-player
+persistence. See `CHANGELOG.md` for what changed when.
 
 To cut a release: bump `mod_version` in `gradle.properties`, then edit `dev/RELEASE` and
 push. CI builds the jar and publishes it as a GitHub Release tagged from `mod_version`.
