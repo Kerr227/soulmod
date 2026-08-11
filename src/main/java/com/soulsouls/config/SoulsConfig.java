@@ -55,6 +55,43 @@ public class SoulsConfig {
     /** Sound played when a Soul is assigned. */
     public String assignment_sound = "minecraft:entity.ender_dragon.growl";
 
+    /**
+     * Show a heart either side of the name floating above a player's head, in the Soul's
+     * colour: {@code (heart) Steve (heart)}.
+     */
+    public boolean nameplate_hearts = true;
+
+    /** The heart character. Change it if your font does not have the default one. */
+    public String nameplate_heart = "❤";
+
+    /** Show the Soul name in front of the tab-list entry: {@code |INTEGRITY| Steve}. */
+    public boolean tab_soul_tag = true;
+
+    /** Brackets around the Soul name in the tab list. */
+    public String tab_bracket_left = "⌊";
+    public String tab_bracket_right = "⌉";
+
+    /** How long the "YOUR SOUL IS:" moment lasts, in seconds. */
+    public double assignment_ceremony_seconds = 6.0;
+
+    /** Levitation amplifier during the ceremony. 0 is Levitation I; -1 turns it off. */
+    public int assignment_levitation_amplifier = 0;
+
+    /** Blind the player for the length of the ceremony. */
+    public boolean assignment_blindness = true;
+
+    /**
+     * Extra seconds of fall immunity after the ceremony ends. Levitation drops you from a
+     * height, so without this the ceremony itself could kill you.
+     */
+    public double assignment_fall_grace_seconds = 10.0;
+
+    /** Sound played where a player dies. */
+    public String death_sound = "minecraft:block.beacon.deactivate";
+
+    /** Pitch of the death sound. 2.0 plays it at double speed. */
+    public double death_sound_pitch = 2.0;
+
     /** How often ability ticks run, in ticks. 5 = four times a second. */
     public int ability_tick_interval = 5;
 

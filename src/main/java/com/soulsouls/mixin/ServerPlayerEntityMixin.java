@@ -4,6 +4,7 @@ import com.soulsouls.data.SoulManager;
 import com.soulsouls.soul.Soul;
 import com.soulsouls.util.SoulText;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,6 +41,19 @@ public abstract class ServerPlayerEntityMixin {
 
         Text existing = callback.getReturnValue();
         String name = existing != null ? existing.getString() : player.getNameForScoreboard();
-        callback.setReturnValue(SoulText.coloured(name, manager.config().colorOf(soul.get())));
+        int colour = manager.config().colorOf(soul.get());
+
+        // The tab list gets the Soul's name in front of the player's, e.g. "|INTEGRITY| Steve".
+        // The name above the head is left to the scoreboard team, which puts hearts around it.
+        MutableText line = Text.empty();
+        if (manager.config().tab_soul_tag) {
+            String tag = manager.config().tab_bracket_left
+                    + soul.get().displayName()
+                    + manager.config().tab_bracket_right;
+            line.append(SoulText.coloured(tag + " ", colour));
+        }
+        line.append(SoulText.coloured(name, colour));
+
+        callback.setReturnValue(line);
     }
 }

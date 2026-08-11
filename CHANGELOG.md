@@ -4,6 +4,23 @@ All notable changes to Soul Souls are recorded here. The project follows
 `MAJOR.MINOR.PATCH`: PATCH for fixes, MINOR for new Souls and abilities, MAJOR for changes
 that need a config or save migration.
 
+## 1.1.0
+
+Presentation and command changes.
+
+- **Hearts above the head.** The name floating above a player is now wrapped in hearts in
+  the Soul's colour - `❤ Steve ❤` - via the scoreboard team's prefix and suffix.
+- **Soul tag in the tab list.** Tab entries now read `⌊INTEGRITY⌉ Steve`. Both the brackets
+  and the heart are configurable in case your font lacks the characters.
+- **`/souls info <player>`** looks up somebody else's Soul.
+- **`/souls give <soul> <player>`** - the Soul now always comes first, so the self and
+  admin forms cannot be confused. (`/souls set <player> <soul>` is unchanged.)
+- **The reveal is now a six-second ceremony**: the title reads `YOUR SOUL IS:` with the
+  Soul's name between two hearts, and for those six seconds the player gets Levitation I,
+  blindness, and fall immunity that lasts ten seconds past the end so the drop cannot kill
+  them.
+- **Death sound**: a beacon deactivating at double speed.
+
 ## 1.0.0
 
 First release. Minecraft 1.21.11, Fabric, Java 21.

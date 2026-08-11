@@ -15,9 +15,12 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -44,6 +47,9 @@ import java.util.UUID;
 public final class SoulManager {
     /** Identifier of the attribute modifier this mod uses for Soul max health. */
     public static final Identifier MAX_HEALTH_MODIFIER_ID = Identifier.of(SoulSouls.MOD_ID, "soul_max_health");
+
+    /** Ability-state key holding when the assignment ceremony ends, in epoch millis. */
+    public static final String CEREMONY_UNTIL_KEY = "ceremony_until";
 
     private static SoulManager instance;
 
@@ -226,6 +232,7 @@ public final class SoulManager {
 
         if (dramatic) {
             SoulEffects.announceSoul(player, soul, this.config, ParticleTypes.TOTEM_OF_UNDYING);
+            startCeremony(player, data);
             player.sendMessage(SoulText.prefix()
                     .append(Text.literal("Your soul is now "))
                     .append(SoulText.soulName(soul, this.config))
@@ -240,6 +247,43 @@ public final class SoulManager {
                 this.server.getPlayerManager().broadcast(announcement, false);
             }
         }
+    }
+
+    /**
+     * The moment a Soul lands: the player is lifted off the ground, blinded while the title
+     * plays, and made immune to fall damage until well after they come back down.
+     *
+     * <p>The fall immunity is not decoration - levitation drops you from a height, so
+     * without it the ceremony could kill the player it is congratulating.
+     */
+    private void startCeremony(ServerPlayerEntity player, PlayerSoulData data) {
+        double seconds = Math.max(0.0, this.config.assignment_ceremony_seconds);
+        if (seconds <= 0.0) {
+            return;
+        }
+        int ticks = (int) Math.round(seconds * 20.0);
+
+        if (this.config.assignment_levitation_amplifier >= 0) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, ticks,
+                    this.config.assignment_levitation_amplifier, true, false, false));
+        }
+        if (this.config.assignment_blindness) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, ticks,
+                    0, true, false, false));
+        }
+
+        data.setState(CEREMONY_UNTIL_KEY, System.currentTimeMillis() + seconds * 1000.0);
+        markDirty();
+    }
+
+    /** True while a player is in the assignment ceremony, or still falling out of one. */
+    public boolean isProtectedFromFalling(PlayerSoulData data) {
+        double until = data.state(CEREMONY_UNTIL_KEY, 0.0);
+        if (until <= 0.0) {
+            return false;
+        }
+        double grace = Math.max(0.0, this.config.assignment_fall_grace_seconds) * 1000.0;
+        return System.currentTimeMillis() < until + grace;
     }
 
     /** Removes a player's Soul so the next roll can give them a new one. */
@@ -368,6 +412,13 @@ public final class SoulManager {
 
     public boolean allowDamage(ServerPlayerEntity player, DamageSource source, float amount) {
         PlayerSoulData data = dataOf(player);
+
+        // The assignment ceremony lifts the player into the air, so it owes them a safe
+        // landing regardless of which Soul they just received.
+        if (source.isIn(DamageTypeTags.IS_FALL) && isProtectedFromFalling(data)) {
+            return false;
+        }
+
         Optional<Soul> soul = soulOf(data);
         if (soul.isEmpty()) {
             return true;
@@ -424,6 +475,10 @@ public final class SoulManager {
      * player victims, every online Soul holder's {@code onOtherPlayerDeath} hook.
      */
     public void onDeath(LivingEntity victim, DamageSource source) {
+        if (victim instanceof ServerPlayerEntity dying) {
+            playDeathSound(dying);
+        }
+
         Entity attacker = source.getAttacker();
         if (attacker instanceof ServerPlayerEntity killer) {
             forEachAbility(killer, (context, ability) -> ability.onKill(context, victim));
@@ -439,6 +494,18 @@ public final class SoulManager {
                         ability.onOtherPlayerDeath(context, deadPlayer, killer));
             }
         }
+    }
+
+    /** The sound a Soul makes when it goes out: a beacon shutting down, at double speed. */
+    private void playDeathSound(ServerPlayerEntity player) {
+        String id = this.config.death_sound;
+        if (id == null || id.isBlank()) {
+            return;
+        }
+        float pitch = (float) Math.max(0.5, Math.min(2.0, this.config.death_sound_pitch));
+        SoulEffects.soundAround(player.getEntityWorld(),
+                player.getX(), player.getY(), player.getZ(),
+                SoulEffects.soundFromId(id), 1.0F, pitch);
     }
 
     private interface AbilityAction {

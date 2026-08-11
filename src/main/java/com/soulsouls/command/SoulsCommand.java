@@ -66,9 +66,13 @@ public final class SoulsCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("souls")
-                .executes(SoulsCommand::info)
+                .executes(context -> info(context, null))
 
-                .then(CommandManager.literal("info").executes(SoulsCommand::info))
+                .then(CommandManager.literal("info")
+                        .executes(context -> info(context, null))
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .executes(context ->
+                                        info(context, EntityArgumentType.getPlayer(context, "player")))))
                 .then(CommandManager.literal("list").executes(SoulsCommand::list))
                 .then(CommandManager.literal("ability").executes(SoulsCommand::ability))
                 .then(CommandManager.literal("reset").executes(SoulsCommand::resetSelf))
@@ -77,17 +81,15 @@ public final class SoulsCommand {
                         .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .executes(SoulsCommand::bond)))
 
+                // The Soul always comes first: "/souls give <soul>" for yourself, and
+                // "/souls give <soul> <player>" for somebody else. Putting the Soul first
+                // means the two forms can never be confused for one another.
                 .then(CommandManager.literal("give")
-                        // Ordering matters: the single-argument form is tried first, and
-                        // Brigadier falls through to the admin form when the first word is
-                        // not a Soul id.
                         .then(CommandManager.argument("soul", StringArgumentType.word())
                                 .suggests(SOUL_SUGGESTIONS)
-                                .executes(SoulsCommand::giveSelf))
-                        .then(CommandManager.argument("player", EntityArgumentType.player())
-                                .requires(source -> SoulPermissions.isAdmin(source))
-                                .then(CommandManager.argument("soul", StringArgumentType.word())
-                                        .suggests(SOUL_SUGGESTIONS)
+                                .executes(SoulsCommand::giveSelf)
+                                .then(CommandManager.argument("player", EntityArgumentType.player())
+                                        .requires(source -> SoulPermissions.isAdmin(source))
                                         .executes(SoulsCommand::giveOther))))
 
                 .then(CommandManager.literal("set")
@@ -129,12 +131,16 @@ public final class SoulsCommand {
 
     // ------------------------------------------------------------------ /souls info
 
-    private static int info(CommandContext<ServerCommandSource> context) {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    private static int info(CommandContext<ServerCommandSource> context, ServerPlayerEntity explicitTarget) {
+        ServerPlayerEntity player = explicitTarget != null
+                ? explicitTarget
+                : context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("Only a player has a Soul. Try /souls list."));
+            context.getSource().sendError(Text.literal(
+                    "Only a player has a Soul. Try /souls info <player> or /souls list."));
             return 0;
         }
+        boolean self = explicitTarget == null || explicitTarget == context.getSource().getPlayer();
 
         SoulManager manager = manager(context);
         if (manager == null) {
@@ -144,7 +150,10 @@ public final class SoulsCommand {
         Optional<Soul> soul = manager.soulOf(player);
         if (soul.isEmpty()) {
             context.getSource().sendFeedback(() -> SoulText.prefix()
-                    .append(Text.literal("You do not have a Soul yet.").formatted(Formatting.GRAY)), false);
+                    .append(Text.literal(self
+                            ? "You do not have a Soul yet."
+                            : player.getNameForScoreboard() + " does not have a Soul yet.")
+                            .formatted(Formatting.GRAY)), false);
             return 0;
         }
 
@@ -153,7 +162,9 @@ public final class SoulsCommand {
         SoulConfig settings = config.soulConfig(found);
         AbilityContext abilityContext = manager.contextFor(player, found);
 
-        context.getSource().sendFeedback(() -> line("Your Soul: ", SoulText.soulName(found, config)), false);
+        context.getSource().sendFeedback(() -> line(
+                self ? "Your Soul: " : player.getNameForScoreboard() + "'s Soul: ",
+                SoulText.soulName(found, config)), false);
         context.getSource().sendFeedback(() -> line("Color: ",
                 SoulText.coloured(SoulText.hex(config.colorOf(found)), config.colorOf(found))), false);
         context.getSource().sendFeedback(() -> line("Rarity: ",

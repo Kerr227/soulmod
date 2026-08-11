@@ -105,3 +105,8 @@ net.minecraft.command.permission.Permission .
 
 # round 5
 net.minecraft.command.permission.PermissionLevel .
+
+# --- round 6: 1.1.0 presentation features ---
+net.minecraft.entity.effect.StatusEffects (LEVITATION|BLINDNESS)
+net.minecraft.scoreboard.Team (setPrefix|setSuffix)
+net.minecraft.text.Text (empty)

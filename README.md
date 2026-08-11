@@ -144,12 +144,13 @@ level 2 (operator).
 | Command | Who | What it does |
 |---|---|---|
 | `/souls info` | anyone | Your Soul, colour, rarity, difficulty, max health, abilities and cooldowns |
+| `/souls info <player>` | anyone | The same, for somebody else |
 | `/souls list` | anyone | Every Soul with its difficulty and chance |
 | `/souls ability` | anyone | Uses your Soul's active ability, if it has one |
 | `/souls bond <player>` | anyone | Offers a Soul bond; both players must run it. Used by Retribution |
 | `/souls give <soul>` | anyone\* | Equips a Soul on yourself. Replies `success while equipping new soul!` |
 | `/souls reset` | anyone\* | Clears your Soul and immediately rolls a new one |
-| `/souls give <player> <soul>` | op | Gives another player a Soul |
+| `/souls give <soul> <player>` | op | Gives another player a Soul. The Soul always comes first |
 | `/souls set <player> <soul>` | op | Same thing, spelled the way admins expect |
 | `/souls reload` | op | Re-reads `config/soulsouls.json` and applies it live |
 | `/souls debug [player]` | op | Soul, colour, health, refuse chance, cooldowns and raw ability state |
@@ -244,21 +245,70 @@ so they cannot be skipped by relogging or by waiting for a restart.
 
 ---
 
-## How name colouring works
+## How names are shown
+
+Names are decorated in two different places, on purpose.
+
+**Above the player's head** you get a heart either side of the name, in the Soul's colour:
+
+```
+❤ Yeti_Factories ❤
+```
+
+**In the tab list** you get the Soul's name in front instead, which is more useful when you
+are scanning a player list:
+
+```
+⌊INTEGRITY⌉ Yeti_Factories
+```
+
+Both are configurable - `nameplate_hearts` / `nameplate_heart` for the hearts, and
+`tab_soul_tag` / `tab_bracket_left` / `tab_bracket_right` for the tab tag. If the heart or
+bracket characters do not render in your font, replace them with anything you like.
+
+### How that works underneath
 
 Souls use full RGB colours, but the name floating above a player's head is drawn by the
 vanilla client, which only knows the 16 chat colours. So the mod does two things:
 
 - **Scoreboard teams** (`use_scoreboard_teams`) put each player on a `soul_<id>` team whose
-  colour is the closest vanilla colour to the Soul's RGB. This is what colours the name
-  above the head, the tab list and the chat name, and it needs nothing on the client.
-- **A tab-list mixin** (`rgb_tab_list_names`) replaces the tab-list name with the exact RGB
-  colour, so pastel green really is pastel green there.
+  colour is the closest vanilla colour to the Soul's RGB, and whose prefix and suffix are
+  the hearts. This is what decorates the name above the head and in chat, and it needs
+  nothing on the client.
+- **A tab-list mixin** (`rgb_tab_list_names`) replaces the tab-list entry with the Soul tag
+  plus the name, in the exact RGB colour - so pastel green really is pastel green there.
 
 Titles, action bars and everything the mod writes itself always use the true RGB colour.
 
 If another mod or plugin owns your scoreboard teams, set `use_scoreboard_teams` to `false`;
-you keep the RGB tab list and lose the name-tag colour.
+you keep the RGB tab list and lose the name-tag hearts.
+
+---
+
+## Receiving a Soul
+
+Getting a Soul is a six-second event, not a line of chat:
+
+```
+YOUR SOUL IS:
+🖤 HATRED 🖤
+```
+
+For those six seconds the player is lifted off the ground with Levitation I, blinded, and
+made immune to fall damage - the immunity lasts a further ten seconds after the title
+fades, because levitation drops you from a height and the ceremony should not be able to
+kill the player it is congratulating.
+
+| Key | Default | Effect |
+|---|---|---|
+| `assignment_ceremony_seconds` | 6 | Length of the title and the effects |
+| `assignment_levitation_amplifier` | 0 | Levitation I; `-1` turns it off |
+| `assignment_blindness` | true | Blindness for the same window |
+| `assignment_fall_grace_seconds` | 10 | Extra fall immunity after it ends |
+| `assignment_sound` | `entity.ender_dragon.growl` | Sound on assignment |
+
+When a player dies, a beacon-deactivate sound plays at double speed
+(`death_sound`, `death_sound_pitch`).
 
 ---
 

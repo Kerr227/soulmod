@@ -7,6 +7,7 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 /**
  * Colours player names using vanilla scoreboard teams.
@@ -43,6 +44,19 @@ public final class SoulTeams {
             }
             team.setDisplayName(SoulText.soulName(soul, config));
             team.setColor(SoulText.nearestFormatting(config.colorOf(soul)));
+
+            // A team prefix and suffix wrap the name everywhere vanilla draws it, which is
+            // how the hearts end up either side of the name above the player's head.
+            if (config.nameplate_hearts && config.nameplate_heart != null
+                    && !config.nameplate_heart.isEmpty()) {
+                int colour = config.colorOf(soul);
+                team.setPrefix(SoulText.coloured(config.nameplate_heart + " ", colour));
+                team.setSuffix(SoulText.coloured(" " + config.nameplate_heart, colour));
+            } else {
+                team.setPrefix(Text.empty());
+                team.setSuffix(Text.empty());
+            }
+
             // Souls are not a gameplay alliance - do not change how players interact.
             team.setFriendlyFireAllowed(true);
             team.setShowFriendlyInvisibles(false);

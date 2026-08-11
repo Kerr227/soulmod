@@ -14,6 +14,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -93,10 +94,33 @@ public final class SoulEffects {
      */
     public static void announceSoul(ServerPlayerEntity player, Soul soul, SoulsConfig config,
                                     ParticleEffect particle) {
+        int colour = config.colorOf(soul);
+
+        // A heart either side of the Soul's name, in its own colour:
+        //     YOUR SOUL IS:
+        //     (heart) HATRED (heart)
+        MutableText subtitle = Text.empty();
+        boolean hearts = config.nameplate_hearts && config.nameplate_heart != null
+                && !config.nameplate_heart.isEmpty();
+        if (hearts) {
+            subtitle.append(SoulText.coloured(config.nameplate_heart + " ", colour));
+        }
+        subtitle.append(SoulText.coloured(soul.displayName(), colour));
+        if (hearts) {
+            subtitle.append(SoulText.coloured(" " + config.nameplate_heart, colour));
+        }
+
+        // The whole ceremony should last exactly as long as the configured window, so the
+        // title fades out as the effects wear off.
+        int totalTicks = (int) Math.round(Math.max(1.0, config.assignment_ceremony_seconds) * 20.0);
+        int fadeIn = Math.min(10, totalTicks / 6);
+        int fadeOut = Math.min(20, totalTicks / 6);
+        int stay = Math.max(1, totalTicks - fadeIn - fadeOut);
+
         SoulEffects.title(player,
-                Text.literal("YOUR SOUL IS").formatted(net.minecraft.util.Formatting.WHITE),
-                SoulText.coloured("\"" + soul.displayName() + "\"", config.colorOf(soul)),
-                10, 70, 20);
+                Text.literal("YOUR SOUL IS:").formatted(net.minecraft.util.Formatting.WHITE),
+                subtitle,
+                fadeIn, stay, fadeOut);
 
         sound(player, soundFromId(config.assignment_sound), 1.0F, 1.0F);
 
