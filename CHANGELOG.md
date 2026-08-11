@@ -4,6 +4,52 @@ All notable changes to Soul Souls are recorded here. The project follows
 `MAJOR.MINOR.PATCH`: PATCH for fixes, MINOR for new Souls and abilities, MAJOR for changes
 that need a config or save migration.
 
+## 1.2.0
+
+Four new Souls, an in-game way to fire abilities, and a reworked Hatred.
+
+### Activation
+- **Double-sneak** fires your Soul's ability, so you no longer have to type a command
+  mid-fight. `/souls ability` still works and does exactly the same thing.
+
+### New Souls
+- **Curiosity** (`#00CED1`) - finds the nearest structure within 1000 blocks, with sound.
+  Each kind of structure can only be found once, so it is not a repeatable compass.
+  500 second cooldown.
+- **Humility** (`#9E9E9E`) - protection inverted. No armour is netherite-grade, anything up
+  to iron is diamond-grade, and full diamond or netherite gives nothing at all.
+- **Fury** (`#8B0000`) - damage builds up; at 20 it screams like a Warden. Everyone within
+  5 blocks is pinned and blinded while Fury gets Strength IV and heals. 200 second cooldown.
+- **Memory** (`#FFD700`) - tells you exactly where you died, and remembers everyone you
+  scan. Read the list back with `/memory memories`.
+
+### Changed
+- **Hatred** now has 20 hearts and suffers nothing: Wither and Poison heal it, Weakness
+  gives Strength, Slowness gives Speed, Mining Fatigue gives Haste, Blindness gives Night
+  Vision, and any other harmful effect is stripped. Its name is now white against the black
+  hearts so it can be read.
+- **Bravery** gains Strength alongside Speed while its momentum is up.
+- **Justice** arrows now hit for double, growing by 0.1 per consecutive hit up to +1.0. One
+  miss puts it back to standard.
+- **Integrity** can double-sneak to launch itself straight up - safe, because it ignores the
+  landing.
+- **Fun** gains a party trick: villagers, a tamed wolf pack, or ten seconds of coloured
+  fireworks that only hurt other people. Each shouts a line, heard within 10 blocks and
+  switchable with `soul_voice_lines`.
+- **Retribution** now shows a title naming the killer to hunt.
+- **Determination** plays a beacon shutting down at normal speed and throws red sparks when
+  it refuses a death.
+- **Patience** plays a small chime on each step, switchable with `patience_sounds`.
+- The tab list now matches the name above the head: hearts either side, rather than a
+  bracketed Soul name.
+- `/souls give <soul>` refuses a Soul you already have, with `cant have the soul twice!`.
+- The assignment ceremony no longer applies Levitation. Blindness and the fall immunity are
+  unchanged; set `assignment_levitation_amplifier` above -1 to bring it back.
+
+### Removed
+- **Patient Justice**. Existing players carrying it are left without a Soul and are given a
+  new one on their next join.
+
 ## 1.1.0
 
 Presentation and command changes.
