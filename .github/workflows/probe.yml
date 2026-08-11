@@ -9,6 +9,7 @@ on:
   push:
     paths:
       - 'dev/probe-list.txt'
+      - '.github/workflows/probe.yml'
 
 permissions:
   contents: write
