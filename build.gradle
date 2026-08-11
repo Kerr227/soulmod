@@ -84,6 +84,64 @@ jar {
 // It reads `dev/probe-list.txt` (one "fully.qualified.ClassName optional-regex"
 // per line) and javaps each class against the remapped compile classpath.
 // ---------------------------------------------------------------------------
+// Lists (and dumps) every class in a package on the compile classpath. Useful when an API
+// has moved and you do not know what the new class is called:
+//
+//   ./gradlew probePackage -PprobePackage=net/minecraft/command/permission --no-configuration-cache
+tasks.register('probePackage') {
+    description = 'Lists and javaps every class in a package on the compile classpath (development aid).'
+    group = 'help'
+
+    doLast {
+        def prefix = (project.findProperty('probePackage') ?: '').toString()
+        if (prefix.isEmpty()) {
+            println 'Pass -PprobePackage=net/minecraft/some/package'
+            return
+        }
+
+        def classpath = sourceSets.main.compileClasspath
+        def found = new TreeSet<String>()
+
+        classpath.each { file ->
+            if (!file.name.endsWith('.jar') || !file.exists()) {
+                return
+            }
+            try {
+                new java.util.zip.ZipFile(file).withCloseable { zip ->
+                    zip.entries().each { entry ->
+                        if (entry.name.startsWith(prefix) && entry.name.endsWith('.class')) {
+                            found << entry.name
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+                // Not a readable jar - skip it.
+            }
+        }
+
+        println "===== ${found.size()} classes under ${prefix}"
+        found.each { println '  ' + it }
+
+        def classpathText = classpath.asPath
+        found.each { entry ->
+            def className = entry.replace('/', '.').replaceAll(/\.class$/, '')
+            println "===== ${className}"
+            def scratch = File.createTempFile('probe', '.txt')
+            def process = new ProcessBuilder(['javap', '-classpath', classpathText, className])
+                    .redirectErrorStream(true)
+                    .redirectOutput(scratch)
+                    .start()
+            if (process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS)) {
+                scratch.readLines().each { println '  ' + it.trim() }
+            } else {
+                process.destroyForcibly()
+                println '  (timed out)'
+            }
+            scratch.delete()
+        }
+    }
+}
+
 tasks.register('probe') {
     description = 'Prints javap output for classes listed in dev/probe-list.txt (development aid).'
     group = 'help'
