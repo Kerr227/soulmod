@@ -110,3 +110,29 @@ net.minecraft.command.permission.PermissionLevel .
 net.minecraft.entity.effect.StatusEffects (LEVITATION|BLINDNESS)
 net.minecraft.scoreboard.Team (setPrefix|setSuffix)
 net.minecraft.text.Text (empty)
+
+# --- round 7: 1.2.0 souls (structures, fireworks, wolves, effect interception) ---
+net.minecraft.server.world.ServerWorld (locateStructure|getPointOfInterestStorage|getStructureAccessor)
+net.minecraft.registry.tag.StructureTags .
+net.minecraft.registry.RegistryKeys (STRUCTURE|BIOME)
+net.minecraft.world.gen.structure.Structure (getType)
+net.minecraft.entity.LivingEntity (canHaveStatusEffect|addStatusEffect|getArmor|getStatusEffects)
+net.minecraft.entity.effect.StatusEffect (getCategory|isBeneficial|isInstant|getName)
+net.minecraft.entity.effect.StatusEffectCategory .
+net.minecraft.entity.effect.StatusEffects (NIGHT_VISION|MINING_FATIGUE|HASTE|POISON|LEVITATION|BLINDNESS|SLOWNESS|WEAKNESS|WITHER|REGENERATION|SPEED|STRENGTH|DARKNESS)
+net.minecraft.entity.passive.WolfEntity (setTamed|setOwner|WolfEntity\(|setSitting)
+net.minecraft.entity.passive.TameableEntity (setTamed|setOwner|setSitting)
+net.minecraft.entity.passive.VillagerEntity (VillagerEntity\()
+net.minecraft.entity.EntityType (WOLF|VILLAGER|FIREWORK_ROCKET|spawn|create)
+net.minecraft.entity.projectile.FireworkRocketEntity (FireworkRocketEntity\()
+net.minecraft.component.DataComponentTypes (FIREWORKS|FIREWORK_EXPLOSION)
+net.minecraft.component.type.FireworksComponent .
+net.minecraft.component.type.FireworkExplosionComponent .
+net.minecraft.item.ItemStack (set\(|get\(|ItemStack\()
+net.minecraft.sound.SoundEvents (ENTITY_WARDEN_|BLOCK_BEACON_DEACTIVATE|ENTITY_VILLAGER_|ENTITY_WOLF_|BLOCK_NOTE_BLOCK|UI_TOAST)
+net.minecraft.particle.ParticleTypes (DUST$|FIREWORK|CRIT|LAVA|WAX_OFF)
+net.minecraft.particle.DustParticleEffect .
+net.minecraft.util.math.BlockPos (BlockPos\(|toShortString|getX)
+net.minecraft.server.world.ServerWorld (spawnEntity|getEntitiesByClass)
+net.minecraft.entity.Entity (refreshPositionAndAngles|isSneaking|setPosition|getBlockPos)
+net.minecraft.entity.player.PlayerEntity (isSneaking|getInventory|getArmorItems)
