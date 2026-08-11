@@ -15,6 +15,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,14 +37,6 @@ jobs:
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-
-      - name: Probe Minecraft/Fabric signatures (development aid)
-        if: ${{ hashFiles('dev/probe-list.txt') != '' }}
-        continue-on-error: true
-        run: |
-          mkdir -p ci-out
-          ./gradlew probe --no-configuration-cache --console=plain > ci-out/probe.txt 2>&1 || true
-          tail -5 ci-out/probe.txt
 
       - name: Build
         id: gradle_build

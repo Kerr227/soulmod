@@ -107,17 +107,27 @@ tasks.register('probe') {
             def filter = parts.length > 1 ? parts[1] : null
 
             println "===== ${className}${filter ? '   ~/' + filter + '/' : ''}"
+
+            // Output goes to a file rather than a pipe: reading a pipe blocks, which makes
+            // a javap that never returns hang the whole build.
+            def scratch = File.createTempFile('probe', '.txt')
             def process = new ProcessBuilder(['javap', '-classpath', classpath, className])
                     .redirectErrorStream(true)
+                    .redirectOutput(scratch)
                     .start()
-            def output = process.inputStream.text
-            process.waitFor()
+            if (!process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS)) {
+                process.destroyForcibly()
+                println '  (timed out)'
+                scratch.delete()
+                return
+            }
 
-            output.readLines().each { outputLine ->
+            scratch.readLines().each { outputLine ->
                 if (filter == null || outputLine =~ filter) {
                     println '  ' + outputLine.trim()
                 }
             }
+            scratch.delete()
         }
     }
 }

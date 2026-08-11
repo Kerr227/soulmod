@@ -1,0 +1,59 @@
+name: Release
+
+# Publishes the compiled mod jar as a GitHub Release so it can be downloaded
+# without digging through Actions artifacts.
+#
+#   git tag v1.0.0 && git push origin v1.0.0
+#
+# or run this workflow by hand and give it a tag name.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to publish (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Cache Gradle & Loom
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build --console=plain
+
+      - name: Show what was built
+        run: ls -la build/libs
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          name: Soul Souls ${{ github.event.inputs.tag || github.ref_name }}
+          generate_release_notes: true
+          files: |
+            build/libs/*.jar

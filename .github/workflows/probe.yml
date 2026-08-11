@@ -1,0 +1,57 @@
+name: Probe signatures
+
+# Development aid: prints the real Yarn signatures of the Minecraft and Fabric classes
+# listed in dev/probe-list.txt, for the exact Minecraft version this project targets.
+# Kept out of the build workflow so it can never hold up a build.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'dev/probe-list.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Cache Gradle & Loom
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Probe
+        timeout-minutes: 15
+        run: |
+          chmod +x ./gradlew
+          mkdir -p ci-out
+          ./gradlew probe --no-configuration-cache --console=plain > ci-out/probe.txt 2>&1 || true
+          tail -3 ci-out/probe.txt
+
+      - name: Publish probe output to ci-probe branch
+        if: always()
+        run: |
+          rm -rf /tmp/ci-probe && mkdir -p /tmp/ci-probe
+          cp -r ci-out/* /tmp/ci-probe/ 2>/dev/null || true
+          cd /tmp/ci-probe
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b ci-probe
+          git add -A
+          git commit -q -m "Probe output for ${GITHUB_SHA}"
+          git push -q --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci-probe
