@@ -34,7 +34,7 @@ server-side and survives disconnects, deaths, dimension changes and restarts.
 | Fabric API | 0.141.6+1.21.11 or newer |
 | Java | 21 |
 
-Download `soulsouls-1.0.0.jar` from the
+Download `soulsouls-1.2.0.jar` from the
 [Releases page](https://github.com/Kerr227/soulmod/releases), or build it yourself with the
 instructions below.
 
@@ -42,14 +42,14 @@ instructions below.
 
 1. Install Fabric Loader for 1.21.11 on your server.
 2. Put `fabric-api-0.141.6+1.21.11.jar` in the server's `mods/` folder.
-3. Put `soulsouls-1.0.0.jar` in the same `mods/` folder.
+3. Put `soulsouls-1.2.0.jar` in the same `mods/` folder.
 4. Start the server once. It creates `config/soulsouls.json` with every Soul and every
    tunable value filled in.
 5. Edit the config if you want, then run `/souls reload` (no restart needed).
 
 **Single player**
 
-Same idea: install Fabric for 1.21.11, drop Fabric API and `soulsouls-1.0.0.jar` into
+Same idea: install Fabric for 1.21.11, drop Fabric API and `soulsouls-1.2.0.jar` into
 `.minecraft/mods/`, and launch the Fabric profile.
 
 **Clients do not need the mod.** Everything runs on the server and vanilla clients see the
@@ -68,7 +68,7 @@ cd soulmod
 ./gradlew build          # Windows: gradlew.bat build
 ```
 
-The finished mod is `build/libs/soulsouls-1.0.0.jar`. Ignore `soulsouls-1.0.0-sources.jar`
+The finished mod is `build/libs/soulsouls-1.2.0.jar`. Ignore `soulsouls-1.2.0-sources.jar`
 and any `-dev`/`-remapped` files - only the plain one goes in `mods/`.
 
 The first build downloads Minecraft and the Fabric toolchain and takes a few minutes;
@@ -118,21 +118,24 @@ as often as one with chance 1.
 |---|---|---|---|---|---|
 | **Determination** | `#FF0000` bright red | LEGENDARY | 1 | 15 hearts | 40% chance to refuse death outright |
 | **Patience** | `#00FFFF` cyan | NORMAL | 20 | 10 → 20 hearts | Gains a heart every 10 min to 20, then loses one a minute back to 10, forever |
-| **Bravery** | `#FF8000` orange | NORMAL | 20 | 10 hearts | Speed I while moving, fades shortly after you stop |
-| **Justice** | `#FFFF00` yellow | HARD | 12 | 10 hearts | Arrows hit 15% harder; Focus ability for a bigger multiplier |
+| **Bravery** | `#FF8000` orange | NORMAL | 20 | 10 hearts | Speed and Strength while moving, fading shortly after you stop |
+| **Justice** | `#FFFF00` yellow | HARD | 12 | 10 hearts | Arrows hit double, growing per consecutive hit; resets on a miss |
 | **Kindness** | `#00FF00` green | NORMAL | 15 | 10 hearts | Out-of-combat regen, Resistance when hurt, heals nearby allies |
-| **Integrity** | `#0000FF` blue | NORMAL | 18 | 10 hearts | Takes no fall damage |
+| **Integrity** | `#0000FF` blue | NORMAL | 18 | 10 hearts | Takes no fall damage; double-sneak to launch straight up |
 | **Perseverance** | `#800080` purple | HARD | 12 | 10 hearts | Resistance after heavy hits, Strength at low health, last stand near death |
 | **Courage** | `#FFD700` gold | LEGENDARY | 2 | 11 hearts | Bravery + Justice. Dash, Speed and Strength, Resistance for nearby allies |
 | **Retribution** | `#9370DB` medium purple | LEGENDARY | 2 | 10 hearts | Justice + Perseverance. Avenges bonded allies; marks their killer |
-| **Patient Justice** | `#B0FFB0` pastel green | LEGENDARY | 2 | 10 hearts | Patience + Justice. Charge up, then release a burst on nearby hostiles |
 | **Dedication** | `#FF9BE0` pastel magenta | EXTREME | 1 | 10 hearts | A lethal hit leaves you at 1 HP with 10s to heal, or you die |
-| **Hatred / Regret** | `#101010` black | EXTREME | 1 | 10 hearts | Hits apply Wither; kills build instability that turns on you |
-| **Fun** | `#FF69B4` hot pink | EASY | 4 | 10 hearts | Luck, and a harmless surprise every few minutes |
+| **Hatred / Regret** | `#101010` black | EXTREME | 1 | **20 hearts** | Hits apply Wither. Suffers no harmful effect - they are inverted |
+| **Fun** | `#FF69B4` hot pink | EASY | 4 | 10 hearts | Luck, random surprises, and a party trick |
+| **Curiosity** | `#00CED1` turquoise | EASY | 6 | 10 hearts | Finds structures within 1000 blocks, each kind only once |
+| **Humility** | `#9E9E9E` grey | HARD | 8 | 10 hearts | Armour inverted: wearing less protects more |
+| **Fury** | `#8B0000` dark red | HARD | 4 | 10 hearts | Take enough damage and it roars: nearby players pinned and blinded |
+| **Memory** | `#FFD700` yellow | EASY | 6 | 10 hearts | Tells you where you died; remembers everyone you scan |
 
-There are no Faded Souls, no mixed or four-trait Souls, and no Soul evolution. Courage,
-Retribution and Patient Justice are described as combinations for flavour only - they are
-ordinary Souls you can roll or be given directly.
+There are no Faded Souls, no mixed or four-trait Souls, and no Soul evolution. Courage and
+Retribution are described as combinations for flavour only - they are ordinary Souls you
+can roll or be given directly.
 
 ---
 
@@ -157,6 +160,9 @@ level 2 (operator).
 | `/souls settings chance <soul> <percentage>` | op | Sets a Soul's roll weight |
 | `/souls settings refuse <percentage>` | op | Sets Determination's death-refusal chance |
 | `/souls settings difficulty <soul> <difficulty>` | op | EASY, NORMAL, HARD, EXTREME or LEGENDARY |
+| `/memory memories` | anyone | Memory only: everyone you have scanned, and where you last died |
+
+Giving yourself a Soul you already have is refused with `cant have the soul twice!`.
 
 \* `/souls give <soul>` and `/souls reset` are player-usable because the brief asks for
 them. If you would rather Souls stayed random, set `allow_player_give` and
@@ -165,10 +171,10 @@ them. If you would rather Souls stayed random, set `allow_player_give` and
 `/souls settings ...` writes to the config file immediately, so the change survives a
 restart.
 
-**Active abilities.** `/souls ability` is the trigger for Justice's Focus, Kindness's
-healing aura, Courage's charge and Patient Justice's charge/release. Players who want it on
-a key can bind one client-side to the command; Minecraft has no server-side keybind API, so
-a command is the only way to offer this to vanilla clients.
+**Active abilities: double-sneak.** Sneak twice quickly to fire your Soul's ability -
+Justice's Focus, Kindness's aura, Courage's charge, Integrity's launch, Fun's party trick,
+Curiosity's search, Memory's scan. `/souls ability` does exactly the same thing and stays
+available. The window is `double_sneak_window_millis` (400ms by default).
 
 ---
 
@@ -255,16 +261,15 @@ Names are decorated in two different places, on purpose.
 ❤ Yeti_Factories ❤
 ```
 
-**In the tab list** you get the Soul's name in front instead, which is more useful when you
-are scanning a player list:
+**In the tab list** you get exactly the same thing, so a player looks identical wherever
+you see them.
 
-```
-⌊INTEGRITY⌉ Yeti_Factories
-```
+Configurable through `nameplate_hearts` and `nameplate_heart`. If the heart does not render
+in your font, replace it with anything you like.
 
-Both are configurable - `nameplate_hearts` / `nameplate_heart` for the hearts, and
-`tab_soul_tag` / `tab_bracket_left` / `tab_bracket_right` for the tab tag. If the heart or
-bracket characters do not render in your font, replace them with anything you like.
+A Soul whose colour is too dark to read can colour its name separately - Hatred keeps black
+hearts but takes a white name, which is as close as vanilla text gets to an outline. Set
+`name_color` on any Soul in the config to do the same.
 
 ### How that works underneath
 
@@ -294,15 +299,15 @@ YOUR SOUL IS:
 🖤 HATRED 🖤
 ```
 
-For those six seconds the player is lifted off the ground with Levitation I, blinded, and
-made immune to fall damage - the immunity lasts a further ten seconds after the title
-fades, because levitation drops you from a height and the ceremony should not be able to
-kill the player it is congratulating.
+For those six seconds the player is blinded and made immune to fall damage, for a further
+ten seconds after the title fades. Levitation is off by default - set
+`assignment_levitation_amplifier` to 0 or more to lift the player as well, which is what the
+fall immunity is there for.
 
 | Key | Default | Effect |
 |---|---|---|
 | `assignment_ceremony_seconds` | 6 | Length of the title and the effects |
-| `assignment_levitation_amplifier` | 0 | Levitation I; `-1` turns it off |
+| `assignment_levitation_amplifier` | -1 | Off. `0` is Levitation I |
 | `assignment_blindness` | true | Blindness for the same window |
 | `assignment_fall_grace_seconds` | 10 | Extra fall immunity after it ends |
 | `assignment_sound` | `entity.ender_dragon.growl` | Sound on assignment |
@@ -422,8 +427,18 @@ implementation was used. The differences that matter:
   has a 10-minute cooldown, so nobody is permanently marked.
 - **Justice's ranged bonus** multiplies the projectile's damage after the weapon and its
   enchantments are applied, so it stacks correctly with Power rather than overwriting it.
-- **Patient Justice's release** damages hostile mobs in a radius. It deliberately does not
-  hit players or passive animals.
+- **Humility's armour rule.** "No armour = netherite, iron = diamond, netherite = nothing"
+  cannot all hold on one curve, so it is read as *light armour protects, heavy armour does
+  not*: nothing and anything up to iron both give diamond-grade protection, while full
+  diamond or netherite gives none. All three thresholds are config values.
+- **Hatred's effect inversion is polled** on the ability tick rather than intercepted when
+  the effect is applied, so a harmful effect exists for at most a fraction of a second
+  before flipping. That avoids a fragile mixin on the status-effect pipeline.
+- **Fury pinning players** uses high-amplitude Slowness, which is how vanilla itself
+  immobilises - there is no separate root effect.
+- **Justice's miss detection** is a timeout: an arrow that has not reported a hit within
+  `justice_miss_timeout_seconds` counts as a miss. An arrow that hits nothing simply lands,
+  so there is no event to listen for.
 - **Hatred's instability drain** never kills you on its own - it stops at half a heart.
 - **Active abilities are a command** (`/souls ability`) because Minecraft has no server-side
   keybind API and the mod must work for vanilla clients.
@@ -444,8 +459,8 @@ implementation was used. The differences that matter:
 - **MINOR** - new Souls or abilities, config gains keys but stays compatible (`1.1.0`)
 - **MAJOR** - save format or config format changes in a way that needs migration (`2.0.0`)
 
-Current release: **1.0.0** - the 13 Souls above, the command tree, the config system and
-per-player persistence.
+Current release: **1.2.0** - 16 Souls, double-sneak abilities, the command tree, the config
+system and per-player persistence. See `CHANGELOG.md` for what changed when.
 
 To cut a release: bump `mod_version` in `gradle.properties`, then edit `dev/RELEASE` and
 push. CI builds the jar and publishes it as a GitHub Release tagged from `mod_version`.
