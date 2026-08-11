@@ -42,6 +42,19 @@ jobs:
           ./gradlew probe --no-configuration-cache --console=plain > ci-out/probe.txt 2>&1 || true
           tail -3 ci-out/probe.txt
 
+      - name: List the command.permission package from the remapped jar
+        if: always()
+        timeout-minutes: 5
+        run: |
+          {
+            echo "===== classes in net/minecraft/command/permission"
+            for jar in $(find ~/.gradle/caches/fabric-loom -name '*.jar' 2>/dev/null | grep -iE 'minecraft.*(named|mapped)' | head -3); do
+              echo "--- $jar"
+              unzip -l "$jar" 2>/dev/null | grep 'net/minecraft/command/permission/' || true
+            done
+          } >> ci-out/probe.txt 2>&1
+          tail -40 ci-out/probe.txt
+
       - name: Publish probe output to ci-probe branch
         if: always()
         run: |

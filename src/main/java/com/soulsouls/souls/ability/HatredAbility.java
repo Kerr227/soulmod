@@ -133,11 +133,11 @@ public class HatredAbility implements SoulAbility {
         if (stacks > 0.0 && decaySeconds > 0.0) {
             double lastDecay = ctx.state(LAST_DECAY_AT, 0.0);
             if (lastDecay <= 0.0) {
-                ctx.data().setState(LAST_DECAY_AT, ctx.now());
+                ctx.setState(LAST_DECAY_AT, ctx.now());
             } else if (ctx.now() - lastDecay >= decaySeconds * 1000.0) {
                 stacks = Math.max(0.0, stacks - 1.0);
                 ctx.setState(STACKS, stacks);
-                ctx.data().setState(LAST_DECAY_AT, ctx.now());
+                ctx.setState(LAST_DECAY_AT, ctx.now());
             }
         }
 
