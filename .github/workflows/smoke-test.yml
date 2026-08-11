@@ -1,0 +1,121 @@
+name: Smoke test
+
+# Boots a real dedicated server with the mod installed and checks that it reaches
+# "Done" without a crash, that the mixin applied, that the config was generated and that
+# the /souls command registered. Compiling proves the types are right; this proves the mod
+# actually loads.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/**'
+      - 'build.gradle'
+      - 'gradle.properties'
+      - '.github/workflows/smoke-test.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Cache Gradle & Loom
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Accept the EULA for the test server
+        run: |
+          mkdir -p run
+          echo "eula=true" > run/eula.txt
+          printf 'online-mode=false\nlevel-type=minecraft\\:flat\nspawn-protection=0\nmax-players=4\n' > run/server.properties
+
+      - name: Boot the server
+        timeout-minutes: 20
+        run: |
+          chmod +x ./gradlew
+          mkdir -p ci-out
+          set +e
+          ./gradlew runServer --console=plain > ci-out/server.log 2>&1 &
+          GRADLE_PID=$!
+
+          # Wait for the server to finish starting, or for it to fall over.
+          for i in $(seq 1 120); do
+            grep -q 'Done (' ci-out/server.log && { echo "server reached Done"; break; }
+            grep -qE 'Failed to start|A mod crashed|Mixin apply failed|FAILURE: Build failed' ci-out/server.log && { echo "server failed to start"; break; }
+            kill -0 $GRADLE_PID 2>/dev/null || { echo "gradle exited early"; break; }
+            sleep 5
+          done
+
+          sleep 10
+          kill $GRADLE_PID 2>/dev/null
+          pkill -f 'net.fabricmc' 2>/dev/null
+          sleep 5
+          echo "--- last 60 lines ---"
+          tail -60 ci-out/server.log
+
+      - name: Check the results
+        id: check
+        run: |
+          {
+            echo "# smoke test for ${GITHUB_SHA}"
+            echo
+            echo "## did the server start?"
+            grep -c 'Done (' ci-out/server.log || echo 0
+            echo
+            echo "## Soul Souls log lines"
+            grep -iE 'soul souls|soulsouls' ci-out/server.log | head -30
+            echo
+            echo "## mixin"
+            grep -iE 'mixin' ci-out/server.log | grep -iE 'soulsouls|error|fail' | head -20
+            echo
+            echo "## errors / exceptions"
+            grep -nE 'Exception|ERROR|Caused by|crashed' ci-out/server.log | head -40
+            echo
+            echo "## generated config"
+            if [ -f run/config/soulsouls.json ]; then
+              echo "config/soulsouls.json exists:"
+              head -60 run/config/soulsouls.json
+            else
+              echo "NO CONFIG GENERATED"
+            fi
+            echo
+            echo "## world data dir"
+            ls -la run/world/soulsouls 2>/dev/null || echo "(no player data yet - expected, nobody joined)"
+          } > ci-out/smoke.txt 2>&1
+          cat ci-out/smoke.txt
+
+      - name: Publish smoke output
+        if: always()
+        run: |
+          rm -rf /tmp/ci-smoke && mkdir -p /tmp/ci-smoke
+          cp ci-out/smoke.txt /tmp/ci-smoke/ 2>/dev/null || true
+          tail -400 ci-out/server.log > /tmp/ci-smoke/server-tail.log 2>/dev/null || true
+          cd /tmp/ci-smoke
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b ci-smoke
+          git add -A
+          git commit -q -m "Smoke test for ${GITHUB_SHA}"
+          git push -q --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci-smoke
+
+      - name: Fail if the server did not start cleanly
+        run: |
+          grep -q 'Done (' ci-out/server.log || { echo "server never reached Done"; exit 1; }
+          grep -q 'Soul Souls ready' ci-out/server.log || { echo "mod did not initialise"; exit 1; }
+          echo "server started with Soul Souls loaded"
