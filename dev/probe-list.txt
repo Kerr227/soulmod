@@ -100,3 +100,5 @@ net.minecraft.command.permission.PermissionLevel .
 net.minecraft.command.CommandSource .
 net.minecraft.server.command.AbstractServerCommandSource .
 net.minecraft.server.PlayerManager (isOperator|getOpList|areCheatsAllowed)
+net.minecraft.command.permission.PermissionSource .
+net.minecraft.command.permission.Permission .
