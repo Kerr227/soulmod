@@ -75,7 +75,7 @@ public class SoulsConfig {
     public double assignment_ceremony_seconds = 6.0;
 
     /** Levitation amplifier during the ceremony. 0 is Levitation I; -1 turns it off. */
-    public int assignment_levitation_amplifier = 0;
+    public int assignment_levitation_amplifier = -1;
 
     /** Blind the player for the length of the ceremony. */
     public boolean assignment_blindness = true;
@@ -85,6 +85,18 @@ public class SoulsConfig {
      * height, so without this the ceremony itself could kill you.
      */
     public double assignment_fall_grace_seconds = 10.0;
+
+    /** Souls shout a short line when a Fun ability fires. Turn off for a quieter server. */
+    public boolean soul_voice_lines = true;
+
+    /** Play a small sound each time Patience gains or loses a heart. */
+    public boolean patience_sounds = true;
+
+    /**
+     * How long two sneaks may be apart to count as a double-sneak, in milliseconds.
+     * Double-sneaking activates your Soul's ability, same as /souls ability.
+     */
+    public int double_sneak_window_millis = 400;
 
     /** Sound played where a player dies. */
     public String death_sound = "minecraft:block.beacon.deactivate";
@@ -119,6 +131,19 @@ public class SoulsConfig {
 
     public int colorOf(Soul soul) {
         return parseColor(soulConfig(soul).color, soul.defaultColor());
+    }
+
+    /**
+     * Colour for the player's own name. Usually the Soul's colour, but a Soul whose colour
+     * is too dark to read on a dark background can override it (Hatred keeps black hearts
+     * and a white name).
+     */
+    public int nameColorOf(Soul soul) {
+        String override = soulConfig(soul).name_color;
+        if (override == null || override.isBlank()) {
+            return colorOf(soul);
+        }
+        return parseColor(override, colorOf(soul));
     }
 
     public double maxHealthOf(Soul soul) {

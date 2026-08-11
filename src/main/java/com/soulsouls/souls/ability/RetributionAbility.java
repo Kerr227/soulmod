@@ -99,6 +99,14 @@ public class RetributionAbility implements SoulAbility {
                     true, false, true));
         }
 
+        // A title, so it cannot be missed in the middle of a fight.
+        com.soulsouls.util.SoulEffects.title(ctx.player(),
+                Text.literal("GET REVENGE").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                Text.literal("kill ").formatted(Formatting.GRAY)
+                        .append(Text.literal(killer.getNameForScoreboard())
+                                .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD)),
+                10, 80, 20);
+
         ctx.message(Text.literal(victim.getNameForScoreboard() + " has fallen. ")
                 .formatted(Formatting.LIGHT_PURPLE)
                 .append(Text.literal(killer.getNameForScoreboard())

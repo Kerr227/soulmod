@@ -134,9 +134,13 @@ public class PatienceCycleAbility implements SoulAbility {
         ctx.world().spawnParticles(ParticleTypes.HAPPY_VILLAGER,
                 ctx.player().getX(), ctx.player().getY() + 1.0, ctx.player().getZ(),
                 loud ? 30 : 10, 0.5, 0.6, 0.5, 0.02);
-        if (loud) {
-            ctx.world().playSound(null, ctx.player().getX(), ctx.player().getY(), ctx.player().getZ(),
-                    SoundEvents.BLOCK_BEACON_ACTIVATE, net.minecraft.sound.SoundCategory.PLAYERS, 0.6F, 1.4F);
+        if (!ctx.config().patience_sounds) {
+            return;
         }
+        // A small chime on every step, and a fuller one when the cycle turns over.
+        ctx.world().playSound(null, ctx.player().getX(), ctx.player().getY(), ctx.player().getZ(),
+                loud ? SoundEvents.BLOCK_BEACON_ACTIVATE : SoundEvents.BLOCK_NOTE_BLOCK_CHIME.value(),
+                net.minecraft.sound.SoundCategory.PLAYERS,
+                loud ? 0.6F : 0.35F, loud ? 1.4F : 1.8F);
     }
 }

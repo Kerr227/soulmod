@@ -35,6 +35,9 @@ public class PlayerSoulData {
     /** Bond requests this player has sent and that are waiting to be answered. */
     public Set<String> bond_requests = new LinkedHashSet<>();
 
+    /** uuid -> last known name, for Souls that keep a list of people (Memory). */
+    public Map<String, String> remembered_names = new LinkedHashMap<>();
+
     public PlayerSoulData() {
     }
 
@@ -64,6 +67,9 @@ public class PlayerSoulData {
         }
         if (this.bond_requests == null) {
             this.bond_requests = new LinkedHashSet<>();
+        }
+        if (this.remembered_names == null) {
+            this.remembered_names = new LinkedHashMap<>();
         }
     }
 

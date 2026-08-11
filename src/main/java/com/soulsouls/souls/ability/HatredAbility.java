@@ -13,6 +13,11 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.registry.entry.RegistryEntry;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +36,18 @@ public class HatredAbility implements SoulAbility {
     public static final String TOUCH_COOLDOWN = "hatred_touch";
     private static final String STACKS = "hatred_stacks";
     private static final String LAST_DECAY_AT = "hatred_last_decay_at";
+
+    /**
+     * What each harmful effect becomes. Anything harmful that is not listed here is simply
+     * removed, so Hatred takes no damage from negative effects at all.
+     */
+    private static final Map<RegistryEntry<StatusEffect>, RegistryEntry<StatusEffect>> INVERSIONS = Map.of(
+            StatusEffects.WITHER, StatusEffects.REGENERATION,
+            StatusEffects.WEAKNESS, StatusEffects.STRENGTH,
+            StatusEffects.SLOWNESS, StatusEffects.SPEED,
+            StatusEffects.MINING_FATIGUE, StatusEffects.HASTE,
+            StatusEffects.BLINDNESS, StatusEffects.NIGHT_VISION,
+            StatusEffects.POISON, StatusEffects.REGENERATION);
 
     @Override
     public String id() {
@@ -58,7 +75,8 @@ public class HatredAbility implements SoulAbility {
                 Map.entry("hatred_seconds_per_stack", 0.3),
                 Map.entry("hatred_stack_decay_seconds", 120.0),
                 Map.entry("hatred_instability_threshold", 5.0),
-                Map.entry("hatred_instability_damage", 1.0)
+                Map.entry("hatred_instability_damage", 1.0),
+                Map.entry("hatred_invert_effects", 1.0)
         );
     }
 
@@ -79,7 +97,14 @@ public class HatredAbility implements SoulAbility {
                 Text.literal("  Above ").formatted(Formatting.GRAY)
                         .append(Text.literal((int) ctx.value("hatred_instability_threshold") + " stacks")
                                 .formatted(Formatting.WHITE))
-                        .append(Text.literal(" the Soul turns on you").formatted(Formatting.GRAY))
+                        .append(Text.literal(" the Soul turns on you").formatted(Formatting.GRAY)),
+                Text.literal("  Harmful effects are inverted: ").formatted(Formatting.GRAY),
+                Text.literal("    Wither and Poison heal, Weakness gives Strength,")
+                        .formatted(Formatting.DARK_GRAY),
+                Text.literal("    Slowness gives Speed, Mining Fatigue gives Haste,")
+                        .formatted(Formatting.DARK_GRAY),
+                Text.literal("    Blindness gives Night Vision. Everything else is stripped.")
+                        .formatted(Formatting.DARK_GRAY)
         );
     }
 
@@ -124,8 +149,41 @@ public class HatredAbility implements SoulAbility {
         }
     }
 
+    /**
+     * Hatred does not suffer. Anything harmful that lands on it is stripped off, and the
+     * five effects below are turned into their opposites.
+     *
+     * <p>This is polled rather than intercepted at the point the effect is applied: it runs
+     * on the ability tick, so a harmful effect exists for at most a fraction of a second.
+     * Doing it here keeps the whole Soul in one file and needs no mixin.
+     */
+    private void invertHarmfulEffects(AbilityContext ctx) {
+        if (ctx.value("hatred_invert_effects") <= 0.0) {
+            return;
+        }
+
+        // Copied first: removing an effect modifies the live collection.
+        List<StatusEffectInstance> active = new ArrayList<>(ctx.player().getStatusEffects());
+        for (StatusEffectInstance instance : active) {
+            RegistryEntry<StatusEffect> effect = instance.getEffectType();
+            if (effect.value().getCategory() != StatusEffectCategory.HARMFUL) {
+                continue;
+            }
+
+            RegistryEntry<StatusEffect> replacement = INVERSIONS.get(effect);
+            ctx.player().removeStatusEffect(effect);
+
+            if (replacement != null) {
+                ctx.player().addStatusEffect(new StatusEffectInstance(replacement,
+                        instance.getDuration(), instance.getAmplifier(), true, false, true));
+            }
+        }
+    }
+
     @Override
     public void tick(AbilityContext ctx) {
+        invertHarmfulEffects(ctx);
+
         double stacks = ctx.state(STACKS, 0.0);
 
         // Stacks bleed away over time.
@@ -155,11 +213,9 @@ public class HatredAbility implements SoulAbility {
             return;
         }
 
+        // Note: no Nausea or Weakness here any more. Hatred now turns harmful effects into
+        // helpful ones, so debuffing itself would hand it Strength and Speed instead.
         int overload = (int) (stacks - threshold) + 1;
-        ctx.refreshEffect(StatusEffects.NAUSEA, 100, 0);
-        if (overload >= 3) {
-            ctx.refreshEffect(StatusEffects.WEAKNESS, 100, 0);
-        }
 
         // The Soul feeds on its owner once it is this unstable. Never lethal on its own:
         // it stops at half a heart.

@@ -64,6 +64,10 @@ public final class SoulManager {
     private final Map<UUID, Vec3d> lastPositions = new HashMap<>();
     private final Map<UUID, Double> movedSinceLastTick = new HashMap<>();
 
+    /** Sneak edge detection, for the double-sneak that fires a Soul's ability. */
+    private final Map<UUID, Boolean> wasSneaking = new HashMap<>();
+    private final Map<UUID, Long> lastSneakAt = new HashMap<>();
+
     /**
      * Players whose death must not be refused. Abilities that eventually give up and let a
      * player die (Dedication) add themselves here for the duration of the killing blow.
@@ -336,6 +340,8 @@ public final class SoulManager {
     public void onLeave(ServerPlayerEntity player) {
         this.lastPositions.remove(player.getUuid());
         this.movedSinceLastTick.remove(player.getUuid());
+        this.wasSneaking.remove(player.getUuid());
+        this.lastSneakAt.remove(player.getUuid());
         this.deathBypass.remove(player.getUuid());
         saveNow();
     }
@@ -364,6 +370,7 @@ public final class SoulManager {
         if (this.tickCounter % interval == 0) {
             for (ServerPlayerEntity player : this.server.getPlayerManager().getPlayerList()) {
                 trackMovement(player);
+                boolean doubleSneaked = trackSneak(player);
 
                 PlayerSoulData data = dataOf(player);
                 Optional<Soul> soul = soulOf(data);
@@ -373,6 +380,10 @@ public final class SoulManager {
 
                 AbilityContext context = new AbilityContext(this, player, soul.get(), data);
                 refreshMaxHealth(player, soul.get(), data);
+
+                if (doubleSneaked) {
+                    activateAbility(player, soul.get(), context);
+                }
 
                 for (SoulAbility ability : soul.get().abilities()) {
                     try {
@@ -401,6 +412,56 @@ public final class SoulManager {
         double dx = current.x - previous.x;
         double dz = current.z - previous.z;
         this.movedSinceLastTick.put(player.getUuid(), Math.sqrt(dx * dx + dz * dz));
+    }
+
+    /**
+     * Watches for two sneaks inside the configured window. Sneaking twice quickly is the
+     * in-game way to fire a Soul's active ability, so players do not have to type a command
+     * mid-fight.
+     *
+     * @return true on the tick the second sneak lands
+     */
+    private boolean trackSneak(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        boolean sneaking = player.isSneaking();
+        boolean previously = this.wasSneaking.getOrDefault(uuid, false);
+        this.wasSneaking.put(uuid, sneaking);
+
+        if (!sneaking || previously) {
+            return false;
+        }
+
+        long now = System.currentTimeMillis();
+        Long previousSneak = this.lastSneakAt.get(uuid);
+        if (previousSneak != null && now - previousSneak <= this.config.double_sneak_window_millis) {
+            this.lastSneakAt.remove(uuid);
+            return true;
+        }
+        this.lastSneakAt.put(uuid, now);
+        return false;
+    }
+
+    /**
+     * Runs the first active ability the Soul has. Shared by {@code /souls ability} and the
+     * double-sneak, so the two can never drift apart.
+     *
+     * @return true if an ability actually fired
+     */
+    public boolean activateAbility(ServerPlayerEntity player, Soul soul, AbilityContext context) {
+        for (SoulAbility ability : soul.abilities()) {
+            if (!ability.isActive()) {
+                continue;
+            }
+            try {
+                if (ability.activate(context)) {
+                    return true;
+                }
+            } catch (Exception exception) {
+                SoulSouls.LOGGER.error("Ability {} of soul {} failed to activate",
+                        ability.id(), soul.id(), exception);
+            }
+        }
+        return false;
     }
 
     /** Horizontal distance the player covered during the last ability tick, in blocks. */
@@ -470,6 +531,10 @@ public final class SoulManager {
         forEachAbility(player, (context, ability) -> ability.onProjectileFired(context, projectile));
     }
 
+    public void onProjectileHit(ServerPlayerEntity shooter, LivingEntity victim) {
+        forEachAbility(shooter, (context, ability) -> ability.onProjectileHit(context, victim));
+    }
+
     /**
      * Called when any living entity dies. Feeds the killer's {@code onKill} hook and, for
      * player victims, every online Soul holder's {@code onOtherPlayerDeath} hook.
@@ -477,6 +542,16 @@ public final class SoulManager {
     public void onDeath(LivingEntity victim, DamageSource source) {
         if (victim instanceof ServerPlayerEntity dying) {
             playDeathSound(dying);
+
+            // Memory is told exactly where it fell, while it still knows.
+            soulOf(dataOf(dying)).ifPresent(soul -> {
+                for (SoulAbility ability : soul.abilities()) {
+                    if (ability instanceof com.soulsouls.souls.ability.MemoryAbility) {
+                        com.soulsouls.souls.ability.MemoryAbility.rememberDeath(
+                                new AbilityContext(this, dying, soul, dataOf(dying)));
+                    }
+                }
+            });
         }
 
         Entity attacker = source.getAttacker();

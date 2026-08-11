@@ -24,6 +24,9 @@ import java.util.Map;
 public class JusticeMarksmanAbility implements SoulAbility {
     public static final String COOLDOWN = "justice_focus";
     private static final String FOCUS_UNTIL = "justice_focus_until";
+    private static final String STREAK_BONUS = "justice_streak_bonus";
+    private static final String SHOTS_IN_FLIGHT = "justice_shots_in_flight";
+    private static final String LAST_SHOT_AT = "justice_last_shot_at";
 
     @Override
     public String id() {
@@ -48,10 +51,13 @@ public class JusticeMarksmanAbility implements SoulAbility {
     @Override
     public Map<String, Double> defaultValues() {
         return Map.of(
-                "justice_projectile_multiplier", 1.15,
+                "justice_projectile_multiplier", 2.0,
+                "justice_streak_step", 0.1,
+                "justice_streak_max", 1.0,
                 "justice_focus_multiplier", 1.35,
                 "justice_focus_duration_seconds", 6.0,
-                "justice_focus_cooldown_seconds", 45.0
+                "justice_focus_cooldown_seconds", 45.0,
+                "justice_miss_timeout_seconds", 4.0
         );
     }
 
@@ -59,8 +65,12 @@ public class JusticeMarksmanAbility implements SoulAbility {
     public List<Text> describe(AbilityContext ctx) {
         return List.of(
                 Text.literal("  Arrow damage: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("x" + ctx.value("justice_projectile_multiplier"))
+                        .append(Text.literal("x" + ctx.value("justice_projectile_multiplier")
+                                        + ", +" + ctx.value("justice_streak_step") + " per hit up to +"
+                                        + ctx.value("justice_streak_max"))
                                 .formatted(Formatting.WHITE)),
+                Text.literal("  Current streak bonus: ").formatted(Formatting.GRAY)
+                        .append(Text.literal("+" + ctx.state(STREAK_BONUS, 0.0)).formatted(Formatting.WHITE)),
                 Text.literal("  /souls ability -> Focus: ").formatted(Formatting.GRAY)
                         .append(Text.literal("x" + ctx.value("justice_focus_multiplier") + " for "
                                         + (int) ctx.value("justice_focus_duration_seconds") + "s")
@@ -70,7 +80,8 @@ public class JusticeMarksmanAbility implements SoulAbility {
 
     @Override
     public void onProjectileFired(AbilityContext ctx, PersistentProjectileEntity projectile) {
-        double multiplier = ctx.value("justice_projectile_multiplier");
+        // Base multiplier, plus whatever the current hit streak has earned.
+        double multiplier = ctx.value("justice_projectile_multiplier") + ctx.state(STREAK_BONUS, 0.0);
 
         if (ctx.now() < ctx.state(FOCUS_UNTIL, 0.0)) {
             multiplier *= ctx.value("justice_focus_multiplier");
@@ -80,6 +91,47 @@ public class JusticeMarksmanAbility implements SoulAbility {
         if (multiplier != 1.0) {
             // Scales whatever damage the projectile already had, so Power enchantments still count.
             projectile.applyDamageModifier((float) multiplier);
+        }
+
+        // Every arrow is assumed to have missed until something tells us otherwise. The
+        // arrow lands (or does not) long after this, so the streak is settled in onArrowHit.
+        ctx.setState(SHOTS_IN_FLIGHT, 1.0);
+        ctx.setState(LAST_SHOT_AT, ctx.now());
+    }
+
+    /**
+     * A hit widens the multiplier by {@code justice_streak_step}, up to
+     * {@code justice_streak_max}.
+     */
+    @Override
+    public void onProjectileHit(AbilityContext ctx, net.minecraft.entity.LivingEntity victim) {
+        double bonus = Math.min(ctx.value("justice_streak_max"),
+                ctx.state(STREAK_BONUS, 0.0) + ctx.value("justice_streak_step"));
+        ctx.setState(STREAK_BONUS, bonus);
+        ctx.setState(SHOTS_IN_FLIGHT, 0.0);
+
+        ctx.actionBar(Text.literal(String.format("Justice x%.2f",
+                        ctx.value("justice_projectile_multiplier") + bonus))
+                .formatted(Formatting.YELLOW));
+    }
+
+    @Override
+    public void tick(AbilityContext ctx) {
+        // A miss cannot be observed directly - an arrow that hits nothing just lands. So an
+        // arrow that has not reported a hit within the timeout is counted as a miss, which
+        // ends the streak.
+        if (ctx.state(SHOTS_IN_FLIGHT, 0.0) <= 0.0) {
+            return;
+        }
+        double firedAt = ctx.state(LAST_SHOT_AT, 0.0);
+        if (firedAt <= 0.0 || ctx.now() - firedAt < ctx.value("justice_miss_timeout_seconds") * 1000.0) {
+            return;
+        }
+
+        ctx.setState(SHOTS_IN_FLIGHT, 0.0);
+        if (ctx.state(STREAK_BONUS, 0.0) > 0.0) {
+            ctx.setState(STREAK_BONUS, 0.0);
+            ctx.actionBar(Text.literal("Missed - back to standard.").formatted(Formatting.GRAY));
         }
     }
 

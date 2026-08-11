@@ -43,7 +43,7 @@ public final class SoulTeams {
                 team = scoreboard.addTeam(name);
             }
             team.setDisplayName(SoulText.soulName(soul, config));
-            team.setColor(SoulText.nearestFormatting(config.colorOf(soul)));
+            team.setColor(SoulText.nearestFormatting(config.nameColorOf(soul)));
 
             // A team prefix and suffix wrap the name everywhere vanilla draws it, which is
             // how the hearts end up either side of the name above the player's head.

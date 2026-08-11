@@ -41,19 +41,9 @@ public abstract class ServerPlayerEntityMixin {
 
         Text existing = callback.getReturnValue();
         String name = existing != null ? existing.getString() : player.getNameForScoreboard();
-        int colour = manager.config().colorOf(soul.get());
-
-        // The tab list gets the Soul's name in front of the player's, e.g. "|INTEGRITY| Steve".
-        // The name above the head is left to the scoreboard team, which puts hearts around it.
-        MutableText line = Text.empty();
-        if (manager.config().tab_soul_tag) {
-            String tag = manager.config().tab_bracket_left
-                    + soul.get().displayName()
-                    + manager.config().tab_bracket_right;
-            line.append(SoulText.coloured(tag + " ", colour));
-        }
-        line.append(SoulText.coloured(name, colour));
-
-        callback.setReturnValue(line);
+        // The tab list is built to match the name above the head exactly: hearts in the
+        // Soul's colour around a name in the Soul's name colour. Doing it here (rather than
+        // leaving it to the team) is what gets the true RGB colour into the tab list.
+        callback.setReturnValue(SoulText.decoratedName(name, soul.get(), manager.config()));
     }
 }

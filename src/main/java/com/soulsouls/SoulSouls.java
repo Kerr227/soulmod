@@ -1,5 +1,6 @@
 package com.soulsouls;
 
+import com.soulsouls.command.MemoryCommand;
 import com.soulsouls.command.SoulsCommand;
 import com.soulsouls.config.SoulsConfig;
 import com.soulsouls.data.SoulManager;
@@ -46,8 +47,10 @@ public class SoulSouls implements ModInitializer {
         registerPlayerEvents();
         registerCombatEvents();
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                SoulsCommand.register(dispatcher));
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            SoulsCommand.register(dispatcher);
+            MemoryCommand.register(dispatcher);
+        });
 
         LOGGER.info("Soul Souls ready");
     }
@@ -109,8 +112,17 @@ public class SoulSouls implements ModInitializer {
 
         ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseTaken, taken, blocked) -> {
             SoulManager manager = SoulManager.get();
-            if (manager != null && entity instanceof ServerPlayerEntity player) {
+            if (manager == null) {
+                return;
+            }
+            if (entity instanceof ServerPlayerEntity player) {
                 manager.afterDamage(player, source, taken);
+            }
+            // An arrow connecting is the only reliable signal that a shot did not miss.
+            if (source.getSource() instanceof PersistentProjectileEntity projectile
+                    && projectile.getOwner() instanceof ServerPlayerEntity shooter
+                    && shooter != entity) {
+                manager.onProjectileHit(shooter, entity);
             }
         });
 

@@ -5,6 +5,7 @@ import com.soulsouls.soul.AbilityContext;
 import com.soulsouls.soul.SoulAbility;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -106,8 +107,18 @@ public class RefuseDeathAbility implements SoulAbility {
         world.spawnParticles(ParticleTypes.TOTEM_OF_UNDYING,
                 player.getX(), player.getY() + 1.0, player.getZ(),
                 80, 0.5, 0.8, 0.5, 0.25);
+
+        // Red sparks, in Determination's own colour, thrown outwards.
+        world.spawnParticles(new DustParticleEffect(0xFF0000, 1.6F),
+                player.getX(), player.getY() + 1.0, player.getZ(),
+                60, 0.6, 0.9, 0.6, 0.35);
+
+        // A beacon shutting down, at normal speed - the mirror of the death sound.
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.ITEM_TOTEM_USE, net.minecraft.sound.SoundCategory.PLAYERS, 1.0F, 1.0F);
+                SoundEvents.BLOCK_BEACON_DEACTIVATE, net.minecraft.sound.SoundCategory.PLAYERS,
+                1.0F, 1.0F);
+        world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.ITEM_TOTEM_USE, net.minecraft.sound.SoundCategory.PLAYERS, 0.6F, 1.0F);
 
         return false;
     }

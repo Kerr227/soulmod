@@ -36,7 +36,8 @@ public class BraveryMomentumAbility implements SoulAbility {
                 "bravery_move_threshold", 0.08,
                 "bravery_build_up_seconds", 1.5,
                 "bravery_linger_seconds", 2.0,
-                "bravery_speed_amplifier", 0.0
+                "bravery_speed_amplifier", 0.0,
+                "bravery_strength_amplifier", 0.0
         );
     }
 
@@ -45,7 +46,11 @@ public class BraveryMomentumAbility implements SoulAbility {
         int level = (int) ctx.value("bravery_speed_amplifier") + 1;
         return List.of(
                 Text.literal("  While moving: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("Speed " + roman(level)).formatted(Formatting.WHITE)),
+                        .append(Text.literal("Speed " + roman(level)
+                                        + (ctx.value("bravery_strength_amplifier") >= 0
+                                        ? " and Strength " + roman((int) ctx.value("bravery_strength_amplifier") + 1)
+                                        : ""))
+                                .formatted(Formatting.WHITE)),
                 Text.literal("  Builds up after ").formatted(Formatting.GRAY)
                         .append(Text.literal(trim(ctx.value("bravery_build_up_seconds")) + "s")
                                 .formatted(Formatting.WHITE))
@@ -82,6 +87,12 @@ public class BraveryMomentumAbility implements SoulAbility {
             int amplifier = Math.max(0, (int) ctx.value("bravery_speed_amplifier"));
             // Refresh rather than re-apply, so the client is not spammed with effect packets.
             ctx.refreshEffect(StatusEffects.SPEED, lingerTicks + ctx.tickInterval(), amplifier);
+
+            // Momentum hits as well as moves: keep swinging while you keep running.
+            int strength = (int) ctx.value("bravery_strength_amplifier");
+            if (strength >= 0) {
+                ctx.refreshEffect(StatusEffects.STRENGTH, lingerTicks + ctx.tickInterval(), strength);
+            }
         }
     }
 

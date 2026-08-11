@@ -7,13 +7,17 @@ import com.soulsouls.soul.SoulRegistry;
 import com.soulsouls.souls.ability.BraveryMomentumAbility;
 import com.soulsouls.souls.ability.CourageDashAbility;
 import com.soulsouls.souls.ability.DedicationAbility;
+import com.soulsouls.souls.ability.CuriosityAbility;
 import com.soulsouls.souls.ability.FunAbility;
+import com.soulsouls.souls.ability.FunPartyAbility;
+import com.soulsouls.souls.ability.FuryAbility;
+import com.soulsouls.souls.ability.HumilityArmourAbility;
+import com.soulsouls.souls.ability.MemoryAbility;
 import com.soulsouls.souls.ability.HatredAbility;
 import com.soulsouls.souls.ability.IntegrityFallAbility;
 import com.soulsouls.souls.ability.JusticeMarksmanAbility;
 import com.soulsouls.souls.ability.KindnessAbility;
 import com.soulsouls.souls.ability.PatienceCycleAbility;
-import com.soulsouls.souls.ability.PatientJusticeAbility;
 import com.soulsouls.souls.ability.PerseveranceAbility;
 import com.soulsouls.souls.ability.RefuseDeathAbility;
 import com.soulsouls.souls.ability.RetributionAbility;
@@ -151,16 +155,6 @@ public final class Souls {
                 .ability(new RetributionAbility())
                 .build());
 
-        // ---------------------------------------------------------------- Patient Justice (Patience + Justice)
-        SoulRegistry.register(Soul.builder("patient_justice", "PATIENT JUSTICE")
-                .color(0xB0FFB0)
-                .rarity(SoulRarity.LEGENDARY)
-                .difficulty(SoulDifficulty.LEGENDARY)
-                .description("Patience and Justice together: the longer the wait, the heavier the verdict.")
-                .chance(2.0)
-                .maxHealth(20.0)
-                .ability(new PatientJusticeAbility())
-                .build());
 
         // ---------------------------------------------------------------- Dedication
         SoulRegistry.register(Soul.builder("dedication", "DEDICATION")
@@ -176,11 +170,14 @@ public final class Souls {
         // ---------------------------------------------------------------- Hatred / Regret
         SoulRegistry.register(Soul.builder("hatred", "HATRED")
                 .color(0x101010)
+                // Vanilla text cannot be outlined, so the name goes white against the black
+                // hearts instead - the closest readable equivalent.
+                .nameColor(0xFFFFFF)
                 .rarity(SoulRarity.SECRET)
                 .difficulty(SoulDifficulty.EXTREME)
                 .description("It rots whatever it touches, including the one who carries it.")
                 .chance(1.0)
-                .maxHealth(20.0)
+                .maxHealth(40.0)
                 .ability(new HatredAbility())
                 .build());
 
@@ -193,6 +190,51 @@ public final class Souls {
                 .chance(4.0)
                 .maxHealth(20.0)
                 .ability(new FunAbility())
+                .ability(new FunPartyAbility())
+                .build());
+
+        // ---------------------------------------------------------------- Curiosity
+        SoulRegistry.register(Soul.builder("curiosity", "CURIOSITY")
+                .color(0x00CED1)
+                .rarity(SoulRarity.RARE)
+                .difficulty(SoulDifficulty.EASY)
+                .description("It has to know what is over the next hill.")
+                .chance(6.0)
+                .maxHealth(20.0)
+                .ability(new CuriosityAbility())
+                .build());
+
+        // ---------------------------------------------------------------- Humility
+        SoulRegistry.register(Soul.builder("humility", "HUMILITY")
+                .color(0x9E9E9E)
+                .rarity(SoulRarity.UNCOMMON)
+                .difficulty(SoulDifficulty.HARD)
+                .description("The less it wears, the harder it is to hurt.")
+                .chance(8.0)
+                .maxHealth(20.0)
+                .ability(new HumilityArmourAbility())
+                .build());
+
+        // ---------------------------------------------------------------- Fury
+        SoulRegistry.register(Soul.builder("fury", "FURY")
+                .color(0x8B0000)
+                .rarity(SoulRarity.VERY_RARE)
+                .difficulty(SoulDifficulty.HARD)
+                .description("Hit it enough and it screams.")
+                .chance(4.0)
+                .maxHealth(20.0)
+                .ability(new FuryAbility())
+                .build());
+
+        // ---------------------------------------------------------------- Memory
+        SoulRegistry.register(Soul.builder("memory", "MEMORY")
+                .color(0xFFD700)
+                .rarity(SoulRarity.RARE)
+                .difficulty(SoulDifficulty.EASY)
+                .description("It forgets nothing: not a face, not a place it fell.")
+                .chance(6.0)
+                .maxHealth(20.0)
+                .ability(new MemoryAbility())
                 .build());
 
         // Add new Souls here. See the class comment for a worked example.

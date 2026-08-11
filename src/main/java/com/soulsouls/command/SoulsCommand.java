@@ -255,6 +255,10 @@ public final class SoulsCommand {
             context.getSource().sendError(Text.literal("That Soul is disabled on this server."));
             return 0;
         }
+        if (manager.soulOf(player).filter(current -> current.equals(soul.get())).isPresent()) {
+            context.getSource().sendError(Text.literal("cant have the soul twice!"));
+            return 0;
+        }
 
         manager.assign(player, soul.get(), true);
         context.getSource().sendFeedback(() ->
@@ -278,6 +282,10 @@ public final class SoulsCommand {
 
         Optional<Soul> soul = resolveSoul(context, "soul");
         if (soul.isEmpty()) {
+            return 0;
+        }
+        if (manager.soulOf(target).filter(current -> current.equals(soul.get())).isPresent()) {
+            context.getSource().sendError(Text.literal("cant have the soul twice!"));
             return 0;
         }
 
@@ -344,15 +352,16 @@ public final class SoulsCommand {
         }
 
         AbilityContext abilityContext = manager.contextFor(player, soul.get());
+        if (manager.activateAbility(player, soul.get(), abilityContext)) {
+            return 1;
+        }
+
         boolean anyActive = false;
         for (SoulAbility soulAbility : soul.get().abilities()) {
             if (!soulAbility.isActive()) {
                 continue;
             }
             anyActive = true;
-            if (soulAbility.activate(abilityContext)) {
-                return 1;
-            }
             for (String key : soulAbility.cooldownKeys()) {
                 long left = abilityContext.cooldownSecondsLeft(key);
                 if (left > 0) {

@@ -107,6 +107,10 @@ public interface SoulAbility {
     default void onProjectileFired(AbilityContext ctx, PersistentProjectileEntity projectile) {
     }
 
+    /** Called when a projectile this player fired actually damages something. */
+    default void onProjectileHit(AbilityContext ctx, LivingEntity victim) {
+    }
+
     /**
      * Called on every online Soul holder when any player dies, so a Soul can react to
      * something that happened to somebody else (Retribution uses this).
