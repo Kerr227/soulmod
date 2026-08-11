@@ -84,6 +84,22 @@ public class IntegrityFallAbility implements SoulAbility {
         return true;
     }
 
+    /** The four armour pieces. getArmorItems() is gone in 1.21.11, so slots are read directly. */
+    static java.util.List<ItemStack> armourOf(net.minecraft.entity.LivingEntity entity) {
+        java.util.List<ItemStack> pieces = new java.util.ArrayList<>(4);
+        for (net.minecraft.entity.EquipmentSlot slot : new net.minecraft.entity.EquipmentSlot[]{
+                net.minecraft.entity.EquipmentSlot.HEAD,
+                net.minecraft.entity.EquipmentSlot.CHEST,
+                net.minecraft.entity.EquipmentSlot.LEGS,
+                net.minecraft.entity.EquipmentSlot.FEET}) {
+            ItemStack piece = entity.getEquippedStack(slot);
+            if (!piece.isEmpty()) {
+                pieces.add(piece);
+            }
+        }
+        return pieces;
+    }
+
     /**
      * Turns a blast into repairs. Experience is spent only for damage actually mended, so a
      * player with pristine armour or an empty bar loses nothing.
@@ -101,7 +117,7 @@ public class IntegrityFallAbility implements SoulAbility {
         int spent = 0;
         int repaired = 0;
 
-        for (ItemStack piece : player.getArmorItems()) {
+        for (ItemStack piece : armourOf(player)) {
             if (spent >= budget) {
                 break;
             }

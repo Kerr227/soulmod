@@ -67,8 +67,8 @@ public final class JusticeCommand {
             return 0;
         }
 
-        Vec3d from = ctx.player().getPos();
-        Vec3d to = target.getPos();
+        Vec3d from = new Vec3d(ctx.player().getX(), ctx.player().getY(), ctx.player().getZ());
+        Vec3d to = new Vec3d(target.getX(), target.getY(), target.getZ());
         int distance = (int) from.distanceTo(to);
 
         context.getSource().sendFeedback(() -> Text.literal(target.getNameForScoreboard())

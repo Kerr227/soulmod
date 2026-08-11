@@ -33,10 +33,12 @@ import java.util.UUID;
  * The {@code /souls} command tree.
  *
  * <p>Anything that changes another player, or the configuration, needs permission level 2
- * (the usual "operator" level). The two commands the brief lists as player-facing -
- * {@code /souls give <soul>} and {@code /souls reset} - are gated by the config flags
- * {@code allow_player_give} and {@code allow_player_reset} instead, so a server that wants
- * Souls to stay random can turn them off without losing the admin versions.
+ * (the usual "operator" level). {@code /souls reset} is player-facing and gated by the
+ * {@code allow_player_reset} config flag, so a server that wants Souls to stay where they
+ * landed can turn it off without losing the admin version.
+ *
+ * <p>Souls are handed out by {@code /souls set <player> <soul>} only - players cannot pick
+ * their own.
  */
 public final class SoulsCommand {
     // Admin checks all go through SoulPermissions, which owns the 1.21.11 permission API.

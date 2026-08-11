@@ -204,6 +204,5 @@ public class MemoryAbility implements SoulAbility {
         ctx.world().playSound(null, ctx.player().getX(), ctx.player().getY(), ctx.player().getZ(),
                 SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, net.minecraft.sound.SoundCategory.PLAYERS,
                 0.7F, 1.2F);
-        return true;
     }
 }

@@ -111,7 +111,7 @@ public class BraveryStoredDamageAbility implements SoulAbility {
         // Spread the whole stored total across whatever they are wearing. Nothing here
         // touches their health - the punishment is entirely to their gear.
         int spread = 0;
-        for (ItemStack piece : victim.getArmorItems()) {
+        for (ItemStack piece : IntegrityFallAbility.armourOf(victim)) {
             if (piece.isEmpty() || !piece.isDamageable()) {
                 continue;
             }
