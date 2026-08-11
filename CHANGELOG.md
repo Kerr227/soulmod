@@ -41,6 +41,11 @@ Souls and no Soul evolution.
   changes and anything else that rebuilds a player's attributes.
 - Admin commands require permission level 2.
 
+### Verification
+- CI builds the mod against real Minecraft 1.21.11 and boots a dedicated server with it
+  installed, checking that the server reaches "Done", the mod initialises, the mixin
+  applies and `config/soulsouls.json` is generated.
+
 ### Name colouring
 - Scoreboard teams colour the name above the head, the tab list and chat for vanilla
   clients, using the closest vanilla colour to the Soul's RGB.
