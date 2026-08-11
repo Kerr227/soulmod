@@ -25,17 +25,15 @@ dependencies {
         // Escape hatch: compile against the whole Fabric API bundle.
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     } else {
-        // Only the Fabric API modules this mod actually uses. The mod still requires the
-        // full Fabric API at runtime (see fabric.mod.json), this just keeps the compile
-        // classpath small.
+        // Only the Fabric API modules this mod actually uses. fabric.mod.json depends on
+        // the same module ids, which a normal Fabric API install provides - so this works
+        // both in the dev runtime and for players who drop in the full Fabric API jar.
         [
                 'fabric-api-base',
                 'fabric-lifecycle-events-v1',
                 'fabric-entity-events-v1',
                 'fabric-command-api-v2',
-                'fabric-networking-api-v1',
-                'fabric-events-interaction-v0',
-                'fabric-message-api-v1'
+                'fabric-events-interaction-v0'
         ].each { module ->
             modImplementation fabricApi.module(module, project.fabric_version)
         }

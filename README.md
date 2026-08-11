@@ -85,17 +85,27 @@ fabric_version=0.141.6+1.21.11
 ```
 
 > **Note on Loom.** This project pins Fabric Loom `1.16.3` and depends on the individual
-> Fabric API modules it uses rather than the whole `fabric-api` bundle. Newer Loom versions
-> plus the full bundle fail to set up Minecraft 1.21.11 with
-> `Javadoc provided by mod (fabric-content-registries-v0) must be have an intermediary
-> source namespace`. If you change either, expect to revisit the other.
+> Fabric API modules it uses (`fabric-command-api-v2`, `fabric-entity-events-v1`,
+> `fabric-lifecycle-events-v1`, `fabric-events-interaction-v0`) rather than the whole
+> `fabric-api` bundle. Newer Loom versions plus the full bundle fail to set up Minecraft
+> 1.21.11 with `Javadoc provided by mod (fabric-content-registries-v0) must be have an
+> intermediary source namespace`. If you change either, expect to revisit the other.
+>
+> `fabric.mod.json` depends on those same module ids rather than on `fabric-api` itself.
+> Installing the normal Fabric API jar satisfies them, because it ships each module as a
+> separate mod.
 
-There is also a development helper for checking Yarn signatures against the pinned
-Minecraft version, which is handy when writing new abilities:
+There are two development helpers for checking APIs against the pinned Minecraft version,
+which is handy when writing new abilities:
 
 ```bash
-./gradlew probe --no-configuration-cache      # reads dev/probe-list.txt
+./gradlew probe --no-configuration-cache                       # reads dev/probe-list.txt
+./gradlew probePackage -PprobePackage=net/minecraft/entity \
+    --no-configuration-cache                                   # dumps a whole package
 ```
+
+CI also runs a smoke test that boots a real dedicated server with the mod installed and
+checks it reaches "Done" with the mod initialised - see `.github/workflows/smoke-test.yml`.
 
 ---
 
