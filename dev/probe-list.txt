@@ -93,3 +93,10 @@ net.minecraft.item.Items (^  public static final net.minecraft.item.Item (COOKIE
 net.minecraft.item.ItemStack .
 net.minecraft.server.world.ServerWorld (getOtherEntities|getEntitiesByClass)
 net.minecraft.world.World (getOtherEntities)
+
+# --- round 4: the 1.21.11 permission system ---
+net.minecraft.command.permission.PermissionPredicate .
+net.minecraft.command.permission.PermissionLevel .
+net.minecraft.command.CommandSource .
+net.minecraft.server.command.AbstractServerCommandSource .
+net.minecraft.server.PlayerManager (isOperator|getOpList|areCheatsAllowed)

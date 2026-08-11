@@ -39,7 +39,7 @@ import java.util.UUID;
  * Souls to stay random can turn them off without losing the admin versions.
  */
 public final class SoulsCommand {
-    private static final int ADMIN_LEVEL = 2;
+    // Admin checks all go through SoulPermissions, which owns the 1.21.11 permission API.
 
     private static final SuggestionProvider<ServerCommandSource> SOUL_SUGGESTIONS = (context, builder) -> {
         String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
@@ -85,31 +85,31 @@ public final class SoulsCommand {
                                 .suggests(SOUL_SUGGESTIONS)
                                 .executes(SoulsCommand::giveSelf))
                         .then(CommandManager.argument("player", EntityArgumentType.player())
-                                .requires(source -> source.hasPermissionLevel(ADMIN_LEVEL))
+                                .requires(source -> SoulPermissions.isAdmin(source))
                                 .then(CommandManager.argument("soul", StringArgumentType.word())
                                         .suggests(SOUL_SUGGESTIONS)
                                         .executes(SoulsCommand::giveOther))))
 
                 .then(CommandManager.literal("set")
-                        .requires(source -> source.hasPermissionLevel(ADMIN_LEVEL))
+                        .requires(source -> SoulPermissions.isAdmin(source))
                         .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .then(CommandManager.argument("soul", StringArgumentType.word())
                                         .suggests(SOUL_SUGGESTIONS)
                                         .executes(SoulsCommand::giveOther))))
 
                 .then(CommandManager.literal("reload")
-                        .requires(source -> source.hasPermissionLevel(ADMIN_LEVEL))
+                        .requires(source -> SoulPermissions.isAdmin(source))
                         .executes(SoulsCommand::reload))
 
                 .then(CommandManager.literal("debug")
                         .executes(context -> debug(context, null))
                         .then(CommandManager.argument("player", EntityArgumentType.player())
-                                .requires(source -> source.hasPermissionLevel(ADMIN_LEVEL))
+                                .requires(source -> SoulPermissions.isAdmin(source))
                                 .executes(context ->
                                         debug(context, EntityArgumentType.getPlayer(context, "player")))))
 
                 .then(CommandManager.literal("settings")
-                        .requires(source -> source.hasPermissionLevel(ADMIN_LEVEL))
+                        .requires(source -> SoulPermissions.isAdmin(source))
                         .then(CommandManager.literal("chance")
                                 .then(CommandManager.argument("soul", StringArgumentType.word())
                                         .suggests(SOUL_SUGGESTIONS)
@@ -230,7 +230,7 @@ public final class SoulsCommand {
             return 0;
         }
 
-        boolean isAdmin = context.getSource().hasPermissionLevel(ADMIN_LEVEL);
+        boolean isAdmin = SoulPermissions.isAdmin(context.getSource());
         if (!isAdmin && !manager.config().allow_player_give) {
             context.getSource().sendError(Text.literal("Choosing your own Soul is disabled on this server."));
             return 0;
@@ -293,7 +293,7 @@ public final class SoulsCommand {
             return 0;
         }
 
-        if (!context.getSource().hasPermissionLevel(ADMIN_LEVEL) && !manager.config().allow_player_reset) {
+        if (!SoulPermissions.isAdmin(context.getSource()) && !manager.config().allow_player_reset) {
             context.getSource().sendError(Text.literal("Resetting your Soul is disabled on this server."));
             return 0;
         }
