@@ -82,3 +82,14 @@ net.minecraft.item.Items (DIAMOND|GOLDEN_APPLE|COOKIE|CAKE|EMERALD|EXPERIENCE_BO
 net.minecraft.item.ItemStack (ItemStack\()
 net.minecraft.entity.mob.Monster .
 net.minecraft.util.math.Box (Box\(|expand)
+
+# --- round 3: things that changed in 1.21.11 ---
+net.minecraft.server.command.ServerCommandSource .
+net.minecraft.entity.Entity (elocit)
+net.minecraft.entity.player.PlayerEntity (rofile|getName)
+net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket .
+net.minecraft.particle.ParticleTypes (FIREWORK)
+net.minecraft.item.Items (^  public static final net.minecraft.item.Item (COOKIE|CAKE|EXPERIENCE_BOTTLE|EMERALD);)
+net.minecraft.item.ItemStack .
+net.minecraft.server.world.ServerWorld (getOtherEntities|getEntitiesByClass)
+net.minecraft.world.World (getOtherEntities)

@@ -4,6 +4,7 @@ import com.soulsouls.soul.AbilityContext;
 import com.soulsouls.soul.SoulAbility;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
@@ -85,12 +86,12 @@ public class CourageDashAbility implements SoulAbility {
 
         ServerPlayerEntity player = ctx.player();
 
-        // Push the player along their line of sight. velocityModified makes the server send
-        // the change to the client, which is what actually moves a player.
+        // Push the player along their line of sight. A player's position is client-driven,
+        // so the new velocity has to be pushed to them explicitly or nothing happens.
         Vec3d look = player.getRotationVector();
         Vec3d dash = new Vec3d(look.x, 0.0, look.z).normalize().multiply(ctx.value("courage_dash_power"));
         player.setVelocity(dash.x, ctx.value("courage_dash_lift"), dash.z);
-        player.velocityModified = true;
+        player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
 
         int chargeTicks = (int) Math.round(ctx.value("courage_charge_seconds") * 20.0);
         ctx.effect(StatusEffects.SPEED, chargeTicks, Math.max(0, (int) ctx.value("courage_speed_amplifier")));

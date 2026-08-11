@@ -274,7 +274,7 @@ public final class SoulsCommand {
         SoulsConfig config = manager.config();
         context.getSource().sendFeedback(() ->
                 Text.literal("success while equipping new soul!").formatted(Formatting.GREEN)
-                        .append(Text.literal(" (" + target.getGameProfile().getName() + " -> ")
+                        .append(Text.literal(" (" + target.getNameForScoreboard() + " -> ")
                                 .formatted(Formatting.GRAY))
                         .append(SoulText.soulName(soul.get(), config))
                         .append(Text.literal(")").formatted(Formatting.GRAY)), true);
@@ -392,7 +392,7 @@ public final class SoulsCommand {
 
         if (mine.isBondedTo(targetId)) {
             context.getSource().sendError(Text.literal("You are already bonded with "
-                    + target.getGameProfile().getName() + "."));
+                    + target.getNameForScoreboard() + "."));
             return 0;
         }
 
@@ -403,9 +403,9 @@ public final class SoulsCommand {
             manager.markDirty();
 
             Text message = Text.literal("Soul bond formed: ").formatted(Formatting.LIGHT_PURPLE)
-                    .append(Text.literal(player.getGameProfile().getName()).formatted(Formatting.WHITE))
+                    .append(Text.literal(player.getNameForScoreboard()).formatted(Formatting.WHITE))
                     .append(Text.literal(" and ").formatted(Formatting.LIGHT_PURPLE))
-                    .append(Text.literal(target.getGameProfile().getName()).formatted(Formatting.WHITE));
+                    .append(Text.literal(target.getNameForScoreboard()).formatted(Formatting.WHITE));
             player.sendMessage(message, false);
             target.sendMessage(message, false);
             return 1;
@@ -414,10 +414,10 @@ public final class SoulsCommand {
         mine.bond_requests.add(target.getUuid().toString());
         manager.markDirty();
         context.getSource().sendFeedback(() -> Text.literal("Bond offered to "
-                + target.getGameProfile().getName() + ".").formatted(Formatting.LIGHT_PURPLE), false);
-        target.sendMessage(Text.literal(player.getGameProfile().getName()
+                + target.getNameForScoreboard() + ".").formatted(Formatting.LIGHT_PURPLE), false);
+        target.sendMessage(Text.literal(player.getNameForScoreboard()
                         + " wants to bond souls with you. Run /souls bond "
-                        + player.getGameProfile().getName() + " to accept.")
+                        + player.getNameForScoreboard() + " to accept.")
                 .formatted(Formatting.LIGHT_PURPLE), false);
         return 1;
     }
@@ -520,7 +520,7 @@ public final class SoulsCommand {
         SoulsConfig config = manager.config();
 
         context.getSource().sendFeedback(() -> Text.literal("--- Soul debug: "
-                + target.getGameProfile().getName() + " ---").formatted(Formatting.DARK_GRAY), false);
+                + target.getNameForScoreboard() + " ---").formatted(Formatting.DARK_GRAY), false);
 
         if (soul.isEmpty()) {
             context.getSource().sendFeedback(() ->

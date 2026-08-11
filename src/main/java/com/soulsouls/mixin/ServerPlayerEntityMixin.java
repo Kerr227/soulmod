@@ -39,7 +39,7 @@ public abstract class ServerPlayerEntityMixin {
         }
 
         Text existing = callback.getReturnValue();
-        String name = existing != null ? existing.getString() : player.getGameProfile().getName();
+        String name = existing != null ? existing.getString() : player.getNameForScoreboard();
         callback.setReturnValue(SoulText.coloured(name, manager.config().colorOf(soul.get())));
     }
 }

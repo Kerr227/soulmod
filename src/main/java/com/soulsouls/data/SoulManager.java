@@ -121,7 +121,7 @@ public final class SoulManager {
     // ------------------------------------------------------------------ data access
 
     public PlayerSoulData dataOf(ServerPlayerEntity player) {
-        return dataOf(player.getUuid(), player.getGameProfile().getName());
+        return dataOf(player.getUuid(), player.getNameForScoreboard());
     }
 
     public PlayerSoulData dataOf(UUID uuid, String name) {
@@ -233,7 +233,7 @@ public final class SoulManager {
 
             if (this.config.announce_assignment_to_server) {
                 Text announcement = SoulText.prefix()
-                        .append(Text.literal(player.getGameProfile().getName()).formatted(Formatting.WHITE))
+                        .append(Text.literal(player.getNameForScoreboard()).formatted(Formatting.WHITE))
                         .append(Text.literal(" awakened the "))
                         .append(SoulText.soulName(soul, this.config))
                         .append(Text.literal(" soul."));
@@ -273,7 +273,7 @@ public final class SoulManager {
                 return;
             }
             SoulSouls.LOGGER.warn("No Soul could be rolled for {} - every Soul is disabled "
-                    + "or has a chance of 0", player.getGameProfile().getName());
+                    + "or has a chance of 0", player.getNameForScoreboard());
             return;
         }
 
@@ -335,7 +335,7 @@ public final class SoulManager {
                         ability.tick(context);
                     } catch (Exception exception) {
                         SoulSouls.LOGGER.error("Ability {} of soul {} failed while ticking {}",
-                                ability.id(), soul.get().id(), player.getGameProfile().getName(), exception);
+                                ability.id(), soul.get().id(), player.getNameForScoreboard(), exception);
                     }
                 }
             }

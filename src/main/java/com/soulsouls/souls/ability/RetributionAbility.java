@@ -99,9 +99,9 @@ public class RetributionAbility implements SoulAbility {
                     true, false, true));
         }
 
-        ctx.message(Text.literal(victim.getGameProfile().getName() + " has fallen. ")
+        ctx.message(Text.literal(victim.getNameForScoreboard() + " has fallen. ")
                 .formatted(Formatting.LIGHT_PURPLE)
-                .append(Text.literal(killer.getGameProfile().getName())
+                .append(Text.literal(killer.getNameForScoreboard())
                         .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .append(Text.literal(" will answer for it.").formatted(Formatting.LIGHT_PURPLE)));
 
