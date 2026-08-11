@@ -34,6 +34,10 @@ server-side and survives disconnects, deaths, dimension changes and restarts.
 | Fabric API | 0.141.6+1.21.11 or newer |
 | Java | 21 |
 
+Download `soulsouls-1.0.0.jar` from the
+[Releases page](https://github.com/Kerr227/soulmod/releases), or build it yourself with the
+instructions below.
+
 **Server (recommended)**
 
 1. Install Fabric Loader for 1.21.11 on your server.
@@ -382,3 +386,6 @@ implementation was used. The differences that matter:
 
 Current release: **1.0.0** - the 13 Souls above, the command tree, the config system and
 per-player persistence.
+
+To cut a release: bump `mod_version` in `gradle.properties`, then edit `dev/RELEASE` and
+push. CI builds the jar and publishes it as a GitHub Release tagged from `mod_version`.
