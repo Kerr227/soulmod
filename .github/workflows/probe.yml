@@ -6,6 +6,11 @@ name: Probe signatures
 
 on:
   workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to dump instead of dev/probe-list.txt (e.g. net/minecraft/command/permission)'
+        required: false
+        default: ''
   push:
     paths:
       - 'dev/probe-list.txt'
@@ -35,13 +40,17 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      - name: Probe the permission package
-        timeout-minutes: 15
+      - name: Probe
+        timeout-minutes: 20
         run: |
           chmod +x ./gradlew
           mkdir -p ci-out
-          ./gradlew probePackage -PprobePackage=net/minecraft/command/permission \
-            --no-configuration-cache --console=plain > ci-out/probe.txt 2>&1 || true
+          if [ -n "${{ github.event.inputs.package }}" ]; then
+            ./gradlew probePackage -PprobePackage=${{ github.event.inputs.package }} \
+              --no-configuration-cache --console=plain > ci-out/probe.txt 2>&1 || true
+          else
+            ./gradlew probe --no-configuration-cache --console=plain > ci-out/probe.txt 2>&1 || true
+          fi
           tail -5 ci-out/probe.txt
 
       - name: Publish probe output to ci-probe branch
