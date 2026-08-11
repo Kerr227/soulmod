@@ -143,8 +143,11 @@ public class FunPartyAbility implements SoulAbility {
             }
         }
 
+        // Resolved by id rather than by constant: the wolf sound names have moved around
+        // between versions, and soundFromId falls back safely if this one ever goes away.
         world.playSound(null, ctx.player().getX(), ctx.player().getY(), ctx.player().getZ(),
-                SoundEvents.ENTITY_WOLF_HOWL, net.minecraft.sound.SoundCategory.PLAYERS, 1.0F, 1.0F);
+                SoulEffects.soundFromId("minecraft:entity.wolf.howl"),
+                net.minecraft.sound.SoundCategory.PLAYERS, 1.0F, 1.0F);
         say(ctx, "dog fight!");
     }
 
