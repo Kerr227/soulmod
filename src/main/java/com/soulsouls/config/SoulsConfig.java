@@ -64,18 +64,8 @@ public class SoulsConfig {
     /** The heart character. Change it if your font does not have the default one. */
     public String nameplate_heart = "❤";
 
-    /** Show the Soul name in front of the tab-list entry: {@code |INTEGRITY| Steve}. */
-    public boolean tab_soul_tag = true;
-
-    /** Brackets around the Soul name in the tab list. */
-    public String tab_bracket_left = "⌊";
-    public String tab_bracket_right = "⌉";
-
     /** How long the "YOUR SOUL IS:" moment lasts, in seconds. */
     public double assignment_ceremony_seconds = 6.0;
-
-    /** Levitation amplifier during the ceremony. 0 is Levitation I; -1 turns it off. */
-    public int assignment_levitation_amplifier = -1;
 
     /** Blind the player for the length of the ceremony. */
     public boolean assignment_blindness = true;
@@ -92,12 +82,6 @@ public class SoulsConfig {
     /** Play a small sound each time Patience gains or loses a heart. */
     public boolean patience_sounds = true;
 
-    /**
-     * How long two sneaks may be apart to count as a double-sneak, in milliseconds.
-     * Double-sneaking activates your Soul's ability, same as /souls ability.
-     */
-    public int double_sneak_window_millis = 400;
-
     /** Sound played where a player dies. */
     public String death_sound = "minecraft:block.beacon.deactivate";
 
@@ -112,9 +96,6 @@ public class SoulsConfig {
 
     /** Determination's death-refusal chance, in percent. Also settable with /souls settings refuse. */
     public double determination_refuse_chance = 40.0;
-
-    /** Let ordinary players pick their own Soul with /souls give <soul>. Operators always can. */
-    public boolean allow_player_give = true;
 
     /** Let ordinary players re-roll with /souls reset. Operators always can. */
     public boolean allow_player_reset = true;
@@ -133,17 +114,16 @@ public class SoulsConfig {
         return parseColor(soulConfig(soul).color, soul.defaultColor());
     }
 
-    /**
-     * Colour for the player's own name. Usually the Soul's colour, but a Soul whose colour
-     * is too dark to read on a dark background can override it (Hatred keeps black hearts
-     * and a white name).
-     */
-    public int nameColorOf(Soul soul) {
-        String override = soulConfig(soul).name_color;
-        if (override == null || override.isBlank()) {
-            return colorOf(soul);
-        }
-        return parseColor(override, colorOf(soul));
+    /** The character drawn to the left of the name for this Soul. */
+    public String heartLeftOf(Soul soul) {
+        String override = soulConfig(soul).heart_left;
+        return override == null || override.isEmpty() ? this.nameplate_heart : override;
+    }
+
+    /** The character drawn to the right of the name for this Soul. */
+    public String heartRightOf(Soul soul) {
+        String override = soulConfig(soul).heart_right;
+        return override == null || override.isEmpty() ? this.nameplate_heart : override;
     }
 
     public double maxHealthOf(Soul soul) {

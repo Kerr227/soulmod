@@ -64,10 +64,6 @@ public final class SoulManager {
     private final Map<UUID, Vec3d> lastPositions = new HashMap<>();
     private final Map<UUID, Double> movedSinceLastTick = new HashMap<>();
 
-    /** Sneak edge detection, for the double-sneak that fires a Soul's ability. */
-    private final Map<UUID, Boolean> wasSneaking = new HashMap<>();
-    private final Map<UUID, Long> lastSneakAt = new HashMap<>();
-
     /**
      * Players whose death must not be refused. Abilities that eventually give up and let a
      * player die (Dedication) add themselves here for the duration of the killing blow.
@@ -267,10 +263,6 @@ public final class SoulManager {
         }
         int ticks = (int) Math.round(seconds * 20.0);
 
-        if (this.config.assignment_levitation_amplifier >= 0) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, ticks,
-                    this.config.assignment_levitation_amplifier, true, false, false));
-        }
         if (this.config.assignment_blindness) {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, ticks,
                     0, true, false, false));
@@ -340,8 +332,6 @@ public final class SoulManager {
     public void onLeave(ServerPlayerEntity player) {
         this.lastPositions.remove(player.getUuid());
         this.movedSinceLastTick.remove(player.getUuid());
-        this.wasSneaking.remove(player.getUuid());
-        this.lastSneakAt.remove(player.getUuid());
         this.deathBypass.remove(player.getUuid());
         saveNow();
     }
@@ -370,7 +360,6 @@ public final class SoulManager {
         if (this.tickCounter % interval == 0) {
             for (ServerPlayerEntity player : this.server.getPlayerManager().getPlayerList()) {
                 trackMovement(player);
-                boolean doubleSneaked = trackSneak(player);
 
                 PlayerSoulData data = dataOf(player);
                 Optional<Soul> soul = soulOf(data);
@@ -380,10 +369,6 @@ public final class SoulManager {
 
                 AbilityContext context = new AbilityContext(this, player, soul.get(), data);
                 refreshMaxHealth(player, soul.get(), data);
-
-                if (doubleSneaked) {
-                    activateAbility(player, soul.get(), context);
-                }
 
                 for (SoulAbility ability : soul.get().abilities()) {
                     try {
@@ -415,35 +400,7 @@ public final class SoulManager {
     }
 
     /**
-     * Watches for two sneaks inside the configured window. Sneaking twice quickly is the
-     * in-game way to fire a Soul's active ability, so players do not have to type a command
-     * mid-fight.
-     *
-     * @return true on the tick the second sneak lands
-     */
-    private boolean trackSneak(ServerPlayerEntity player) {
-        UUID uuid = player.getUuid();
-        boolean sneaking = player.isSneaking();
-        boolean previously = this.wasSneaking.getOrDefault(uuid, false);
-        this.wasSneaking.put(uuid, sneaking);
-
-        if (!sneaking || previously) {
-            return false;
-        }
-
-        long now = System.currentTimeMillis();
-        Long previousSneak = this.lastSneakAt.get(uuid);
-        if (previousSneak != null && now - previousSneak <= this.config.double_sneak_window_millis) {
-            this.lastSneakAt.remove(uuid);
-            return true;
-        }
-        this.lastSneakAt.put(uuid, now);
-        return false;
-    }
-
-    /**
-     * Runs the first active ability the Soul has. Shared by {@code /souls ability} and the
-     * double-sneak, so the two can never drift apart.
+     * Runs the first active ability the Soul has, as used by {@code /souls ability}.
      *
      * @return true if an ability actually fired
      */

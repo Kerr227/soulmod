@@ -26,30 +26,21 @@ public final class SoulText {
     }
 
     /**
-     * A player's name decorated the way this mod shows it everywhere: a heart either side
-     * in the Soul's colour, and the name itself in the Soul's name colour.
+     * A player's name decorated the way this mod shows it everywhere: the Soul's hearts
+     * either side, in the Soul's colour, around a plain uncoloured name.
      *
-     * <p>The two colours are usually the same. They differ for Souls that are too dark to
-     * read - Hatred keeps black hearts but gets a white name, which is as close as vanilla
-     * text gets to an outline.
+     * <p>Only the hearts are coloured. The name itself is left alone so it stays readable
+     * against any background and does not fight with whatever else colours names.
      */
     public static MutableText decoratedName(String name, Soul soul, SoulsConfig config) {
-        int heartColour = config.colorOf(soul);
-        int nameColour = config.nameColorOf(soul);
-
-        boolean hearts = config.nameplate_hearts
-                && config.nameplate_heart != null
-                && !config.nameplate_heart.isEmpty();
-
-        MutableText line = Text.empty();
-        if (hearts) {
-            line.append(coloured(config.nameplate_heart + " ", heartColour));
+        if (!config.nameplate_hearts) {
+            return Text.literal(name);
         }
-        line.append(coloured(name, nameColour));
-        if (hearts) {
-            line.append(coloured(" " + config.nameplate_heart, heartColour));
-        }
-        return line;
+        int colour = config.colorOf(soul);
+        return Text.empty()
+                .append(coloured(config.heartLeftOf(soul) + " ", colour))
+                .append(Text.literal(name))
+                .append(coloured(" " + config.heartRightOf(soul), colour));
     }
 
     /** The Soul's name in its own colour, e.g. a bright red "DETERMINATION". */

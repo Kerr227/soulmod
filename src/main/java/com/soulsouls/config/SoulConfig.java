@@ -19,12 +19,12 @@ public class SoulConfig {
     public String color = "#FFFFFF";
 
     /**
-     * Optional separate colour for the player's name itself, {@code #RRGGBB}.
-     * Souls whose colour is too dark to read (Hatred) set this to something light so the
-     * name stays legible while the hearts keep the Soul's real colour. Leave empty to use
-     * {@link #color}.
+     * The two characters drawn either side of the player's name. Leave empty to use the
+     * global {@code nameplate_heart}. Souls with their own pair (Humility, Memory) fill
+     * these in.
      */
-    public String name_color = "";
+    public String heart_left = "";
+    public String heart_right = "";
 
     /** Relative weight for random assignment. 0 means "never roll this Soul". */
     public double chance = 10.0;
@@ -45,9 +45,8 @@ public class SoulConfig {
         SoulConfig config = new SoulConfig();
         config.enabled = true;
         config.color = String.format("#%06X", soul.defaultColor());
-        config.name_color = soul.defaultNameColor() < 0
-                ? ""
-                : String.format("#%06X", soul.defaultNameColor());
+        config.heart_left = soul.defaultHeartLeft();
+        config.heart_right = soul.defaultHeartRight();
         config.chance = soul.defaultChance();
         config.rarity = soul.defaultRarity().name().toLowerCase(java.util.Locale.ROOT);
         config.difficulty = soul.defaultDifficulty().name();

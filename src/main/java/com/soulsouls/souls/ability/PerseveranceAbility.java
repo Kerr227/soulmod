@@ -9,6 +9,9 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import net.minecraft.server.network.ServerPlayerEntity;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +25,10 @@ import java.util.Map;
 public class PerseveranceAbility implements SoulAbility {
     public static final String BRACE_COOLDOWN = "perseverance_brace";
     public static final String LAST_STAND_COOLDOWN = "perseverance_last_stand";
+    public static final String REPORT_COOLDOWN = "perseverance_report";
+
+    /** Per-attacker running damage total: {@code perseverance_damage_<uuid>}. */
+    private static final String DAMAGE_PREFIX = "perseverance_damage_";
 
     @Override
     public String id() {
@@ -48,7 +55,10 @@ public class PerseveranceAbility implements SoulAbility {
                 "perseverance_strength_amplifier", 0.0,
                 "perseverance_last_stand_fraction", 0.15,
                 "perseverance_last_stand_seconds", 6.0,
-                "perseverance_last_stand_cooldown_seconds", 120.0
+                "perseverance_last_stand_cooldown_seconds", 120.0,
+                // Damage from the last few seconds is summarised back to you.
+                "perseverance_report_window_seconds", 5.0,
+                "perseverance_report_cooldown_seconds", 5.0
         );
     }
 
@@ -69,6 +79,8 @@ public class PerseveranceAbility implements SoulAbility {
 
     @Override
     public void afterDamage(AbilityContext ctx, DamageSource source, float taken) {
+        recordAttacker(ctx, source, taken);
+
         if (taken < ctx.value("perseverance_heavy_damage") || !ctx.isReady(BRACE_COOLDOWN)) {
             return;
         }
@@ -83,8 +95,62 @@ public class PerseveranceAbility implements SoulAbility {
                 15, 0.4, 0.5, 0.4, 0.05);
     }
 
+    /**
+     * Remembers who hit you and for how much, so the report can name them. Entries older
+     * than the window are dropped as they are read.
+     */
+    private void recordAttacker(AbilityContext ctx, DamageSource source, float taken) {
+        if (!(source.getAttacker() instanceof ServerPlayerEntity attacker)) {
+            return;
+        }
+        String key = DAMAGE_PREFIX + attacker.getUuid();
+        ctx.data().setState(key, ctx.state(key, 0.0) + taken);
+        ctx.data().setState(key + "_at", ctx.now());
+        ctx.data().remembered_names.put(attacker.getUuid().toString(),
+                attacker.getNameForScoreboard());
+        ctx.manager().markDirty();
+    }
+
+    /** Tells the player who has been hurting them, worst first. */
+    private void reportAttackers(AbilityContext ctx) {
+        double window = ctx.value("perseverance_report_window_seconds") * 1000.0;
+        List<Map.Entry<String, Double>> recent = new ArrayList<>();
+
+        for (String key : new ArrayList<>(ctx.data().state.keySet())) {
+            if (!key.startsWith(DAMAGE_PREFIX) || key.endsWith("_at")) {
+                continue;
+            }
+            double at = ctx.state(key + "_at", 0.0);
+            if (ctx.now() - at > window) {
+                ctx.data().clearState(key);
+                ctx.data().clearState(key + "_at");
+                continue;
+            }
+            recent.add(Map.entry(key.substring(DAMAGE_PREFIX.length()), ctx.state(key, 0.0)));
+        }
+
+        if (recent.isEmpty()) {
+            return;
+        }
+        recent.sort((left, right) -> Double.compare(right.getValue(), left.getValue()));
+
+        for (Map.Entry<String, Double> entry : recent) {
+            String name = ctx.data().remembered_names.getOrDefault(entry.getKey(), "Someone");
+            // Damage is reported in hearts, which is how players read their own health bar.
+            String hearts = String.format("%.1f", entry.getValue() / 2.0);
+            ctx.message(Text.literal(name).formatted(Formatting.WHITE)
+                    .append(Text.literal(" had damaged you " + hearts + " hearts.")
+                            .formatted(Formatting.DARK_PURPLE)));
+        }
+        ctx.startCooldown(REPORT_COOLDOWN, ctx.value("perseverance_report_cooldown_seconds"));
+    }
+
     @Override
     public void tick(AbilityContext ctx) {
+        if (ctx.isReady(REPORT_COOLDOWN)) {
+            reportAttackers(ctx);
+        }
+
         if (!ctx.isVulnerable()) {
             return;
         }

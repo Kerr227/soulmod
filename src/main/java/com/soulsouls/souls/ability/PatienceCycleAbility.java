@@ -43,8 +43,8 @@ public class PatienceCycleAbility implements SoulAbility {
     @Override
     public Map<String, Double> defaultValues() {
         return Map.of(
-                "patience_grow_minutes", 10.0,
-                "patience_fade_minutes", 1.0,
+                "patience_grow_minutes", 1.0,
+                "patience_fade_minutes", 10.0,
                 "patience_max_bonus_hearts", 10.0
         );
     }

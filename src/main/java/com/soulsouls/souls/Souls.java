@@ -5,21 +5,23 @@ import com.soulsouls.soul.SoulDifficulty;
 import com.soulsouls.soul.SoulRarity;
 import com.soulsouls.soul.SoulRegistry;
 import com.soulsouls.souls.ability.BraveryMomentumAbility;
+import com.soulsouls.souls.ability.BraveryStoredDamageAbility;
 import com.soulsouls.souls.ability.CourageDashAbility;
 import com.soulsouls.souls.ability.DedicationAbility;
 import com.soulsouls.souls.ability.CuriosityAbility;
 import com.soulsouls.souls.ability.FunAbility;
 import com.soulsouls.souls.ability.FunPartyAbility;
 import com.soulsouls.souls.ability.FuryAbility;
-import com.soulsouls.souls.ability.HumilityArmourAbility;
+import com.soulsouls.souls.ability.HumilityAbility;
 import com.soulsouls.souls.ability.MemoryAbility;
 import com.soulsouls.souls.ability.HatredAbility;
 import com.soulsouls.souls.ability.IntegrityFallAbility;
-import com.soulsouls.souls.ability.JusticeMarksmanAbility;
+import com.soulsouls.souls.ability.JusticeTargetAbility;
 import com.soulsouls.souls.ability.KindnessAbility;
 import com.soulsouls.souls.ability.PatienceCycleAbility;
 import com.soulsouls.souls.ability.PerseveranceAbility;
 import com.soulsouls.souls.ability.RefuseDeathAbility;
+import com.soulsouls.souls.ability.TruePlayerAbility;
 import com.soulsouls.souls.ability.RetributionAbility;
 
 /**
@@ -61,6 +63,7 @@ public final class Souls {
                 .chance(1.0)
                 .maxHealth(30.0)
                 .ability(new RefuseDeathAbility())
+                .ability(new TruePlayerAbility())
                 .build());
 
         // ---------------------------------------------------------------- Patience
@@ -79,10 +82,11 @@ public final class Souls {
                 .color(0xFF8000)
                 .rarity(SoulRarity.COMMON)
                 .difficulty(SoulDifficulty.NORMAL)
-                .description("Rewards those who keep moving forward.")
+                .description("Takes every blow and gives it back against their armour.")
                 .chance(20.0)
                 .maxHealth(20.0)
                 .ability(new BraveryMomentumAbility())
+                .ability(new BraveryStoredDamageAbility())
                 .build());
 
         // ---------------------------------------------------------------- Justice
@@ -93,7 +97,7 @@ public final class Souls {
                 .description("Judgement delivered from a distance.")
                 .chance(12.0)
                 .maxHealth(20.0)
-                .ability(new JusticeMarksmanAbility())
+                .ability(new JusticeTargetAbility())
                 .build());
 
         // ---------------------------------------------------------------- Kindness
@@ -170,9 +174,6 @@ public final class Souls {
         // ---------------------------------------------------------------- Hatred / Regret
         SoulRegistry.register(Soul.builder("hatred", "HATRED")
                 .color(0x101010)
-                // Vanilla text cannot be outlined, so the name goes white against the black
-                // hearts instead - the closest readable equivalent.
-                .nameColor(0xFFFFFF)
                 .rarity(SoulRarity.SECRET)
                 .difficulty(SoulDifficulty.EXTREME)
                 .description("It rots whatever it touches, including the one who carries it.")
@@ -206,13 +207,14 @@ public final class Souls {
 
         // ---------------------------------------------------------------- Humility
         SoulRegistry.register(Soul.builder("humility", "HUMILITY")
-                .color(0x9E9E9E)
+                .color(0x404040)
+                .hearts("\uD83E\uDE76", "\uD83E\udD0D")
                 .rarity(SoulRarity.UNCOMMON)
                 .difficulty(SoulDifficulty.HARD)
-                .description("The less it wears, the harder it is to hurt.")
+                .description("It believes it is the weaker one, until it hits back.")
                 .chance(8.0)
                 .maxHealth(20.0)
-                .ability(new HumilityArmourAbility())
+                .ability(new HumilityAbility())
                 .build());
 
         // ---------------------------------------------------------------- Fury
@@ -229,6 +231,7 @@ public final class Souls {
         // ---------------------------------------------------------------- Memory
         SoulRegistry.register(Soul.builder("memory", "MEMORY")
                 .color(0xFFD700)
+                .hearts("\uD83D\udC99", "\uD83D\udC9B")
                 .rarity(SoulRarity.RARE)
                 .difficulty(SoulDifficulty.EASY)
                 .description("It forgets nothing: not a face, not a place it fell.")

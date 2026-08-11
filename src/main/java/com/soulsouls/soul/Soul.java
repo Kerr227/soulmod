@@ -38,7 +38,8 @@ public final class Soul {
     private final String id;
     private final String displayName;
     private final int defaultColor;
-    private final int defaultNameColor;
+    private final String defaultHeartLeft;
+    private final String defaultHeartRight;
     private final SoulRarity defaultRarity;
     private final SoulDifficulty defaultDifficulty;
     private final String description;
@@ -51,7 +52,8 @@ public final class Soul {
         this.id = builder.id;
         this.displayName = builder.displayName;
         this.defaultColor = builder.color;
-        this.defaultNameColor = builder.nameColor;
+        this.defaultHeartLeft = builder.heartLeft;
+        this.defaultHeartRight = builder.heartRight;
         this.defaultRarity = builder.rarity;
         this.defaultDifficulty = builder.difficulty;
         this.description = builder.description;
@@ -83,13 +85,16 @@ public final class Soul {
     }
 
     /**
-     * Default colour for the player's name, which is normally the Soul's colour. Souls too
-     * dark to read against a dark background override it.
-     *
-     * @return -1 when the Soul has no override
+     * The character shown to the left of the name, or empty to use the global default.
+     * Souls with their own pair (Humility, Memory) set both.
      */
-    public int defaultNameColor() {
-        return this.defaultNameColor;
+    public String defaultHeartLeft() {
+        return this.defaultHeartLeft;
+    }
+
+    /** The character shown to the right of the name, or empty for the global default. */
+    public String defaultHeartRight() {
+        return this.defaultHeartRight;
     }
 
     public SoulRarity defaultRarity() {
@@ -149,7 +154,8 @@ public final class Soul {
         private final String id;
         private final String displayName;
         private int color = 0xFFFFFF;
-        private int nameColor = -1;
+        private String heartLeft = "";
+        private String heartRight = "";
         private SoulRarity rarity = SoulRarity.COMMON;
         private SoulDifficulty difficulty = SoulDifficulty.NORMAL;
         private String description = "";
@@ -170,13 +176,12 @@ public final class Soul {
         }
 
         /**
-         * Colour for the player's name, when it should differ from the Soul's own colour.
-         * Vanilla text has no outline, so a near-black Soul uses a light name instead.
-         *
-         * @param nameColor packed 0xRRGGBB
+         * Overrides the pair of characters drawn either side of the player's name. Pass the
+         * same string twice for a matching pair.
          */
-        public Builder nameColor(int nameColor) {
-            this.nameColor = nameColor & 0xFFFFFF;
+        public Builder hearts(String left, String right) {
+            this.heartLeft = left;
+            this.heartRight = right;
             return this;
         }
 

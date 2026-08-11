@@ -48,10 +48,10 @@ public class FuryAbility implements SoulAbility {
         return Map.ofEntries(
                 Map.entry("fury_trigger_damage", 20.0),
                 Map.entry("fury_radius", 5.0),
-                Map.entry("fury_hold_seconds", 4.0),
+                Map.entry("fury_hold_seconds", 8.0),
                 Map.entry("fury_slowness_amplifier", 6.0),
                 Map.entry("fury_strength_amplifier", 3.0),
-                Map.entry("fury_strength_seconds", 8.0),
+                Map.entry("fury_strength_seconds", 20.0),
                 Map.entry("fury_regeneration_amplifier", 2.0),
                 Map.entry("fury_cooldown_seconds", 200.0)
         );

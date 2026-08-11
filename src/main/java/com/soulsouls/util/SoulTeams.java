@@ -43,15 +43,15 @@ public final class SoulTeams {
                 team = scoreboard.addTeam(name);
             }
             team.setDisplayName(SoulText.soulName(soul, config));
-            team.setColor(SoulText.nearestFormatting(config.nameColorOf(soul)));
+            // Names are deliberately left uncoloured - only the hearts carry the Soul's colour.
+            team.setColor(net.minecraft.util.Formatting.RESET);
 
             // A team prefix and suffix wrap the name everywhere vanilla draws it, which is
             // how the hearts end up either side of the name above the player's head.
-            if (config.nameplate_hearts && config.nameplate_heart != null
-                    && !config.nameplate_heart.isEmpty()) {
+            if (config.nameplate_hearts) {
                 int colour = config.colorOf(soul);
-                team.setPrefix(SoulText.coloured(config.nameplate_heart + " ", colour));
-                team.setSuffix(SoulText.coloured(" " + config.nameplate_heart, colour));
+                team.setPrefix(SoulText.coloured(config.heartLeftOf(soul) + " ", colour));
+                team.setSuffix(SoulText.coloured(" " + config.heartRightOf(soul), colour));
             } else {
                 team.setPrefix(Text.empty());
                 team.setSuffix(Text.empty());

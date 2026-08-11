@@ -81,16 +81,6 @@ public final class SoulsCommand {
                         .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .executes(SoulsCommand::bond)))
 
-                // The Soul always comes first: "/souls give <soul>" for yourself, and
-                // "/souls give <soul> <player>" for somebody else. Putting the Soul first
-                // means the two forms can never be confused for one another.
-                .then(CommandManager.literal("give")
-                        .then(CommandManager.argument("soul", StringArgumentType.word())
-                                .suggests(SOUL_SUGGESTIONS)
-                                .executes(SoulsCommand::giveSelf)
-                                .then(CommandManager.argument("player", EntityArgumentType.player())
-                                        .requires(source -> SoulPermissions.isAdmin(source))
-                                        .executes(SoulsCommand::giveOther))))
 
                 .then(CommandManager.literal("set")
                         .requires(source -> SoulPermissions.isAdmin(source))
@@ -227,44 +217,7 @@ public final class SoulsCommand {
         return SoulRegistry.size();
     }
 
-    // ------------------------------------------------------------------ /souls give, set, reset
-
-    private static int giveSelf(CommandContext<ServerCommandSource> context) {
-        SoulManager manager = manager(context);
-        if (manager == null) {
-            return 0;
-        }
-
-        ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) {
-            context.getSource().sendError(Text.literal("Only a player can equip a Soul this way."));
-            return 0;
-        }
-
-        boolean isAdmin = SoulPermissions.isAdmin(context.getSource());
-        if (!isAdmin && !manager.config().allow_player_give) {
-            context.getSource().sendError(Text.literal("Choosing your own Soul is disabled on this server."));
-            return 0;
-        }
-
-        Optional<Soul> soul = resolveSoul(context, "soul");
-        if (soul.isEmpty()) {
-            return 0;
-        }
-        if (!isAdmin && !manager.config().isEnabled(soul.get())) {
-            context.getSource().sendError(Text.literal("That Soul is disabled on this server."));
-            return 0;
-        }
-        if (manager.soulOf(player).filter(current -> current.equals(soul.get())).isPresent()) {
-            context.getSource().sendError(Text.literal("cant have the soul twice!"));
-            return 0;
-        }
-
-        manager.assign(player, soul.get(), true);
-        context.getSource().sendFeedback(() ->
-                Text.literal("success while equipping new soul!").formatted(Formatting.GREEN), false);
-        return 1;
-    }
+    // ------------------------------------------------------------------ /souls set, reset
 
     private static int giveOther(CommandContext<ServerCommandSource> context) {
         SoulManager manager = manager(context);

@@ -1,5 +1,6 @@
 package com.soulsouls;
 
+import com.soulsouls.command.JusticeCommand;
 import com.soulsouls.command.MemoryCommand;
 import com.soulsouls.command.SoulsCommand;
 import com.soulsouls.config.SoulsConfig;
@@ -50,6 +51,7 @@ public class SoulSouls implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             SoulsCommand.register(dispatcher);
             MemoryCommand.register(dispatcher);
+            JusticeCommand.register(dispatcher);
         });
 
         LOGGER.info("Soul Souls ready");

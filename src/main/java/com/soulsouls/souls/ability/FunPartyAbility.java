@@ -42,6 +42,10 @@ import it.unimi.dsi.fastutil.ints.IntList;
 public class FunPartyAbility implements SoulAbility {
     public static final String COOLDOWN = "fun_party";
     private static final String FIREWORKS_UNTIL = "fun_fireworks_until";
+    private static final String GUESTS_UNTIL = "fun_guests_until";
+
+    /** Entity tag marking a villager this Soul spawned, so it can be cleaned up later. */
+    private static final String PARTY_TAG = "soulsouls_party_guest";
 
     @Override
     public String id() {
@@ -68,7 +72,7 @@ public class FunPartyAbility implements SoulAbility {
         return Map.of(
                 "fun_party_cooldown_seconds", 120.0,
                 "fun_voice_radius", 10.0,
-                "fun_villager_count", 8.0,
+                "fun_villager_count", 16.0,
                 "fun_wolf_count", 20.0,
                 "fun_wolf_radius", 2.0,
                 "fun_fireworks_seconds", 10.0,
@@ -80,7 +84,7 @@ public class FunPartyAbility implements SoulAbility {
     @Override
     public List<Text> describe(AbilityContext ctx) {
         return List.of(
-                Text.literal("  Double-sneak: one of three parties").formatted(Formatting.GRAY),
+                Text.literal("  /souls ability: one of three parties").formatted(Formatting.GRAY),
                 Text.literal("    villagers, a wolf pack, or ten seconds of fireworks")
                         .formatted(Formatting.DARK_GRAY));
     }
@@ -102,6 +106,19 @@ public class FunPartyAbility implements SoulAbility {
 
     // ------------------------------------------------------------------ the three parties
 
+    /** Removes the villagers this Soul conjured, once the cooldown has run out. */
+    private void despawnPartyGuests(AbilityContext ctx) {
+        double radius = 32.0;
+        net.minecraft.util.math.Box area = ctx.player().getBoundingBox().expand(radius);
+        for (net.minecraft.entity.passive.VillagerEntity villager
+                : ctx.world().getEntitiesByClass(net.minecraft.entity.passive.VillagerEntity.class,
+                area, guest -> guest.getCommandTags().contains(PARTY_TAG))) {
+            ctx.world().spawnParticles(ParticleTypes.HAPPY_VILLAGER,
+                    villager.getX(), villager.getY() + 1.0, villager.getZ(), 6, 0.3, 0.3, 0.3, 0.02);
+            villager.discard();
+        }
+    }
+
     private void party(AbilityContext ctx) {
         ServerWorld world = ctx.world();
         int count = Math.max(1, (int) ctx.value("fun_villager_count"));
@@ -112,7 +129,12 @@ public class FunPartyAbility implements SoulAbility {
                     ctx.player().getX() + Math.cos(angle) * 2.5,
                     ctx.player().getY(),
                     ctx.player().getZ() + Math.sin(angle) * 2.5);
-            EntityType.VILLAGER.spawn(world, where, SpawnReason.COMMAND);
+            net.minecraft.entity.passive.VillagerEntity villager =
+                    EntityType.VILLAGER.spawn(world, where, SpawnReason.COMMAND);
+            if (villager != null) {
+                // Tagged so they can be cleared away again when the party is over.
+                villager.addCommandTag(PARTY_TAG);
+            }
         }
 
         world.spawnParticles(ParticleTypes.HAPPY_VILLAGER,
@@ -120,6 +142,7 @@ public class FunPartyAbility implements SoulAbility {
                 40, 2.0, 1.0, 2.0, 0.05);
         world.playSound(null, ctx.player().getX(), ctx.player().getY(), ctx.player().getZ(),
                 SoundEvents.ENTITY_VILLAGER_CELEBRATE, net.minecraft.sound.SoundCategory.PLAYERS, 1.0F, 1.0F);
+        ctx.setState(GUESTS_UNTIL, ctx.now() + ctx.value("fun_party_cooldown_seconds") * 1000.0);
         say(ctx, "partyy!!");
     }
 
@@ -163,6 +186,13 @@ public class FunPartyAbility implements SoulAbility {
      */
     @Override
     public void tick(AbilityContext ctx) {
+        // The party guests go home when the cooldown is up.
+        double guestsUntil = ctx.state(GUESTS_UNTIL, 0.0);
+        if (guestsUntil > 0.0 && ctx.now() >= guestsUntil) {
+            ctx.clearState(GUESTS_UNTIL);
+            despawnPartyGuests(ctx);
+        }
+
         double until = ctx.state(FIREWORKS_UNTIL, 0.0);
         if (until <= 0.0) {
             return;
