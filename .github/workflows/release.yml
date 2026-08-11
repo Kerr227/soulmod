@@ -3,14 +3,14 @@ name: Release
 # Publishes the compiled mod jar as a GitHub Release so it can be downloaded
 # without digging through Actions artifacts.
 #
-#   git tag v1.0.0 && git push origin v1.0.0
-#
-# or run this workflow by hand and give it a tag name.
+# Edit dev/RELEASE (any change) and push: the tag is taken from mod_version in
+# gradle.properties, so bump that first. You can also run this workflow by hand and
+# give it a tag name.
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - '**'
     paths:
       - 'dev/RELEASE'
   workflow_dispatch:
