@@ -136,3 +136,21 @@ net.minecraft.util.math.BlockPos (BlockPos\(|toShortString|getX)
 net.minecraft.server.world.ServerWorld (spawnEntity|getEntitiesByClass)
 net.minecraft.entity.Entity (refreshPositionAndAngles|isSneaking|setPosition|getBlockPos)
 net.minecraft.entity.player.PlayerEntity (isSneaking|getInventory|getArmorItems)
+
+# --- round 8: 1.4.0 (mace reflection, totem check, nether, hostile pacify) ---
+net.minecraft.item.Items (MACE|TOTEM_OF_UNDYING|NETHERITE_)
+net.minecraft.item.ItemStack (isOf|getItem|getDamage|setDamage|getMaxDamage|isDamageable|damage\()
+net.minecraft.entity.player.PlayerEntity (getOffHandStack|getMainHandStack|getStackInHand|isUsingItem)
+net.minecraft.entity.LivingEntity (getEquippedStack|equipStack|damageArmor|getOffHandStack|getMainHandStack|getWeaponStack)
+net.minecraft.registry.tag.DamageTypeTags .
+net.minecraft.entity.damage.DamageTypes (EXPLOSION|PLAYER_EXPLOSION|MACE_SMASH|FALL)
+net.minecraft.entity.damage.DamageSource (isOf|isIn|getSource|getAttacker|getTypeRegistryEntry)
+net.minecraft.world.World (NETHER|OVERWORLD|END|getRegistryKey|getDimension|getDimensionEntry)
+net.minecraft.registry.RegistryKeys (WORLD|DIMENSION|DAMAGE_TYPE)
+net.minecraft.entity.mob.MobEntity (setTarget|getTarget|isPersistent)
+net.minecraft.entity.mob.HostileEntity .
+net.minecraft.entity.mob.Angerable (stopAnger|setAngryAt|setTarget)
+net.minecraft.entity.mob.PathAwareEntity (setTarget)
+net.minecraft.sound.SoundEvents (ITEM_MACE|ITEM_SHIELD|ITEM_TOTEM|ENTITY_ZOMBIE_|ENTITY_WITHER_|BLOCK_RESPAWN_ANCHOR|ENTITY_IRON_GOLEM_DAMAGE|ITEM_ARMOR_EQUIP|BLOCK_ANVIL|ENTITY_GENERIC_EXPLODE)
+net.minecraft.particle.ParticleTypes (SOUL_FIRE_FLAME|SCULK|ASH|WHITE_ASH|LARGE_SMOKE|CRIMSON|WARPED|EXPLOSION)
+net.minecraft.entity.effect.StatusEffects (RESISTANCE|ABSORPTION|HEALTH_BOOST|STRENGTH|SPEED)
