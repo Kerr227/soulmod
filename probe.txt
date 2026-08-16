@@ -1,0 +1,1667 @@
+
+Welcome to Gradle 9.7.0!
+
+Here are the highlights of this release:
+ - Isolated Projects graduates to incubating
+ - Broader Configuration Cache compatibility
+ - More source locations in problem reports
+
+For more details see https://docs.gradle.org/9.7.0/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Configure project :
+Fabric Loom: 1.16.3
+
+Cannot remap modifiers because it does not exist in any of the targets [] or their parents.
+
+> Task :probe
+===== net.minecraft.server.network.ServerPlayerEntity   ~/(PlayerListName|ServerWorld|getWorld|playSound|networkHandler|changeGameMode|getStatHandler|teleport|sendMessage)/
+  public net.minecraft.server.network.ServerPlayNetworkHandler networkHandler;
+  public net.minecraft.server.network.ServerPlayerEntity(net.minecraft.server.MinecraftServer, net.minecraft.server.world.ServerWorld, com.mojang.authlib.GameProfile, net.minecraft.network.packet.c2s.common.SyncedClientOptions);
+  public net.minecraft.util.math.BlockPos getWorldSpawnPos(net.minecraft.server.world.ServerWorld, net.minecraft.util.math.BlockPos);
+  public boolean damage(net.minecraft.server.world.ServerWorld, net.minecraft.entity.damage.DamageSource, float);
+  public net.minecraft.server.network.ServerPlayerEntity teleportTo(net.minecraft.world.TeleportTarget);
+  public boolean isInvulnerableTo(net.minecraft.server.world.ServerWorld, net.minecraft.entity.damage.DamageSource);
+  protected void applyMovementEffects(net.minecraft.server.world.ServerWorld, net.minecraft.util.math.BlockPos);
+  public void sendMessage(net.minecraft.text.Text, boolean);
+  public boolean teleport(net.minecraft.server.world.ServerWorld, double, double, double, java.util.Set<net.minecraft.network.packet.s2c.play.PositionFlag>, float, float, boolean);
+  public net.minecraft.server.world.ServerWorld getEntityWorld();
+  public boolean changeGameMode(net.minecraft.world.GameMode);
+  public void sendMessage(net.minecraft.text.Text);
+  public void sendMessageToClient(net.minecraft.text.Text, boolean);
+  public net.minecraft.stat.ServerStatHandler getStatHandler();
+  public net.minecraft.text.Text getPlayerListName();
+  public void setServerWorld(net.minecraft.server.world.ServerWorld);
+  public boolean canModifyAt(net.minecraft.server.world.ServerWorld, net.minecraft.util.math.BlockPos);
+  public net.minecraft.network.packet.s2c.play.CommonPlayerSpawnInfo createCommonPlayerSpawnInfo(net.minecraft.server.world.ServerWorld);
+  public static long addEnderPearlTicket(net.minecraft.server.world.ServerWorld, net.minecraft.util.math.ChunkPos);
+  public net.minecraft.entity.Entity teleportTo(net.minecraft.world.TeleportTarget);
+===== net.minecraft.entity.player.PlayerEntity   ~/(getDisplayName|getName|damage|heal|getHealth|getMaxHealth|isCreative|isSpectator|getInventory)/
+  protected float damageTiltYaw;
+  public void onDeath(net.minecraft.entity.damage.DamageSource);
+  protected net.minecraft.sound.SoundEvent getHurtSound(net.minecraft.entity.damage.DamageSource);
+  public boolean isInvulnerableTo(net.minecraft.server.world.ServerWorld, net.minecraft.entity.damage.DamageSource);
+  public boolean damage(net.minecraft.server.world.ServerWorld, net.minecraft.entity.damage.DamageSource, float);
+  protected void damageArmor(net.minecraft.entity.damage.DamageSource, float);
+  protected void damageHelmet(net.minecraft.entity.damage.DamageSource, float);
+  protected void applyDamage(net.minecraft.server.world.ServerWorld, net.minecraft.entity.damage.DamageSource, float);
+  protected float getDamageAgainst(net.minecraft.entity.Entity, float, net.minecraft.entity.damage.DamageSource);
+  public net.minecraft.entity.player.PlayerInventory getInventory();
+  public boolean handleFallDamage(double, float, net.minecraft.entity.damage.DamageSource);
+  public boolean onKilledOther(net.minecraft.server.world.ServerWorld, net.minecraft.entity.LivingEntity, net.minecraft.entity.damage.DamageSource);
+  public net.minecraft.text.Text getName();
+  public boolean isSpectator();
+  public boolean isCreative();
+  public net.minecraft.text.Text getDisplayName();
+  public java.lang.String getNameForScoreboard();
+  public boolean isCreativeLevelTwoOp();
+===== net.minecraft.entity.LivingEntity   ~/(damage\(|heal|addStatusEffect|removeStatusEffect|hasStatusEffect|getStatusEffect|setHealth|getHealth|getMaxHealth|getAttributeInstance|getAttributes|getRecentDamageSource|isDead|onDeath|takeKnockback|getAttacker)/
+  public net.minecraft.entity.LivingEntity getAttacker();
+  public java.util.Collection<net.minecraft.entity.effect.StatusEffectInstance> getStatusEffects();
+  public boolean hasStatusEffect(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>);
+  public net.minecraft.entity.effect.StatusEffectInstance getStatusEffect(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>);
+  public final boolean addStatusEffect(net.minecraft.entity.effect.StatusEffectInstance);
+  public boolean addStatusEffect(net.minecraft.entity.effect.StatusEffectInstance, net.minecraft.entity.Entity);
+  public final net.minecraft.entity.effect.StatusEffectInstance removeStatusEffectInternal(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>);
+  public boolean removeStatusEffect(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>);
+  public void heal(float);
+  public float getHealth();
+  public void setHealth(float);
+  public boolean isDead();
+  public boolean damage(net.minecraft.server.world.ServerWorld, net.minecraft.entity.damage.DamageSource, float);
+  public net.minecraft.entity.damage.DamageSource getRecentDamageSource();
+  public void onDeath(net.minecraft.entity.damage.DamageSource);
+  public void takeKnockback(double, double, double);
+  public final float getMaxHealth();
+  public net.minecraft.entity.attribute.EntityAttributeInstance getAttributeInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute>);
+  public net.minecraft.entity.attribute.AttributeContainer getAttributes();
+===== net.minecraft.entity.Entity   ~/(getWorld|getEntityWorld|damage\(|setVelocity|getVelocity|velocityModified|getPos|getX\(|getY\(|getZ\(|getRotationVec|getNameForScoreboard|getUuid|getDisplayName|extinguish|setOnFire|getServer)/
+  public net.minecraft.entity.EntityPose getPose();
+  public void setOnFire(boolean);
+  public void setOnFireFromLava();
+  public final void setOnFireFor(float);
+  public void setOnFireForTicks(int);
+  public void extinguish();
+  public void extinguishWithSound();
+  public net.minecraft.util.math.BlockPos getVelocityAffectingPos();
+  protected net.minecraft.util.math.BlockPos getPosWithYOffset(float);
+  protected float getVelocityMultiplier();
+  public net.minecraft.util.math.BlockPos getWorldSpawnPos(net.minecraft.server.world.ServerWorld, net.minecraft.util.math.BlockPos);
+  public abstract boolean damage(net.minecraft.server.world.ServerWorld, net.minecraft.entity.damage.DamageSource, float);
+  public final net.minecraft.util.math.Vec3d getRotationVec(float);
+  public final net.minecraft.util.math.Vec3d getRotationVector(float, float);
+  public net.minecraft.util.math.Vec3d getRotationVector();
+  public net.minecraft.util.math.Vec3d getRotationVecClient();
+  public void setVelocityClient(net.minecraft.util.math.Vec3d);
+  public java.util.UUID getUuid();
+  public java.lang.String getUuidAsString();
+  public java.lang.String getNameForScoreboard();
+  public net.minecraft.text.Text getDisplayName();
+  public net.minecraft.util.math.Vec3d getVelocity();
+  public void setVelocity(net.minecraft.util.math.Vec3d);
+  public void setVelocity(double, double, double);
+  public final double getX();
+  public final double getY();
+  public final double getZ();
+  public net.minecraft.world.World getEntityWorld();
+===== net.minecraft.entity.attribute.EntityAttributes   ~/(MAX_HEALTH|ATTACK_DAMAGE|MOVEMENT_SPEED|KNOCKBACK|ARMOR)/
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> ARMOR;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> ARMOR_TOUGHNESS;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> ATTACK_DAMAGE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> ATTACK_KNOCKBACK;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> EXPLOSION_KNOCKBACK_RESISTANCE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> KNOCKBACK_RESISTANCE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> MAX_HEALTH;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> MOVEMENT_SPEED;
+===== net.minecraft.entity.attribute.EntityAttributeModifier   ~/./
+  Compiled from "EntityAttributeModifier.java"
+  public final class net.minecraft.entity.attribute.EntityAttributeModifier extends java.lang.Record {
+  public static final com.mojang.serialization.MapCodec<net.minecraft.entity.attribute.EntityAttributeModifier> MAP_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.entity.attribute.EntityAttributeModifier> CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<io.netty.buffer.ByteBuf, net.minecraft.entity.attribute.EntityAttributeModifier> PACKET_CODEC;
+  public net.minecraft.entity.attribute.EntityAttributeModifier(net.minecraft.util.Identifier, double, net.minecraft.entity.attribute.EntityAttributeModifier$Operation);
+  public boolean idMatches(net.minecraft.util.Identifier);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.util.Identifier id();
+  public double value();
+  public net.minecraft.entity.attribute.EntityAttributeModifier$Operation operation();
+  static {};
+  }
+===== net.minecraft.entity.attribute.EntityAttributeInstance   ~/./
+  Compiled from "EntityAttributeInstance.java"
+  public class net.minecraft.entity.attribute.EntityAttributeInstance {
+  public net.minecraft.entity.attribute.EntityAttributeInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute>, java.util.function.Consumer<net.minecraft.entity.attribute.EntityAttributeInstance>);
+  public net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> getAttribute();
+  public double getBaseValue();
+  public void setBaseValue(double);
+  java.util.Map<net.minecraft.util.Identifier, net.minecraft.entity.attribute.EntityAttributeModifier> getModifiers(net.minecraft.entity.attribute.EntityAttributeModifier$Operation);
+  public java.util.Set<net.minecraft.entity.attribute.EntityAttributeModifier> getModifiers();
+  public java.util.Set<net.minecraft.entity.attribute.EntityAttributeModifier> getPersistentModifiers();
+  public net.minecraft.entity.attribute.EntityAttributeModifier getModifier(net.minecraft.util.Identifier);
+  public boolean hasModifier(net.minecraft.util.Identifier);
+  public void updateModifier(net.minecraft.entity.attribute.EntityAttributeModifier);
+  public void addTemporaryModifier(net.minecraft.entity.attribute.EntityAttributeModifier);
+  public void overwritePersistentModifier(net.minecraft.entity.attribute.EntityAttributeModifier);
+  public void addPersistentModifier(net.minecraft.entity.attribute.EntityAttributeModifier);
+  public void addPersistentModifiers(java.util.Collection<net.minecraft.entity.attribute.EntityAttributeModifier>);
+  protected void onUpdate();
+  public void removeModifier(net.minecraft.entity.attribute.EntityAttributeModifier);
+  public boolean removeModifier(net.minecraft.util.Identifier);
+  public void clearModifiers();
+  public double getValue();
+  public void setFrom(net.minecraft.entity.attribute.EntityAttributeInstance);
+  public net.minecraft.entity.attribute.EntityAttributeInstance$Packed pack();
+  public void unpack(net.minecraft.entity.attribute.EntityAttributeInstance$Packed);
+  }
+===== net.minecraft.entity.attribute.AttributeContainer   ~/(getCustomInstance|hasModifier)/
+  public net.minecraft.entity.attribute.EntityAttributeInstance getCustomInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute>);
+  public boolean hasModifierForAttribute(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute>, net.minecraft.util.Identifier);
+===== net.minecraft.scoreboard.Scoreboard   ~/(Team|ScoreHolder)/
+  public final void forEachScore(net.minecraft.scoreboard.ScoreboardCriterion, net.minecraft.scoreboard.ScoreHolder, java.util.function.Consumer<net.minecraft.scoreboard.ScoreAccess>);
+  public net.minecraft.scoreboard.ScoreAccess getOrCreateScore(net.minecraft.scoreboard.ScoreHolder, net.minecraft.scoreboard.ScoreboardObjective);
+  public net.minecraft.scoreboard.ScoreAccess getOrCreateScore(net.minecraft.scoreboard.ScoreHolder, net.minecraft.scoreboard.ScoreboardObjective, boolean);
+  public net.minecraft.scoreboard.ReadableScoreboardScore getScore(net.minecraft.scoreboard.ScoreHolder, net.minecraft.scoreboard.ScoreboardObjective);
+  public java.util.Collection<net.minecraft.scoreboard.ScoreHolder> getKnownScoreHolders();
+  public void removeScores(net.minecraft.scoreboard.ScoreHolder);
+  public void removeScore(net.minecraft.scoreboard.ScoreHolder, net.minecraft.scoreboard.ScoreboardObjective);
+  public it.unimi.dsi.fastutil.objects.Object2IntMap<net.minecraft.scoreboard.ScoreboardObjective> getScoreHolderObjectives(net.minecraft.scoreboard.ScoreHolder);
+  public net.minecraft.scoreboard.Team getTeam(java.lang.String);
+  public net.minecraft.scoreboard.Team addTeam(java.lang.String);
+  public void removeTeam(net.minecraft.scoreboard.Team);
+  public boolean addScoreHolderToTeam(java.lang.String, net.minecraft.scoreboard.Team);
+  public boolean clearTeam(java.lang.String);
+  public void removeScoreHolderFromTeam(java.lang.String, net.minecraft.scoreboard.Team);
+  public java.util.Collection<java.lang.String> getTeamNames();
+  public java.util.Collection<net.minecraft.scoreboard.Team> getTeams();
+  public net.minecraft.scoreboard.Team getScoreHolderTeam(java.lang.String);
+  protected void updateScore(net.minecraft.scoreboard.ScoreHolder, net.minecraft.scoreboard.ScoreboardObjective, net.minecraft.scoreboard.ScoreboardScore);
+  protected void resetScore(net.minecraft.scoreboard.ScoreHolder, net.minecraft.scoreboard.ScoreboardObjective);
+  public void onScoreHolderRemoved(net.minecraft.scoreboard.ScoreHolder);
+  public void onScoreRemoved(net.minecraft.scoreboard.ScoreHolder, net.minecraft.scoreboard.ScoreboardObjective);
+  public void updateScoreboardTeamAndPlayers(net.minecraft.scoreboard.Team);
+  public void updateScoreboardTeam(net.minecraft.scoreboard.Team);
+  public void updateRemovedTeam(net.minecraft.scoreboard.Team);
+  protected java.util.List<net.minecraft.scoreboard.Team$Packed> getPackedTeams();
+  protected void addTeam(net.minecraft.scoreboard.Team$Packed);
+===== net.minecraft.scoreboard.Team   ~/(setColor|setPrefix|setSuffix|setDisplayName|setFriendlyFire|setShowFriendlyInvisibles|getName|CollisionRule|NameTagVisibility)/
+  public java.lang.String getName();
+  public void setDisplayName(net.minecraft.text.Text);
+  public void setPrefix(net.minecraft.text.Text);
+  public void setSuffix(net.minecraft.text.Text);
+  public void setFriendlyFireAllowed(boolean);
+  public void setShowFriendlyInvisibles(boolean);
+  public net.minecraft.scoreboard.AbstractTeam$VisibilityRule getNameTagVisibilityRule();
+  public void setNameTagVisibilityRule(net.minecraft.scoreboard.AbstractTeam$VisibilityRule);
+  public net.minecraft.scoreboard.AbstractTeam$CollisionRule getCollisionRule();
+  public void setCollisionRule(net.minecraft.scoreboard.AbstractTeam$CollisionRule);
+  public void setColor(net.minecraft.util.Formatting);
+===== net.minecraft.scoreboard.AbstractTeam   ~/./
+  Compiled from "AbstractTeam.java"
+  public abstract class net.minecraft.scoreboard.AbstractTeam {
+  public net.minecraft.scoreboard.AbstractTeam();
+  public boolean isEqual(net.minecraft.scoreboard.AbstractTeam);
+  public abstract java.lang.String getName();
+  public abstract net.minecraft.text.MutableText decorateName(net.minecraft.text.Text);
+  public abstract boolean shouldShowFriendlyInvisibles();
+  public abstract boolean isFriendlyFireAllowed();
+  public abstract net.minecraft.scoreboard.AbstractTeam$VisibilityRule getNameTagVisibilityRule();
+  public abstract net.minecraft.util.Formatting getColor();
+  public abstract java.util.Collection<java.lang.String> getPlayerList();
+  public abstract net.minecraft.scoreboard.AbstractTeam$VisibilityRule getDeathMessageVisibilityRule();
+  public abstract net.minecraft.scoreboard.AbstractTeam$CollisionRule getCollisionRule();
+  }
+===== net.minecraft.server.world.ServerWorld   ~/(spawnParticles|playSound|getServer|getPlayers)/
+  public java.util.List<net.minecraft.server.network.ServerPlayerEntity> getPlayers(java.util.function.Predicate<? super net.minecraft.server.network.ServerPlayerEntity>);
+  public java.util.List<net.minecraft.server.network.ServerPlayerEntity> getPlayers(java.util.function.Predicate<? super net.minecraft.server.network.ServerPlayerEntity>, int);
+  public void playSound(net.minecraft.entity.Entity, double, double, double, net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent>, net.minecraft.sound.SoundCategory, float, float, long);
+  public void playSoundFromEntity(net.minecraft.entity.Entity, net.minecraft.entity.Entity, net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent>, net.minecraft.sound.SoundCategory, float, float, long);
+  public net.minecraft.server.MinecraftServer getServer();
+  public <T extends net.minecraft.particle.ParticleEffect> int spawnParticles(T, double, double, double, int, double, double, double, double);
+  public <T extends net.minecraft.particle.ParticleEffect> int spawnParticles(T, boolean, boolean, double, double, double, int, double, double, double, double);
+  public <T extends net.minecraft.particle.ParticleEffect> boolean spawnParticles(net.minecraft.server.network.ServerPlayerEntity, T, boolean, boolean, double, double, double, int, double, double, double, double);
+  public java.util.List<net.minecraft.server.network.ServerPlayerEntity> getPlayers();
+===== net.minecraft.world.World   ~/(playSound|getTime|isThundering|isRaining|getDamageSources|getRandom)/
+  public void playSound(net.minecraft.entity.Entity, net.minecraft.util.math.BlockPos, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float);
+  public abstract void playSound(net.minecraft.entity.Entity, double, double, double, net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent>, net.minecraft.sound.SoundCategory, float, float, long);
+  public void playSound(net.minecraft.entity.Entity, double, double, double, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float, long);
+  public abstract void playSoundFromEntity(net.minecraft.entity.Entity, net.minecraft.entity.Entity, net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent>, net.minecraft.sound.SoundCategory, float, float, long);
+  public void playSound(net.minecraft.entity.Entity, double, double, double, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory);
+  public void playSound(net.minecraft.entity.Entity, double, double, double, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float);
+  public void playSound(net.minecraft.entity.Entity, double, double, double, net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent>, net.minecraft.sound.SoundCategory, float, float);
+  public void playSoundFromEntity(net.minecraft.entity.Entity, net.minecraft.entity.Entity, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float);
+  public void playSoundAtBlockCenterClient(net.minecraft.util.math.BlockPos, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float, boolean);
+  public void playSoundFromEntityClient(net.minecraft.entity.Entity, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float);
+  public void playSoundClient(double, double, double, net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float, boolean);
+  public void playSoundClient(net.minecraft.sound.SoundEvent, net.minecraft.sound.SoundCategory, float, float);
+  public long getTimeOfDay();
+  public boolean isThundering();
+  public boolean isRaining();
+  public net.minecraft.util.math.random.Random getRandom();
+  public net.minecraft.util.math.BlockPos getRandomPosInChunk(int, int, int, int);
+  public net.minecraft.entity.damage.DamageSources getDamageSources();
+===== net.minecraft.entity.damage.DamageSource   ~/(getAttacker|getSource|getName|isIn|getTypeRegistryEntry|isOf)/
+  public net.minecraft.entity.Entity getSource();
+  public net.minecraft.entity.Entity getAttacker();
+  public java.lang.String getName();
+  public boolean isIn(net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType>);
+  public boolean isOf(net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType>);
+  public net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.damage.DamageType> getTypeRegistryEntry();
+===== net.minecraft.entity.damage.DamageSources   ~/(generic|genericKill|magic|outOfWorld|playerAttack|mobAttack|fall)/
+  public net.minecraft.entity.damage.DamageSource fall();
+  public net.minecraft.entity.damage.DamageSource outOfWorld();
+  public net.minecraft.entity.damage.DamageSource generic();
+  public net.minecraft.entity.damage.DamageSource magic();
+  public net.minecraft.entity.damage.DamageSource fallingBlock(net.minecraft.entity.Entity);
+  public net.minecraft.entity.damage.DamageSource fallingAnvil(net.minecraft.entity.Entity);
+  public net.minecraft.entity.damage.DamageSource fallingStalactite(net.minecraft.entity.Entity);
+  public net.minecraft.entity.damage.DamageSource mobAttack(net.minecraft.entity.LivingEntity);
+  public net.minecraft.entity.damage.DamageSource mobAttackNoAggro(net.minecraft.entity.LivingEntity);
+  public net.minecraft.entity.damage.DamageSource playerAttack(net.minecraft.entity.player.PlayerEntity);
+  public net.minecraft.entity.damage.DamageSource genericKill();
+===== net.minecraft.entity.projectile.PersistentProjectileEntity   ~/(setDamage|getDamage|getOwner|setPunch|setCritical)/
+  public void setDamage(double);
+  public void setCritical(boolean);
+===== net.minecraft.entity.projectile.ProjectileEntity   ~/(getOwner|setOwner|setVelocity)/
+  protected void setOwner(net.minecraft.entity.LazyEntityReference<net.minecraft.entity.Entity>);
+  public void setOwner(net.minecraft.entity.Entity);
+  public net.minecraft.entity.Entity getOwner();
+  public void setVelocity(double, double, double, float, float);
+  public void setVelocity(net.minecraft.entity.Entity, float, float, float, float, float);
+===== net.minecraft.network.packet.s2c.play.TitleS2CPacket   ~/./
+  Compiled from "TitleS2CPacket.java"
+  public final class net.minecraft.network.packet.s2c.play.TitleS2CPacket extends java.lang.Record implements net.minecraft.network.packet.Packet<net.minecraft.network.listener.ClientPlayPacketListener> {
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.network.packet.s2c.play.TitleS2CPacket> CODEC;
+  public net.minecraft.network.packet.s2c.play.TitleS2CPacket(net.minecraft.text.Text);
+  public net.minecraft.network.packet.PacketType<net.minecraft.network.packet.s2c.play.TitleS2CPacket> getPacketType();
+  public void apply(net.minecraft.network.listener.ClientPlayPacketListener);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.text.Text text();
+  public void apply(net.minecraft.network.listener.PacketListener);
+  static {};
+  }
+===== net.minecraft.network.packet.s2c.play.SubtitleS2CPacket   ~/./
+  Compiled from "SubtitleS2CPacket.java"
+  public final class net.minecraft.network.packet.s2c.play.SubtitleS2CPacket extends java.lang.Record implements net.minecraft.network.packet.Packet<net.minecraft.network.listener.ClientPlayPacketListener> {
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.network.packet.s2c.play.SubtitleS2CPacket> CODEC;
+  public net.minecraft.network.packet.s2c.play.SubtitleS2CPacket(net.minecraft.text.Text);
+  public net.minecraft.network.packet.PacketType<net.minecraft.network.packet.s2c.play.SubtitleS2CPacket> getPacketType();
+  public void apply(net.minecraft.network.listener.ClientPlayPacketListener);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.text.Text text();
+  public void apply(net.minecraft.network.listener.PacketListener);
+  static {};
+  }
+===== net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket   ~/./
+  Compiled from "TitleFadeS2CPacket.java"
+  public class net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket implements net.minecraft.network.packet.Packet<net.minecraft.network.listener.ClientPlayPacketListener> {
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.PacketByteBuf, net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket> CODEC;
+  public net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket(int, int, int);
+  public net.minecraft.network.packet.PacketType<net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket> getPacketType();
+  public void apply(net.minecraft.network.listener.ClientPlayPacketListener);
+  public int getFadeInTicks();
+  public int getStayTicks();
+  public int getFadeOutTicks();
+  public void apply(net.minecraft.network.listener.PacketListener);
+  static {};
+  }
+===== net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket   ~/./
+  Compiled from "PlaySoundS2CPacket.java"
+  public class net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket implements net.minecraft.network.packet.Packet<net.minecraft.network.listener.ClientPlayPacketListener> {
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket> CODEC;
+  public static final float COORDINATE_SCALE;
+  public net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket(net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent>, net.minecraft.sound.SoundCategory, double, double, double, float, float, long);
+  public net.minecraft.network.packet.PacketType<net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket> getPacketType();
+  public void apply(net.minecraft.network.listener.ClientPlayPacketListener);
+  public net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> getSound();
+  public net.minecraft.sound.SoundCategory getCategory();
+  public double getX();
+  public double getY();
+  public double getZ();
+  public float getVolume();
+  public float getPitch();
+  public long getSeed();
+  public void apply(net.minecraft.network.listener.PacketListener);
+  static {};
+  }
+===== net.minecraft.network.packet.s2c.play.PlayerListS2CPacket   ~/(PlayerListS2CPacket\(|Action)/
+  public net.minecraft.network.packet.s2c.play.PlayerListS2CPacket(java.util.EnumSet<net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Action>, java.util.Collection<net.minecraft.server.network.ServerPlayerEntity>);
+  public net.minecraft.network.packet.s2c.play.PlayerListS2CPacket(net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Action, net.minecraft.server.network.ServerPlayerEntity);
+  public java.util.EnumSet<net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Action> getActions();
+===== net.minecraft.text.Text   ~/(literal|empty|translatable|copy|getString)/
+  public default java.lang.String getString();
+  public default net.minecraft.text.MutableText copyContentOnly();
+  public default net.minecraft.text.MutableText copy();
+  public static net.minecraft.text.MutableText literal(java.lang.String);
+  public static net.minecraft.text.MutableText translatable(java.lang.String);
+  public static net.minecraft.text.MutableText translatable(java.lang.String, java.lang.Object...);
+  public static net.minecraft.text.MutableText translatableWithFallback(java.lang.String, java.lang.String);
+  public static net.minecraft.text.MutableText translatableWithFallback(java.lang.String, java.lang.String, java.lang.Object...);
+  public static net.minecraft.text.MutableText empty();
+===== net.minecraft.text.MutableText   ~/(formatted|styled|withColor|append|setStyle)/
+  public net.minecraft.text.MutableText setStyle(net.minecraft.text.Style);
+  public net.minecraft.text.MutableText append(java.lang.String);
+  public net.minecraft.text.MutableText append(net.minecraft.text.Text);
+  public net.minecraft.text.MutableText styled(java.util.function.UnaryOperator<net.minecraft.text.Style>);
+  public net.minecraft.text.MutableText formatted(net.minecraft.util.Formatting...);
+  public net.minecraft.text.MutableText formatted(net.minecraft.util.Formatting);
+  public net.minecraft.text.MutableText withColor(int);
+===== net.minecraft.text.Style   ~/(withColor|withBold|withItalic|EMPTY)/
+  public static final net.minecraft.text.Style EMPTY;
+  public net.minecraft.text.Style withColor(net.minecraft.text.TextColor);
+  public net.minecraft.text.Style withColor(net.minecraft.util.Formatting);
+  public net.minecraft.text.Style withColor(int);
+  public net.minecraft.text.Style withBold(java.lang.Boolean);
+  public net.minecraft.text.Style withItalic(java.lang.Boolean);
+===== net.minecraft.text.TextColor   ~/(fromRgb|fromFormatting|getRgb)/
+  public int getRgb();
+  public static net.minecraft.text.TextColor fromFormatting(net.minecraft.util.Formatting);
+  public static net.minecraft.text.TextColor fromRgb(int);
+===== net.minecraft.util.Identifier   ~/(of|ofVanilla|tryParse)/
+  public static net.minecraft.util.Identifier of(java.lang.String, java.lang.String);
+  public static net.minecraft.util.Identifier of(java.lang.String);
+  public static net.minecraft.util.Identifier ofVanilla(java.lang.String);
+  public static net.minecraft.util.Identifier tryParse(java.lang.String);
+  public static net.minecraft.util.Identifier tryParse(java.lang.String, java.lang.String);
+===== net.minecraft.util.Formatting   ~/(byName|getColorValue|getName|values)/
+  public static net.minecraft.util.Formatting[] values();
+  public java.lang.Integer getColorValue();
+  public java.lang.String getName();
+  public static net.minecraft.util.Formatting byName(java.lang.String);
+  public static java.util.Collection<java.lang.String> getNames(boolean, boolean);
+===== net.minecraft.registry.tag.DamageTypeTags   ~/(IS_FALL|IS_FIRE|IS_DROWNING|IS_EXPLOSION|BYPASSES)/
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_ARMOR;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_SHIELD;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_INVULNERABILITY;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_COOLDOWN;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_EFFECTS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_RESISTANCE;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_ENCHANTMENTS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_FIRE;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_EXPLOSION;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_FALL;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_DROWNING;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_WOLF_ARMOR;
+===== net.minecraft.server.MinecraftServer   ~/(getSavePath|getPlayerManager|getScoreboard|getTicks|execute|getOverworld)/
+  protected void executeTask(net.minecraft.server.ServerTask);
+  public final net.minecraft.server.world.ServerWorld getOverworld();
+  public net.minecraft.server.PlayerManager getPlayerManager();
+  public int getTicks();
+  public void executeSync(java.lang.Runnable);
+  public net.minecraft.scoreboard.ServerScoreboard getScoreboard();
+  public java.nio.file.Path getSavePath(net.minecraft.util.WorldSavePath);
+  public void executeTask(java.lang.Runnable);
+===== net.minecraft.util.WorldSavePath   ~/./
+  Compiled from "WorldSavePath.java"
+  public class net.minecraft.util.WorldSavePath {
+  public static final net.minecraft.util.WorldSavePath ADVANCEMENTS;
+  public static final net.minecraft.util.WorldSavePath STATS;
+  public static final net.minecraft.util.WorldSavePath PLAYERDATA;
+  public static final net.minecraft.util.WorldSavePath PLAYERS;
+  public static final net.minecraft.util.WorldSavePath LEVEL_DAT;
+  public static final net.minecraft.util.WorldSavePath LEVEL_DAT_OLD;
+  public static final net.minecraft.util.WorldSavePath ICON_PNG;
+  public static final net.minecraft.util.WorldSavePath SESSION_LOCK;
+  public static final net.minecraft.util.WorldSavePath GENERATED;
+  public static final net.minecraft.util.WorldSavePath DATAPACKS;
+  public static final net.minecraft.util.WorldSavePath RESOURCES_ZIP;
+  public static final net.minecraft.util.WorldSavePath ROOT;
+  public java.lang.String getRelativePath();
+  public java.lang.String toString();
+  static {};
+  }
+===== net.minecraft.server.PlayerManager   ~/(getPlayer|getPlayerList|broadcast|sendToAll)/
+  public void sendToAll(net.minecraft.network.packet.Packet<?>);
+  public java.lang.String[] getPlayerNames();
+  public net.minecraft.server.network.ServerPlayerEntity getPlayer(java.lang.String);
+  public java.util.List<net.minecraft.server.network.ServerPlayerEntity> getPlayersByIp(java.lang.String);
+  public void broadcast(net.minecraft.text.Text, boolean);
+  public void broadcast(net.minecraft.text.Text, java.util.function.Function<net.minecraft.server.network.ServerPlayerEntity, net.minecraft.text.Text>, boolean);
+  public void broadcast(net.minecraft.network.message.SignedMessage, net.minecraft.server.command.ServerCommandSource, net.minecraft.network.message.MessageType$Parameters);
+  public void broadcast(net.minecraft.network.message.SignedMessage, net.minecraft.server.network.ServerPlayerEntity, net.minecraft.network.message.MessageType$Parameters);
+  public java.util.List<net.minecraft.server.network.ServerPlayerEntity> getPlayerList();
+  public net.minecraft.server.network.ServerPlayerEntity getPlayer(java.util.UUID);
+===== net.minecraft.entity.effect.StatusEffectInstance   ~/(StatusEffectInstance\()/
+  public net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>);
+  public net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>, int);
+  public net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>, int, int);
+  public net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>, int, int, boolean, boolean);
+  public net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>, int, int, boolean, boolean, boolean);
+  public net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>, int, int, boolean, boolean, boolean, net.minecraft.entity.effect.StatusEffectInstance);
+  public net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.entity.effect.StatusEffectInstance);
+===== net.minecraft.entity.effect.StatusEffects   ~/(SPEED|STRENGTH|RESISTANCE|REGENERATION|WITHER|ABSORPTION|LUCK|GLOWING|FIRE_RESISTANCE|SLOWNESS|WEAKNESS|INSTANT_HEALTH|NAUSEA|JUMP_BOOST|HASTE|SATURATION)/
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> SPEED;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> SLOWNESS;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> HASTE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> STRENGTH;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> INSTANT_HEALTH;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> JUMP_BOOST;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> NAUSEA;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> REGENERATION;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> RESISTANCE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> FIRE_RESISTANCE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> WEAKNESS;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> WITHER;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> ABSORPTION;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> SATURATION;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> GLOWING;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> LUCK;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> UNLUCK;
+===== net.minecraft.particle.ParticleTypes   ~/(HEART|CRIT|FLAME|SOUL|ANGRY_VILLAGER|HAPPY_VILLAGER|DUST|END_ROD|TOTEM_OF_UNDYING|SMOKE|ENCHANTED_HIT|ELECTRIC_SPARK|SCULK_SOUL|DAMAGE_INDICATOR)/
+  public static final net.minecraft.particle.SimpleParticleType ANGRY_VILLAGER;
+  public static final net.minecraft.particle.SimpleParticleType COPPER_FIRE_FLAME;
+  public static final net.minecraft.particle.SimpleParticleType CRIT;
+  public static final net.minecraft.particle.SimpleParticleType DAMAGE_INDICATOR;
+  public static final net.minecraft.particle.ParticleType<net.minecraft.particle.DustParticleEffect> DUST;
+  public static final net.minecraft.particle.ParticleType<net.minecraft.particle.DustColorTransitionParticleEffect> DUST_COLOR_TRANSITION;
+  public static final net.minecraft.particle.SimpleParticleType ENCHANTED_HIT;
+  public static final net.minecraft.particle.SimpleParticleType END_ROD;
+  public static final net.minecraft.particle.ParticleType<net.minecraft.particle.BlockStateParticleEffect> FALLING_DUST;
+  public static final net.minecraft.particle.SimpleParticleType FLAME;
+  public static final net.minecraft.particle.SimpleParticleType SCULK_SOUL;
+  public static final net.minecraft.particle.SimpleParticleType SOUL_FIRE_FLAME;
+  public static final net.minecraft.particle.SimpleParticleType SOUL;
+  public static final net.minecraft.particle.SimpleParticleType HAPPY_VILLAGER;
+  public static final net.minecraft.particle.SimpleParticleType HEART;
+  public static final net.minecraft.particle.SimpleParticleType LARGE_SMOKE;
+  public static final net.minecraft.particle.SimpleParticleType SMOKE;
+  public static final net.minecraft.particle.SimpleParticleType WHITE_SMOKE;
+  public static final net.minecraft.particle.SimpleParticleType TOTEM_OF_UNDYING;
+  public static final net.minecraft.particle.SimpleParticleType CAMPFIRE_COSY_SMOKE;
+  public static final net.minecraft.particle.SimpleParticleType CAMPFIRE_SIGNAL_SMOKE;
+  public static final net.minecraft.particle.SimpleParticleType SMALL_FLAME;
+  public static final net.minecraft.particle.SimpleParticleType ELECTRIC_SPARK;
+  public static final net.minecraft.particle.SimpleParticleType DUST_PLUME;
+  public static final net.minecraft.particle.ParticleType<net.minecraft.particle.BlockStateParticleEffect> DUST_PILLAR;
+===== net.minecraft.sound.SoundEvents   ~/(ENTITY_ENDER_DRAGON_GROWL|ENTITY_ENDER_DRAGON_DEATH|ITEM_TOTEM_USE|ENTITY_PLAYER_LEVELUP|BLOCK_BEACON_ACTIVATE|ENTITY_FIREWORK_ROCKET|ENTITY_WITHER_SPAWN|ENTITY_EXPERIENCE_ORB)/
+  public static final net.minecraft.sound.SoundEvent BLOCK_BEACON_ACTIVATE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ENDER_DRAGON_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ENDER_DRAGON_GROWL;
+  public static final net.minecraft.sound.SoundEvent ENTITY_EXPERIENCE_ORB_PICKUP;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_BLAST;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_BLAST_FAR;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_LAUNCH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_SHOOT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE_FAR;
+  public static final net.minecraft.sound.SoundEvent ENTITY_PLAYER_LEVELUP;
+  public static final net.minecraft.sound.SoundEvent ITEM_TOTEM_USE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_SPAWN;
+===== net.minecraft.sound.SoundCategory   ~/./
+  Compiled from "SoundCategory.java"
+  public final class net.minecraft.sound.SoundCategory extends java.lang.Enum<net.minecraft.sound.SoundCategory> {
+  public static final net.minecraft.sound.SoundCategory MASTER;
+  public static final net.minecraft.sound.SoundCategory MUSIC;
+  public static final net.minecraft.sound.SoundCategory RECORDS;
+  public static final net.minecraft.sound.SoundCategory WEATHER;
+  public static final net.minecraft.sound.SoundCategory BLOCKS;
+  public static final net.minecraft.sound.SoundCategory HOSTILE;
+  public static final net.minecraft.sound.SoundCategory NEUTRAL;
+  public static final net.minecraft.sound.SoundCategory PLAYERS;
+  public static final net.minecraft.sound.SoundCategory AMBIENT;
+  public static final net.minecraft.sound.SoundCategory VOICE;
+  public static final net.minecraft.sound.SoundCategory UI;
+  public static net.minecraft.sound.SoundCategory[] values();
+  public static net.minecraft.sound.SoundCategory valueOf(java.lang.String);
+  public java.lang.String getName();
+  static {};
+  }
+===== net.minecraft.server.command.ServerCommandSource   ~/(getPlayer|getEntity|sendFeedback|sendError|hasPermissionLevel|getServer|getName)/
+  public java.lang.String getName();
+  public net.minecraft.entity.Entity getEntity();
+  public net.minecraft.entity.Entity getEntityOrThrow() throws com.mojang.brigadier.exceptions.CommandSyntaxException;
+  public net.minecraft.server.network.ServerPlayerEntity getPlayerOrThrow() throws com.mojang.brigadier.exceptions.CommandSyntaxException;
+  public net.minecraft.server.network.ServerPlayerEntity getPlayer();
+  public net.minecraft.server.MinecraftServer getServer();
+  public net.minecraft.command.argument.EntityAnchorArgumentType$EntityAnchor getEntityAnchor();
+  public void sendFeedback(java.util.function.Supplier<net.minecraft.text.Text>, boolean);
+  public void sendError(net.minecraft.text.Text);
+  public java.util.Collection<java.lang.String> getPlayerNames();
+===== net.minecraft.command.argument.EntityArgumentType   ~/(player|getPlayer|players|getPlayers)/
+  final boolean playersOnly;
+  public static net.minecraft.command.argument.EntityArgumentType player();
+  public static net.minecraft.server.network.ServerPlayerEntity getPlayer(com.mojang.brigadier.context.CommandContext<net.minecraft.server.command.ServerCommandSource>, java.lang.String) throws com.mojang.brigadier.exceptions.CommandSyntaxException;
+  public static net.minecraft.command.argument.EntityArgumentType players();
+  public static java.util.Collection<net.minecraft.server.network.ServerPlayerEntity> getPlayers(com.mojang.brigadier.context.CommandContext<net.minecraft.server.command.ServerCommandSource>, java.lang.String) throws com.mojang.brigadier.exceptions.CommandSyntaxException;
+===== net.minecraft.entity.mob.HostileEntity   ~/(HostileEntity)/
+  Compiled from "HostileEntity.java"
+  public abstract class net.minecraft.entity.mob.HostileEntity extends net.minecraft.entity.mob.PathAwareEntity implements net.minecraft.entity.mob.Monster {
+  protected net.minecraft.entity.mob.HostileEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.mob.HostileEntity>, net.minecraft.world.World);
+  public static boolean canSpawnIgnoreLightLevel(net.minecraft.entity.EntityType<? extends net.minecraft.entity.mob.HostileEntity>, net.minecraft.world.WorldAccess, net.minecraft.entity.SpawnReason, net.minecraft.util.math.BlockPos, net.minecraft.util.math.random.Random);
+===== net.minecraft.util.math.Vec3d   ~/(multiply|normalize|add|length)/
+  public static net.minecraft.util.math.Vec3d add(net.minecraft.util.math.Vec3i, double, double, double);
+  public net.minecraft.util.math.Vec3d normalize();
+  public net.minecraft.util.math.Vec3d add(double);
+  public net.minecraft.util.math.Vec3d add(net.minecraft.util.math.Vec3d);
+  public net.minecraft.util.math.Vec3d add(double, double, double);
+  public net.minecraft.util.math.Vec3d multiply(double);
+  public net.minecraft.util.math.Vec3d multiply(net.minecraft.util.math.Vec3d);
+  public net.minecraft.util.math.Vec3d multiply(double, double, double);
+  public net.minecraft.util.math.Vec3d addRandom(net.minecraft.util.math.random.Random, float);
+  public net.minecraft.util.math.Vec3d addHorizontalRandom(net.minecraft.util.math.random.Random, float);
+  public double length();
+  public double lengthSquared();
+===== net.minecraft.registry.entry.RegistryEntry   ~/(of)/
+  public static <T> net.minecraft.registry.entry.RegistryEntry<T> of(T);
+===== net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents   ~/./
+  Compiled from "ServerLivingEntityEvents.java"
+  public final class net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDamage> ALLOW_DAMAGE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDamage> AFTER_DAMAGE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDeath> ALLOW_DEATH;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDeath> AFTER_DEATH;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$MobConversion> MOB_CONVERSION;
+  static {};
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents   ~/./
+  Compiled from "ServerPlayerEvents.java"
+  public final class net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$CopyFrom> COPY_FROM;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AfterRespawn> AFTER_RESPAWN;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Join> JOIN;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Leave> LEAVE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AllowDeath> ALLOW_DEATH;
+  static {};
+  }
+===== net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents   ~/./
+  Compiled from "ServerEntityEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Load> ENTITY_LOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Unload> ENTITY_UNLOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$EquipmentChange> EQUIPMENT_CHANGE;
+  static {};
+  }
+===== net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents   ~/./
+  Compiled from "ServerTickEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$StartTick> START_SERVER_TICK;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$EndTick> END_SERVER_TICK;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$StartWorldTick> START_WORLD_TICK;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$EndWorldTick> END_WORLD_TICK;
+  static {};
+  }
+===== net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents   ~/./
+  Compiled from "ServerLifecycleEvents.java"
+  public final class net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarting> SERVER_STARTING;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarted> SERVER_STARTED;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopping> SERVER_STOPPING;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopped> SERVER_STOPPED;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$SyncDataPackContents> SYNC_DATA_PACK_CONTENTS;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$StartDataPackReload> START_DATA_PACK_RELOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$EndDataPackReload> END_DATA_PACK_RELOAD;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$BeforeSave> BEFORE_SAVE;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$AfterSave> AFTER_SAVE;
+  static {};
+  }
+===== net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents   ~/./
+  Compiled from "ServerPlayConnectionEvents.java"
+  public final class net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Init> INIT;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Join> JOIN;
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents$Disconnect> DISCONNECT;
+  static {};
+  }
+===== net.fabricmc.fabric.api.event.player.AttackEntityCallback   ~/./
+  Compiled from "AttackEntityCallback.java"
+  public interface net.fabricmc.fabric.api.event.player.AttackEntityCallback {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.event.player.AttackEntityCallback> EVENT;
+  public abstract net.minecraft.util.ActionResult interact(net.minecraft.entity.player.PlayerEntity, net.minecraft.world.World, net.minecraft.util.Hand, net.minecraft.entity.Entity, net.minecraft.util.hit.EntityHitResult);
+  static {};
+  }
+===== net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback   ~/./
+  Compiled from "CommandRegistrationCallback.java"
+  public interface net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback {
+  public static final net.fabricmc.fabric.api.event.Event<net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback> EVENT;
+  public abstract void register(com.mojang.brigadier.CommandDispatcher<net.minecraft.server.command.ServerCommandSource>, net.minecraft.command.CommandRegistryAccess, net.minecraft.server.command.CommandManager$RegistrationEnvironment);
+  static {};
+  }
+===== net.fabricmc.fabric.api.message.v1.ServerMessageEvents   ~/./
+  Error: class not found: net.fabricmc.fabric.api.message.v1.ServerMessageEvents
+===== net.fabricmc.loader.api.FabricLoader   ~/(getConfigDir|getInstance)/
+  public static net.fabricmc.loader.api.FabricLoader getInstance();
+  public abstract java.nio.file.Path getConfigDir();
+  public abstract java.io.File getConfigDirectory();
+===== net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDamage   ~/./
+  Compiled from "ServerLivingEntityEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDamage {
+  public abstract boolean allowDamage(net.minecraft.entity.LivingEntity, net.minecraft.entity.damage.DamageSource, float);
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDamage   ~/./
+  Compiled from "ServerLivingEntityEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDamage {
+  public abstract void afterDamage(net.minecraft.entity.LivingEntity, net.minecraft.entity.damage.DamageSource, float, float, boolean);
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDeath   ~/./
+  Compiled from "ServerLivingEntityEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDeath {
+  public abstract boolean allowDeath(net.minecraft.entity.LivingEntity, net.minecraft.entity.damage.DamageSource, float);
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDeath   ~/./
+  Compiled from "ServerLivingEntityEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AfterDeath {
+  public abstract void afterDeath(net.minecraft.entity.LivingEntity, net.minecraft.entity.damage.DamageSource);
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AfterRespawn   ~/./
+  Compiled from "ServerPlayerEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AfterRespawn {
+  public abstract void afterRespawn(net.minecraft.server.network.ServerPlayerEntity, net.minecraft.server.network.ServerPlayerEntity, boolean);
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Join   ~/./
+  Compiled from "ServerPlayerEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Join {
+  public abstract void onJoin(net.minecraft.server.network.ServerPlayerEntity);
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Leave   ~/./
+  Compiled from "ServerPlayerEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$Leave {
+  public abstract void onLeave(net.minecraft.server.network.ServerPlayerEntity);
+  }
+===== net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AllowDeath   ~/./
+  Compiled from "ServerPlayerEvents.java"
+  public interface net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents$AllowDeath {
+  public abstract boolean allowDeath(net.minecraft.server.network.ServerPlayerEntity, net.minecraft.entity.damage.DamageSource, float);
+  }
+===== net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Load   ~/./
+  Compiled from "ServerEntityEvents.java"
+  public interface net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents$Load {
+  public abstract void onLoad(net.minecraft.entity.Entity, net.minecraft.server.world.ServerWorld);
+  }
+===== net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$EndTick   ~/./
+  Compiled from "ServerTickEvents.java"
+  public interface net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$EndTick {
+  public abstract void onEndTick(net.minecraft.server.MinecraftServer);
+  }
+===== net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarted   ~/./
+  Compiled from "ServerLifecycleEvents.java"
+  public interface net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStarted {
+  public abstract void onServerStarted(net.minecraft.server.MinecraftServer);
+  }
+===== net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopping   ~/./
+  Compiled from "ServerLifecycleEvents.java"
+  public interface net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents$ServerStopping {
+  public abstract void onServerStopping(net.minecraft.server.MinecraftServer);
+  }
+===== net.minecraft.entity.attribute.EntityAttributeModifier$Operation   ~/./
+  Compiled from "EntityAttributeModifier.java"
+  public final class net.minecraft.entity.attribute.EntityAttributeModifier$Operation extends java.lang.Enum<net.minecraft.entity.attribute.EntityAttributeModifier$Operation> implements net.minecraft.util.StringIdentifiable {
+  public static final net.minecraft.entity.attribute.EntityAttributeModifier$Operation ADD_VALUE;
+  public static final net.minecraft.entity.attribute.EntityAttributeModifier$Operation ADD_MULTIPLIED_BASE;
+  public static final net.minecraft.entity.attribute.EntityAttributeModifier$Operation ADD_MULTIPLIED_TOTAL;
+  public static final java.util.function.IntFunction<net.minecraft.entity.attribute.EntityAttributeModifier$Operation> ID_TO_VALUE;
+  public static final net.minecraft.network.codec.PacketCodec<io.netty.buffer.ByteBuf, net.minecraft.entity.attribute.EntityAttributeModifier$Operation> PACKET_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.entity.attribute.EntityAttributeModifier$Operation> CODEC;
+  public static net.minecraft.entity.attribute.EntityAttributeModifier$Operation[] values();
+  public static net.minecraft.entity.attribute.EntityAttributeModifier$Operation valueOf(java.lang.String);
+  public int getId();
+  public java.lang.String asString();
+  static {};
+  }
+===== net.minecraft.entity.projectile.PersistentProjectileEntity   ~/(damage|Damage|getOwner|isCritical|setPierceLevel)/
+  protected void knockback(net.minecraft.entity.LivingEntity, net.minecraft.entity.damage.DamageSource);
+  public void setDamage(double);
+  public boolean isCritical();
+  public void applyDamageModifier(float);
+===== net.minecraft.entity.projectile.ArrowEntity   ~/(ArrowEntity\()/
+  public net.minecraft.entity.projectile.ArrowEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.projectile.ArrowEntity>, net.minecraft.world.World);
+  public net.minecraft.entity.projectile.ArrowEntity(net.minecraft.world.World, double, double, double, net.minecraft.item.ItemStack, net.minecraft.item.ItemStack);
+  public net.minecraft.entity.projectile.ArrowEntity(net.minecraft.world.World, net.minecraft.entity.LivingEntity, net.minecraft.item.ItemStack, net.minecraft.item.ItemStack);
+===== net.minecraft.entity.player.PlayerEntity   ~/(giveItemStack|dropItem|getItemCooldownManager)/
+  public net.minecraft.entity.ItemEntity dropItem(net.minecraft.item.ItemStack, boolean);
+  public boolean giveItemStack(net.minecraft.item.ItemStack);
+  public net.minecraft.entity.player.ItemCooldownManager getItemCooldownManager();
+===== net.minecraft.server.network.ServerPlayNetworkHandler   ~/(sendPacket)/
+===== net.minecraft.registry.Registries   ~/(SOUND_EVENT|PARTICLE_TYPE)/
+  public static final net.minecraft.registry.Registry<net.minecraft.sound.SoundEvent> SOUND_EVENT;
+  public static final net.minecraft.registry.Registry<net.minecraft.particle.ParticleType<?>> PARTICLE_TYPE;
+===== net.minecraft.util.ActionResult   ~/(PASS|SUCCESS|FAIL)/
+  public static final net.minecraft.util.ActionResult$Success SUCCESS;
+  public static final net.minecraft.util.ActionResult$Success SUCCESS_SERVER;
+  public static final net.minecraft.util.ActionResult$Fail FAIL;
+  public static final net.minecraft.util.ActionResult$Pass PASS;
+  public static final net.minecraft.util.ActionResult$PassToDefaultBlockAction PASS_TO_DEFAULT_BLOCK_ACTION;
+===== net.minecraft.server.command.CommandManager   ~/(literal|argument)/
+  public static com.mojang.brigadier.builder.LiteralArgumentBuilder<net.minecraft.server.command.ServerCommandSource> literal(java.lang.String);
+  public static <T> com.mojang.brigadier.builder.RequiredArgumentBuilder<net.minecraft.server.command.ServerCommandSource, T> argument(java.lang.String, com.mojang.brigadier.arguments.ArgumentType<T>);
+===== net.minecraft.entity.LivingEntity   ~/(isAlive|getLastAttacker|setAttacker|clearStatusEffects|getArmor)/
+  public net.minecraft.entity.LivingEntity getLastAttacker();
+  public void setAttacker(net.minecraft.entity.LivingEntity);
+  public boolean clearStatusEffects();
+  public boolean isAlive();
+  public int getArmor();
+  public float getArmorVisibility();
+===== net.minecraft.entity.Entity   ~/(isAlive|squaredDistanceTo|distanceTo|getBoundingBox|isOnGround|isTouchingWater)/
+  public boolean isOnGround();
+  public boolean isTouchingWater();
+  public boolean isTouchingWaterOrRain();
+  public float distanceTo(net.minecraft.entity.Entity);
+  public double squaredDistanceTo(double, double, double);
+  public double squaredDistanceTo(net.minecraft.entity.Entity);
+  public double squaredDistanceTo(net.minecraft.util.math.Vec3d);
+  public boolean isAlive();
+  public final net.minecraft.util.math.Box getBoundingBox();
+===== net.minecraft.item.Items   ~/(DIAMOND|GOLDEN_APPLE|COOKIE|CAKE|EMERALD|EXPERIENCE_BOTTLE)/
+  public static final net.minecraft.item.Item EMERALD_ORE;
+  public static final net.minecraft.item.Item DEEPSLATE_EMERALD_ORE;
+  public static final net.minecraft.item.Item DIAMOND_ORE;
+  public static final net.minecraft.item.Item DEEPSLATE_DIAMOND_ORE;
+  public static final net.minecraft.item.Item DIAMOND_BLOCK;
+  public static final net.minecraft.item.Item EMERALD_BLOCK;
+  public static final net.minecraft.item.Item DIAMOND;
+  public static final net.minecraft.item.Item EMERALD;
+  public static final net.minecraft.item.Item DIAMOND_SWORD;
+  public static final net.minecraft.item.Item DIAMOND_SHOVEL;
+  public static final net.minecraft.item.Item DIAMOND_PICKAXE;
+  public static final net.minecraft.item.Item DIAMOND_AXE;
+  public static final net.minecraft.item.Item DIAMOND_HOE;
+  public static final net.minecraft.item.Item DIAMOND_HELMET;
+  public static final net.minecraft.item.Item DIAMOND_CHESTPLATE;
+  public static final net.minecraft.item.Item DIAMOND_LEGGINGS;
+  public static final net.minecraft.item.Item DIAMOND_BOOTS;
+  public static final net.minecraft.item.Item GOLDEN_APPLE;
+  public static final net.minecraft.item.Item ENCHANTED_GOLDEN_APPLE;
+  public static final net.minecraft.item.Item CAKE;
+  public static final net.minecraft.item.Item COOKIE;
+  public static final net.minecraft.item.Item EXPERIENCE_BOTTLE;
+  public static final net.minecraft.item.Item DIAMOND_HORSE_ARMOR;
+  public static final net.minecraft.item.Item DIAMOND_SPEAR;
+  public static final net.minecraft.item.Item DIAMOND_NAUTILUS_ARMOR;
+===== net.minecraft.item.ItemStack   ~/(ItemStack\()/
+  public net.minecraft.item.ItemStack(net.minecraft.item.ItemConvertible);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>, int, net.minecraft.component.ComponentChanges);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>, int);
+  public net.minecraft.item.ItemStack(net.minecraft.item.ItemConvertible, int);
+===== net.minecraft.entity.mob.Monster   ~/./
+  Compiled from "Monster.java"
+  public interface net.minecraft.entity.mob.Monster {
+  public static final int ZERO_EXPERIENCE;
+  public static final int SMALL_MONSTER_EXPERIENCE;
+  public static final int NORMAL_MONSTER_EXPERIENCE;
+  public static final int STRONG_MONSTER_EXPERIENCE;
+  public static final int STRONGER_MONSTER_EXPERIENCE;
+  public static final int WITHER_EXPERIENCE;
+  }
+===== net.minecraft.util.math.Box   ~/(Box\(|expand)/
+  public net.minecraft.util.math.Box(double, double, double, double, double, double);
+  public net.minecraft.util.math.Box(net.minecraft.util.math.BlockPos);
+  public net.minecraft.util.math.Box(net.minecraft.util.math.Vec3d, net.minecraft.util.math.Vec3d);
+  public net.minecraft.util.math.Box expand(double, double, double);
+  public net.minecraft.util.math.Box expand(double);
+===== net.minecraft.server.command.ServerCommandSource   ~/./
+  Compiled from "ServerCommandSource.java"
+  public class net.minecraft.server.command.ServerCommandSource implements net.minecraft.server.command.AbstractServerCommandSource<net.minecraft.server.command.ServerCommandSource>, net.minecraft.command.CommandSource {
+  public static final com.mojang.brigadier.exceptions.SimpleCommandExceptionType REQUIRES_PLAYER_EXCEPTION;
+  public static final com.mojang.brigadier.exceptions.SimpleCommandExceptionType REQUIRES_ENTITY_EXCEPTION;
+  public net.minecraft.server.command.ServerCommandSource(net.minecraft.server.command.CommandOutput, net.minecraft.util.math.Vec3d, net.minecraft.util.math.Vec2f, net.minecraft.server.world.ServerWorld, net.minecraft.command.permission.PermissionPredicate, java.lang.String, net.minecraft.text.Text, net.minecraft.server.MinecraftServer, net.minecraft.entity.Entity);
+  public net.minecraft.server.command.ServerCommandSource withOutput(net.minecraft.server.command.CommandOutput);
+  public net.minecraft.server.command.ServerCommandSource withEntity(net.minecraft.entity.Entity);
+  public net.minecraft.server.command.ServerCommandSource withPosition(net.minecraft.util.math.Vec3d);
+  public net.minecraft.server.command.ServerCommandSource withRotation(net.minecraft.util.math.Vec2f);
+  public net.minecraft.server.command.ServerCommandSource withReturnValueConsumer(net.minecraft.command.ReturnValueConsumer);
+  public net.minecraft.server.command.ServerCommandSource mergeReturnValueConsumers(net.minecraft.command.ReturnValueConsumer, java.util.function.BinaryOperator<net.minecraft.command.ReturnValueConsumer>);
+  public net.minecraft.server.command.ServerCommandSource withSilent();
+  public net.minecraft.server.command.ServerCommandSource withPermissions(net.minecraft.command.permission.PermissionPredicate);
+  public net.minecraft.server.command.ServerCommandSource withAdditionalPermissions(net.minecraft.command.permission.PermissionPredicate);
+  public net.minecraft.server.command.ServerCommandSource withEntityAnchor(net.minecraft.command.argument.EntityAnchorArgumentType$EntityAnchor);
+  public net.minecraft.server.command.ServerCommandSource withWorld(net.minecraft.server.world.ServerWorld);
+  public net.minecraft.server.command.ServerCommandSource withLookingAt(net.minecraft.entity.Entity, net.minecraft.command.argument.EntityAnchorArgumentType$EntityAnchor);
+  public net.minecraft.server.command.ServerCommandSource withLookingAt(net.minecraft.util.math.Vec3d);
+  public net.minecraft.server.command.ServerCommandSource withSignedArguments(net.minecraft.network.message.SignedCommandArguments, net.minecraft.util.thread.FutureQueue);
+  public net.minecraft.text.Text getDisplayName();
+  public java.lang.String getName();
+  public net.minecraft.command.permission.PermissionPredicate getPermissions();
+  public net.minecraft.util.math.Vec3d getPosition();
+  public net.minecraft.server.world.ServerWorld getWorld();
+  public net.minecraft.entity.Entity getEntity();
+  public net.minecraft.entity.Entity getEntityOrThrow() throws com.mojang.brigadier.exceptions.CommandSyntaxException;
+  public net.minecraft.server.network.ServerPlayerEntity getPlayerOrThrow() throws com.mojang.brigadier.exceptions.CommandSyntaxException;
+  public net.minecraft.server.network.ServerPlayerEntity getPlayer();
+  public boolean isExecutedByPlayer();
+  public net.minecraft.util.math.Vec2f getRotation();
+  public net.minecraft.server.MinecraftServer getServer();
+  public net.minecraft.command.argument.EntityAnchorArgumentType$EntityAnchor getEntityAnchor();
+  public net.minecraft.network.message.SignedCommandArguments getSignedArguments();
+  public net.minecraft.util.thread.FutureQueue getMessageChainTaskQueue();
+  public boolean shouldFilterText(net.minecraft.server.network.ServerPlayerEntity);
+  public void sendChatMessage(net.minecraft.network.message.SentMessage, boolean, net.minecraft.network.message.MessageType$Parameters);
+  public void sendMessage(net.minecraft.text.Text);
+  public void sendFeedback(java.util.function.Supplier<net.minecraft.text.Text>, boolean);
+  public void sendError(net.minecraft.text.Text);
+  public net.minecraft.command.ReturnValueConsumer getReturnValueConsumer();
+  public java.util.Collection<java.lang.String> getPlayerNames();
+  public java.util.Collection<java.lang.String> getTeamNames();
+  public java.util.stream.Stream<net.minecraft.util.Identifier> getSoundIds();
+  public java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> getCompletions(com.mojang.brigadier.context.CommandContext<?>);
+  public java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> listIdSuggestions(net.minecraft.registry.RegistryKey<? extends net.minecraft.registry.Registry<?>>, net.minecraft.command.CommandSource$SuggestedIdType, com.mojang.brigadier.suggestion.SuggestionsBuilder, com.mojang.brigadier.context.CommandContext<?>);
+  public java.util.Set<net.minecraft.registry.RegistryKey<net.minecraft.world.World>> getWorldKeys();
+  public net.minecraft.registry.DynamicRegistryManager getRegistryManager();
+  public net.minecraft.resource.featuretoggle.FeatureSet getEnabledFeatures();
+  public com.mojang.brigadier.CommandDispatcher<net.minecraft.server.command.ServerCommandSource> getDispatcher();
+  public void handleException(com.mojang.brigadier.exceptions.CommandExceptionType, com.mojang.brigadier.Message, boolean, net.minecraft.server.function.Tracer);
+  public boolean isSilent();
+  public net.minecraft.server.command.AbstractServerCommandSource withReturnValueConsumer(net.minecraft.command.ReturnValueConsumer);
+  static {};
+  }
+===== net.minecraft.entity.Entity   ~/(elocit)/
+  public boolean velocityDirty;
+  public net.minecraft.util.math.BlockPos getVelocityAffectingPos();
+  protected float getJumpVelocityMultiplier();
+  protected float getVelocityMultiplier();
+  public void updateVelocity(float, net.minecraft.util.math.Vec3d);
+  protected static net.minecraft.util.math.Vec3d movementInputToVelocity(net.minecraft.util.math.Vec3d, float, float);
+  public void addVelocity(net.minecraft.util.math.Vec3d);
+  public void addVelocity(double, double, double);
+  protected void scheduleVelocityUpdate();
+  public void setVelocityClient(net.minecraft.util.math.Vec3d);
+  public net.minecraft.util.math.Vec3d getVelocity();
+  public void setVelocity(net.minecraft.util.math.Vec3d);
+  public void addVelocityInternal(net.minecraft.util.math.Vec3d);
+  public void setVelocity(double, double, double);
+===== net.minecraft.entity.player.PlayerEntity   ~/(rofile|getName)/
+  public net.minecraft.entity.player.PlayerEntity(net.minecraft.world.World, com.mojang.authlib.GameProfile);
+  public com.mojang.authlib.GameProfile getGameProfile();
+  public net.minecraft.text.Text getName();
+  public java.lang.String getNameForScoreboard();
+===== net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket   ~/./
+  Compiled from "EntityVelocityUpdateS2CPacket.java"
+  public class net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket implements net.minecraft.network.packet.Packet<net.minecraft.network.listener.ClientPlayPacketListener> {
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.PacketByteBuf, net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket> CODEC;
+  public net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(net.minecraft.entity.Entity);
+  public net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(int, net.minecraft.util.math.Vec3d);
+  public net.minecraft.network.packet.PacketType<net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket> getPacketType();
+  public void apply(net.minecraft.network.listener.ClientPlayPacketListener);
+  public int getEntityId();
+  public net.minecraft.util.math.Vec3d getVelocity();
+  public void apply(net.minecraft.network.listener.PacketListener);
+  static {};
+  }
+===== net.minecraft.particle.ParticleTypes   ~/(FIREWORK)/
+  public static final net.minecraft.particle.SimpleParticleType FIREWORK;
+===== net.minecraft.item.Items   ~/(^  public static final net.minecraft.item.Item (COOKIE|CAKE|EXPERIENCE_BOTTLE|EMERALD);)/
+  public static final net.minecraft.item.Item EMERALD;
+  public static final net.minecraft.item.Item CAKE;
+  public static final net.minecraft.item.Item COOKIE;
+  public static final net.minecraft.item.Item EXPERIENCE_BOTTLE;
+===== net.minecraft.item.ItemStack   ~/./
+  Compiled from "ItemStack.java"
+  public final class net.minecraft.item.ItemStack implements net.minecraft.component.ComponentHolder {
+  public static final com.mojang.serialization.MapCodec<net.minecraft.item.ItemStack> MAP_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.item.ItemStack> CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.item.ItemStack> UNCOUNTED_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.item.ItemStack> VALIDATED_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.item.ItemStack> VALIDATED_UNCOUNTED_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.item.ItemStack> OPTIONAL_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.item.ItemStack> REGISTRY_ENTRY_CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.item.ItemStack> OPTIONAL_PACKET_CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.item.ItemStack> LENGTH_PREPENDED_OPTIONAL_PACKET_CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.item.ItemStack> PACKET_CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, java.util.List<net.minecraft.item.ItemStack>> OPTIONAL_LIST_PACKET_CODEC;
+  public static final net.minecraft.item.ItemStack EMPTY;
+  final net.minecraft.component.MergedComponentMap components;
+  public static com.mojang.serialization.DataResult<net.minecraft.item.ItemStack> validate(net.minecraft.item.ItemStack);
+  public static net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.item.ItemStack> createExtraValidatingPacketCodec(net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.item.ItemStack>);
+  public java.util.Optional<net.minecraft.item.tooltip.TooltipData> getTooltipData();
+  public net.minecraft.component.ComponentMap getComponents();
+  public net.minecraft.component.ComponentMap getDefaultComponents();
+  public net.minecraft.component.ComponentChanges getComponentChanges();
+  public net.minecraft.component.ComponentMap getImmutableComponents();
+  public boolean hasChangedComponent(net.minecraft.component.ComponentType<?>);
+  public net.minecraft.item.ItemStack(net.minecraft.item.ItemConvertible);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>, int, net.minecraft.component.ComponentChanges);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>, int);
+  public net.minecraft.item.ItemStack(net.minecraft.item.ItemConvertible, int);
+  public static com.mojang.serialization.DataResult<net.minecraft.util.Unit> validateComponents(net.minecraft.component.ComponentMap);
+  public boolean isEmpty();
+  public boolean isItemEnabled(net.minecraft.resource.featuretoggle.FeatureSet);
+  public net.minecraft.item.ItemStack split(int);
+  public net.minecraft.item.ItemStack copyAndEmpty();
+  public net.minecraft.item.Item getItem();
+  public net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item> getRegistryEntry();
+  public boolean isIn(net.minecraft.registry.tag.TagKey<net.minecraft.item.Item>);
+  public boolean isOf(net.minecraft.item.Item);
+  public boolean itemMatches(java.util.function.Predicate<net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>>);
+  public boolean itemMatches(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>);
+  public boolean isIn(net.minecraft.registry.entry.RegistryEntryList<net.minecraft.item.Item>);
+  public java.util.stream.Stream<net.minecraft.registry.tag.TagKey<net.minecraft.item.Item>> streamTags();
+  public net.minecraft.util.ActionResult useOnBlock(net.minecraft.item.ItemUsageContext);
+  public float getMiningSpeedMultiplier(net.minecraft.block.BlockState);
+  public net.minecraft.util.ActionResult use(net.minecraft.world.World, net.minecraft.entity.player.PlayerEntity, net.minecraft.util.Hand);
+  public net.minecraft.item.ItemStack finishUsing(net.minecraft.world.World, net.minecraft.entity.LivingEntity);
+  public int getMaxCount();
+  public boolean isStackable();
+  public boolean isDamageable();
+  public boolean isDamaged();
+  public int getDamage();
+  public void setDamage(int);
+  public int getMaxDamage();
+  public boolean shouldBreak();
+  public boolean willBreakNextUse();
+  public void damage(int, net.minecraft.server.world.ServerWorld, net.minecraft.server.network.ServerPlayerEntity, java.util.function.Consumer<net.minecraft.item.Item>);
+  public void damage(int, net.minecraft.entity.player.PlayerEntity);
+  public void damage(int, net.minecraft.entity.LivingEntity, net.minecraft.util.Hand);
+  public void damage(int, net.minecraft.entity.LivingEntity, net.minecraft.entity.EquipmentSlot);
+  public net.minecraft.item.ItemStack damage(int, net.minecraft.item.ItemConvertible, net.minecraft.entity.LivingEntity, net.minecraft.entity.EquipmentSlot);
+  public boolean isItemBarVisible();
+  public int getItemBarStep();
+  public int getItemBarColor();
+  public boolean onStackClicked(net.minecraft.screen.slot.Slot, net.minecraft.util.ClickType, net.minecraft.entity.player.PlayerEntity);
+  public boolean onClicked(net.minecraft.item.ItemStack, net.minecraft.screen.slot.Slot, net.minecraft.util.ClickType, net.minecraft.entity.player.PlayerEntity, net.minecraft.inventory.StackReference);
+  public boolean postHit(net.minecraft.entity.LivingEntity, net.minecraft.entity.LivingEntity);
+  public void postDamageEntity(net.minecraft.entity.LivingEntity, net.minecraft.entity.LivingEntity);
+  public void postMine(net.minecraft.world.World, net.minecraft.block.BlockState, net.minecraft.util.math.BlockPos, net.minecraft.entity.player.PlayerEntity);
+  public boolean isSuitableFor(net.minecraft.block.BlockState);
+  public net.minecraft.util.ActionResult useOnEntity(net.minecraft.entity.player.PlayerEntity, net.minecraft.entity.LivingEntity, net.minecraft.util.Hand);
+  public net.minecraft.item.ItemStack copy();
+  public net.minecraft.item.ItemStack copyWithCount(int);
+  public net.minecraft.item.ItemStack withItem(net.minecraft.item.ItemConvertible);
+  public net.minecraft.item.ItemStack copyComponentsToNewStack(net.minecraft.item.ItemConvertible, int);
+  public static boolean areEqual(net.minecraft.item.ItemStack, net.minecraft.item.ItemStack);
+  public static boolean stacksEqual(java.util.List<net.minecraft.item.ItemStack>, java.util.List<net.minecraft.item.ItemStack>);
+  public static boolean areItemsEqual(net.minecraft.item.ItemStack, net.minecraft.item.ItemStack);
+  public static boolean areItemsAndComponentsEqual(net.minecraft.item.ItemStack, net.minecraft.item.ItemStack);
+  public static boolean shouldSkipHandAnimationOnSwap(net.minecraft.item.ItemStack, net.minecraft.item.ItemStack, java.util.function.Predicate<net.minecraft.component.ComponentType<?>>);
+  public static com.mojang.serialization.MapCodec<net.minecraft.item.ItemStack> createOptionalCodec(java.lang.String);
+  public static int hashCode(net.minecraft.item.ItemStack);
+  public static int listHashCode(java.util.List<net.minecraft.item.ItemStack>);
+  public java.lang.String toString();
+  public void inventoryTick(net.minecraft.world.World, net.minecraft.entity.Entity, net.minecraft.entity.EquipmentSlot);
+  public void onCraftByPlayer(net.minecraft.entity.player.PlayerEntity, int);
+  public void onCraftByCrafter(net.minecraft.world.World);
+  public int getMaxUseTime(net.minecraft.entity.LivingEntity);
+  public net.minecraft.item.consume.UseAction getUseAction();
+  public void onStoppedUsing(net.minecraft.world.World, net.minecraft.entity.LivingEntity, int);
+  public void emitUseGameEvent(net.minecraft.entity.Entity, net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.world.event.GameEvent>);
+  public boolean isUsedOnRelease();
+  public <T> T set(net.minecraft.component.ComponentType<T>, T);
+  public <T> T set(net.minecraft.component.Component<T>);
+  public <T> void copy(net.minecraft.component.ComponentType<T>, net.minecraft.component.ComponentsAccess);
+  public <T, U> T apply(net.minecraft.component.ComponentType<T>, T, U, java.util.function.BiFunction<T, U, T>);
+  public <T> T apply(net.minecraft.component.ComponentType<T>, T, java.util.function.UnaryOperator<T>);
+  public <T> T remove(net.minecraft.component.ComponentType<? extends T>);
+  public void applyChanges(net.minecraft.component.ComponentChanges);
+  public void applyUnvalidatedChanges(net.minecraft.component.ComponentChanges);
+  public void applyComponentsFrom(net.minecraft.component.ComponentMap);
+  public net.minecraft.text.Text getName();
+  public net.minecraft.text.Text getCustomName();
+  public net.minecraft.text.Text getItemName();
+  public net.minecraft.text.Text getFormattedName();
+  public <T extends net.minecraft.item.tooltip.TooltipAppender> void appendComponentTooltip(net.minecraft.component.ComponentType<T>, net.minecraft.item.Item$TooltipContext, net.minecraft.component.type.TooltipDisplayComponent, java.util.function.Consumer<net.minecraft.text.Text>, net.minecraft.item.tooltip.TooltipType);
+  public java.util.List<net.minecraft.text.Text> getTooltip(net.minecraft.item.Item$TooltipContext, net.minecraft.entity.player.PlayerEntity, net.minecraft.item.tooltip.TooltipType);
+  public void appendTooltip(net.minecraft.item.Item$TooltipContext, net.minecraft.component.type.TooltipDisplayComponent, net.minecraft.entity.player.PlayerEntity, net.minecraft.item.tooltip.TooltipType, java.util.function.Consumer<net.minecraft.text.Text>);
+  public boolean hasGlint();
+  public net.minecraft.util.Rarity getRarity();
+  public boolean isEnchantable();
+  public void addEnchantment(net.minecraft.registry.entry.RegistryEntry<net.minecraft.enchantment.Enchantment>, int);
+  public boolean hasEnchantments();
+  public net.minecraft.component.type.ItemEnchantmentsComponent getEnchantments();
+  public boolean isInFrame();
+  public void setHolder(net.minecraft.entity.Entity);
+  public net.minecraft.entity.decoration.ItemFrameEntity getFrame();
+  public net.minecraft.entity.Entity getHolder();
+  public void applyAttributeModifier(net.minecraft.component.type.AttributeModifierSlot, org.apache.commons.lang3.function.TriConsumer<net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute>, net.minecraft.entity.attribute.EntityAttributeModifier, net.minecraft.component.type.AttributeModifiersComponent$Display>);
+  public void applyAttributeModifiers(net.minecraft.entity.EquipmentSlot, java.util.function.BiConsumer<net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute>, net.minecraft.entity.attribute.EntityAttributeModifier>);
+  public net.minecraft.text.Text toHoverableText();
+  public net.minecraft.component.type.SwingAnimationComponent getSwingAnimation();
+  public boolean canPlaceOn(net.minecraft.block.pattern.CachedBlockPosition);
+  public boolean canBreak(net.minecraft.block.pattern.CachedBlockPosition);
+  public int getBobbingAnimationTime();
+  public void setBobbingAnimationTime(int);
+  public int getCount();
+  public void setCount(int);
+  public void capCount(int);
+  public void increment(int);
+  public void decrement(int);
+  public void decrementUnlessCreative(int, net.minecraft.entity.LivingEntity);
+  public net.minecraft.item.ItemStack splitUnlessCreative(int, net.minecraft.entity.LivingEntity);
+  public void usageTick(net.minecraft.world.World, net.minecraft.entity.LivingEntity, int);
+  public void onItemEntityDestroyed(net.minecraft.entity.ItemEntity);
+  public boolean takesDamageFrom(net.minecraft.entity.damage.DamageSource);
+  public boolean canRepairWith(net.minecraft.item.ItemStack);
+  public boolean canMine(net.minecraft.block.BlockState, net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.entity.player.PlayerEntity);
+  public net.minecraft.entity.damage.DamageSource getDamageSource(net.minecraft.entity.LivingEntity, java.util.function.Supplier<net.minecraft.entity.damage.DamageSource>);
+  static {};
+  }
+===== net.minecraft.server.world.ServerWorld   ~/(getOtherEntities|getEntitiesByClass)/
+===== net.minecraft.world.World   ~/(getOtherEntities)/
+  public java.util.List<net.minecraft.entity.Entity> getOtherEntities(net.minecraft.entity.Entity, net.minecraft.util.math.Box, java.util.function.Predicate<? super net.minecraft.entity.Entity>);
+===== net.minecraft.command.permission.PermissionPredicate   ~/./
+  Compiled from "PermissionPredicate.java"
+  public interface net.minecraft.command.permission.PermissionPredicate {
+  public static final net.minecraft.command.permission.PermissionPredicate NONE;
+  public static final net.minecraft.command.permission.PermissionPredicate ALL;
+  public abstract boolean hasPermission(net.minecraft.command.permission.Permission);
+  public default net.minecraft.command.permission.PermissionPredicate or(net.minecraft.command.permission.PermissionPredicate);
+  static {};
+  }
+===== net.minecraft.command.permission.PermissionLevel   ~/./
+  Compiled from "PermissionLevel.java"
+  public final class net.minecraft.command.permission.PermissionLevel extends java.lang.Enum<net.minecraft.command.permission.PermissionLevel> implements net.minecraft.util.StringIdentifiable {
+  public static final net.minecraft.command.permission.PermissionLevel ALL;
+  public static final net.minecraft.command.permission.PermissionLevel MODERATORS;
+  public static final net.minecraft.command.permission.PermissionLevel GAMEMASTERS;
+  public static final net.minecraft.command.permission.PermissionLevel ADMINS;
+  public static final net.minecraft.command.permission.PermissionLevel OWNERS;
+  public static final com.mojang.serialization.Codec<net.minecraft.command.permission.PermissionLevel> CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.command.permission.PermissionLevel> NUMERIC_CODEC;
+  public static net.minecraft.command.permission.PermissionLevel[] values();
+  public static net.minecraft.command.permission.PermissionLevel valueOf(java.lang.String);
+  public boolean isAtLeast(net.minecraft.command.permission.PermissionLevel);
+  public static net.minecraft.command.permission.PermissionLevel fromLevel(int);
+  public int getLevel();
+  public java.lang.String asString();
+  static {};
+  }
+===== net.minecraft.command.CommandSource   ~/./
+  Compiled from "CommandSource.java"
+  public interface net.minecraft.command.CommandSource extends net.minecraft.command.permission.PermissionSource {
+  public static final com.google.common.base.CharMatcher SUGGESTION_MATCH_PREFIX;
+  public abstract java.util.Collection<java.lang.String> getPlayerNames();
+  public default java.util.Collection<java.lang.String> getChatSuggestions();
+  public default java.util.Collection<java.lang.String> getEntitySuggestions();
+  public abstract java.util.Collection<java.lang.String> getTeamNames();
+  public abstract java.util.stream.Stream<net.minecraft.util.Identifier> getSoundIds();
+  public abstract java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> getCompletions(com.mojang.brigadier.context.CommandContext<?>);
+  public default java.util.Collection<net.minecraft.command.CommandSource$RelativePosition> getBlockPositionSuggestions();
+  public default java.util.Collection<net.minecraft.command.CommandSource$RelativePosition> getPositionSuggestions();
+  public abstract java.util.Set<net.minecraft.registry.RegistryKey<net.minecraft.world.World>> getWorldKeys();
+  public abstract net.minecraft.registry.DynamicRegistryManager getRegistryManager();
+  public abstract net.minecraft.resource.featuretoggle.FeatureSet getEnabledFeatures();
+  public default void suggestIdentifiers(net.minecraft.registry.RegistryWrapper<?>, net.minecraft.command.CommandSource$SuggestedIdType, com.mojang.brigadier.suggestion.SuggestionsBuilder);
+  public static <S> java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> listSuggestions(com.mojang.brigadier.context.CommandContext<S>, com.mojang.brigadier.suggestion.SuggestionsBuilder, net.minecraft.registry.RegistryKey<? extends net.minecraft.registry.Registry<?>>, net.minecraft.command.CommandSource$SuggestedIdType);
+  public abstract java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> listIdSuggestions(net.minecraft.registry.RegistryKey<? extends net.minecraft.registry.Registry<?>>, net.minecraft.command.CommandSource$SuggestedIdType, com.mojang.brigadier.suggestion.SuggestionsBuilder, com.mojang.brigadier.context.CommandContext<?>);
+  public static <T> void forEachMatching(java.lang.Iterable<T>, java.lang.String, java.util.function.Function<T, net.minecraft.util.Identifier>, java.util.function.Consumer<T>);
+  public static <T> void forEachMatching(java.lang.Iterable<T>, java.lang.String, java.lang.String, java.util.function.Function<T, net.minecraft.util.Identifier>, java.util.function.Consumer<T>);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestIdentifiers(java.lang.Iterable<net.minecraft.util.Identifier>, com.mojang.brigadier.suggestion.SuggestionsBuilder, java.lang.String);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestIdentifiers(java.util.stream.Stream<net.minecraft.util.Identifier>, com.mojang.brigadier.suggestion.SuggestionsBuilder, java.lang.String);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestIdentifiers(java.lang.Iterable<net.minecraft.util.Identifier>, com.mojang.brigadier.suggestion.SuggestionsBuilder);
+  public static <T> java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestFromIdentifier(java.lang.Iterable<T>, com.mojang.brigadier.suggestion.SuggestionsBuilder, java.util.function.Function<T, net.minecraft.util.Identifier>, java.util.function.Function<T, com.mojang.brigadier.Message>);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestIdentifiers(java.util.stream.Stream<net.minecraft.util.Identifier>, com.mojang.brigadier.suggestion.SuggestionsBuilder);
+  public static <T> java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestFromIdentifier(java.util.stream.Stream<T>, com.mojang.brigadier.suggestion.SuggestionsBuilder, java.util.function.Function<T, net.minecraft.util.Identifier>, java.util.function.Function<T, com.mojang.brigadier.Message>);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestPositions(java.lang.String, java.util.Collection<net.minecraft.command.CommandSource$RelativePosition>, com.mojang.brigadier.suggestion.SuggestionsBuilder, java.util.function.Predicate<java.lang.String>);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestColumnPositions(java.lang.String, java.util.Collection<net.minecraft.command.CommandSource$RelativePosition>, com.mojang.brigadier.suggestion.SuggestionsBuilder, java.util.function.Predicate<java.lang.String>);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestMatching(java.lang.Iterable<java.lang.String>, com.mojang.brigadier.suggestion.SuggestionsBuilder);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestMatching(java.util.stream.Stream<java.lang.String>, com.mojang.brigadier.suggestion.SuggestionsBuilder);
+  public static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestMatching(java.lang.String[], com.mojang.brigadier.suggestion.SuggestionsBuilder);
+  public static <T> java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> suggestMatching(java.lang.Iterable<T>, com.mojang.brigadier.suggestion.SuggestionsBuilder, java.util.function.Function<T, java.lang.String>, java.util.function.Function<T, com.mojang.brigadier.Message>);
+  public static boolean shouldSuggest(java.lang.String, java.lang.String);
+  static {};
+  }
+===== net.minecraft.server.command.AbstractServerCommandSource   ~/./
+  Compiled from "AbstractServerCommandSource.java"
+  public interface net.minecraft.server.command.AbstractServerCommandSource<T extends net.minecraft.server.command.AbstractServerCommandSource<T>> extends net.minecraft.command.permission.PermissionSource {
+  public abstract T withReturnValueConsumer(net.minecraft.command.ReturnValueConsumer);
+  public abstract net.minecraft.command.ReturnValueConsumer getReturnValueConsumer();
+  public default T withDummyReturnValueConsumer();
+  public abstract com.mojang.brigadier.CommandDispatcher<T> getDispatcher();
+  public abstract void handleException(com.mojang.brigadier.exceptions.CommandExceptionType, com.mojang.brigadier.Message, boolean, net.minecraft.server.function.Tracer);
+  public abstract boolean isSilent();
+  public default void handleException(com.mojang.brigadier.exceptions.CommandSyntaxException, boolean, net.minecraft.server.function.Tracer);
+  public static <T extends net.minecraft.server.command.AbstractServerCommandSource<T>> com.mojang.brigadier.ResultConsumer<T> asResultConsumer();
+  }
+===== net.minecraft.server.PlayerManager   ~/(isOperator|getOpList|areCheatsAllowed)/
+  public boolean isOperator(net.minecraft.server.PlayerConfigEntry);
+  public net.minecraft.server.OperatorList getOpList();
+  public boolean areCheatsAllowed();
+===== net.minecraft.command.permission.PermissionSource   ~/./
+  Compiled from "PermissionSource.java"
+  public interface net.minecraft.command.permission.PermissionSource {
+  public abstract net.minecraft.command.permission.PermissionPredicate getPermissions();
+  }
+===== net.minecraft.command.permission.Permission   ~/./
+  Compiled from "Permission.java"
+  public interface net.minecraft.command.permission.Permission {
+  public static final com.mojang.serialization.Codec<net.minecraft.command.permission.Permission> UNABBREVIATED_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.command.permission.Permission> CODEC;
+  public abstract com.mojang.serialization.MapCodec<? extends net.minecraft.command.permission.Permission> getCodec();
+  static {};
+  }
+===== net.minecraft.command.permission.PermissionLevel   ~/./
+  Compiled from "PermissionLevel.java"
+  public final class net.minecraft.command.permission.PermissionLevel extends java.lang.Enum<net.minecraft.command.permission.PermissionLevel> implements net.minecraft.util.StringIdentifiable {
+  public static final net.minecraft.command.permission.PermissionLevel ALL;
+  public static final net.minecraft.command.permission.PermissionLevel MODERATORS;
+  public static final net.minecraft.command.permission.PermissionLevel GAMEMASTERS;
+  public static final net.minecraft.command.permission.PermissionLevel ADMINS;
+  public static final net.minecraft.command.permission.PermissionLevel OWNERS;
+  public static final com.mojang.serialization.Codec<net.minecraft.command.permission.PermissionLevel> CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.command.permission.PermissionLevel> NUMERIC_CODEC;
+  public static net.minecraft.command.permission.PermissionLevel[] values();
+  public static net.minecraft.command.permission.PermissionLevel valueOf(java.lang.String);
+  public boolean isAtLeast(net.minecraft.command.permission.PermissionLevel);
+  public static net.minecraft.command.permission.PermissionLevel fromLevel(int);
+  public int getLevel();
+  public java.lang.String asString();
+  static {};
+  }
+===== net.minecraft.entity.effect.StatusEffects   ~/(LEVITATION|BLINDNESS)/
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> BLINDNESS;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> LEVITATION;
+===== net.minecraft.scoreboard.Team   ~/(setPrefix|setSuffix)/
+  public void setPrefix(net.minecraft.text.Text);
+  public void setSuffix(net.minecraft.text.Text);
+===== net.minecraft.text.Text   ~/(empty)/
+  public static net.minecraft.text.MutableText empty();
+===== net.minecraft.server.world.ServerWorld   ~/(locateStructure|getPointOfInterestStorage|getStructureAccessor)/
+  public net.minecraft.world.gen.StructureAccessor getStructureAccessor();
+  public net.minecraft.util.math.BlockPos locateStructure(net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure>, net.minecraft.util.math.BlockPos, int, boolean);
+  public net.minecraft.world.poi.PointOfInterestStorage getPointOfInterestStorage();
+===== net.minecraft.registry.tag.StructureTags   ~/./
+  Compiled from "StructureTags.java"
+  public interface net.minecraft.registry.tag.StructureTags {
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> EYE_OF_ENDER_LOCATED;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> DOLPHIN_LOCATED;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_WOODLAND_EXPLORER_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_OCEAN_EXPLORER_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_SAVANNA_VILLAGE_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_DESERT_VILLAGE_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_PLAINS_VILLAGE_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_TAIGA_VILLAGE_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_SNOWY_VILLAGE_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_JUNGLE_EXPLORER_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_SWAMP_EXPLORER_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_TREASURE_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> ON_TRIAL_CHAMBERS_MAPS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> CATS_SPAWN_IN;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> CATS_SPAWN_AS_BLACK;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> VILLAGE;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> MINESHAFT;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> SHIPWRECK;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> RUINED_PORTAL;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.world.gen.structure.Structure> OCEAN_RUIN;
+  static {};
+  }
+===== net.minecraft.registry.RegistryKeys   ~/(STRUCTURE|BIOME)/
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<com.mojang.serialization.MapCodec<? extends net.minecraft.world.biome.source.BiomeSource>>> BIOME_SOURCE;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.structure.StructurePieceType>> STRUCTURE_PIECE;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.gen.chunk.placement.StructurePlacementType<?>>> STRUCTURE_PLACEMENT;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.structure.pool.StructurePoolElementType<?>>> STRUCTURE_POOL_ELEMENT;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.structure.processor.StructureProcessorType<?>>> STRUCTURE_PROCESSOR;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.gen.structure.StructureType<?>>> STRUCTURE_TYPE;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.biome.Biome>> BIOME;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterList>> MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.structure.StructureSet>> STRUCTURE_SET;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.gen.structure.Structure>> STRUCTURE;
+===== net.minecraft.world.gen.structure.Structure   ~/(getType)/
+  public abstract net.minecraft.world.gen.structure.StructureType<?> getType();
+===== net.minecraft.entity.LivingEntity   ~/(canHaveStatusEffect|addStatusEffect|getArmor|getStatusEffects)/
+  public java.util.Collection<net.minecraft.entity.effect.StatusEffectInstance> getStatusEffects();
+  public final boolean addStatusEffect(net.minecraft.entity.effect.StatusEffectInstance);
+  public boolean addStatusEffect(net.minecraft.entity.effect.StatusEffectInstance, net.minecraft.entity.Entity);
+  public boolean canHaveStatusEffect(net.minecraft.entity.effect.StatusEffectInstance);
+  public int getArmor();
+  public float getArmorVisibility();
+===== net.minecraft.entity.effect.StatusEffect   ~/(getCategory|isBeneficial|isInstant|getName)/
+  public boolean isInstant();
+  public net.minecraft.text.Text getName();
+  public net.minecraft.entity.effect.StatusEffectCategory getCategory();
+  public boolean isBeneficial();
+===== net.minecraft.entity.effect.StatusEffectCategory   ~/./
+  Compiled from "StatusEffectCategory.java"
+  public final class net.minecraft.entity.effect.StatusEffectCategory extends java.lang.Enum<net.minecraft.entity.effect.StatusEffectCategory> {
+  public static final net.minecraft.entity.effect.StatusEffectCategory BENEFICIAL;
+  public static final net.minecraft.entity.effect.StatusEffectCategory HARMFUL;
+  public static final net.minecraft.entity.effect.StatusEffectCategory NEUTRAL;
+  public static net.minecraft.entity.effect.StatusEffectCategory[] values();
+  public static net.minecraft.entity.effect.StatusEffectCategory valueOf(java.lang.String);
+  public net.minecraft.util.Formatting getFormatting();
+  static {};
+  }
+===== net.minecraft.entity.effect.StatusEffects   ~/(NIGHT_VISION|MINING_FATIGUE|HASTE|POISON|LEVITATION|BLINDNESS|SLOWNESS|WEAKNESS|WITHER|REGENERATION|SPEED|STRENGTH|DARKNESS)/
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> SPEED;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> SLOWNESS;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> HASTE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> MINING_FATIGUE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> STRENGTH;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> REGENERATION;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> BLINDNESS;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> NIGHT_VISION;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> WEAKNESS;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> POISON;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> WITHER;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> LEVITATION;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> DARKNESS;
+===== net.minecraft.entity.passive.WolfEntity   ~/(setTamed|setOwner|WolfEntity\(|setSitting)/
+  public net.minecraft.entity.passive.WolfEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.passive.WolfEntity>, net.minecraft.world.World);
+===== net.minecraft.entity.passive.TameableEntity   ~/(setTamed|setOwner|setSitting)/
+  public void setTamed(boolean, boolean);
+  public void setOwner(net.minecraft.entity.LivingEntity);
+  public void setOwner(net.minecraft.entity.LazyEntityReference<net.minecraft.entity.LivingEntity>);
+  public void setTamedBy(net.minecraft.entity.player.PlayerEntity);
+  public void setSitting(boolean);
+===== net.minecraft.entity.passive.VillagerEntity   ~/(VillagerEntity\()/
+  public net.minecraft.entity.passive.VillagerEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.passive.VillagerEntity>, net.minecraft.world.World);
+  public net.minecraft.entity.passive.VillagerEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.passive.VillagerEntity>, net.minecraft.world.World, net.minecraft.registry.RegistryKey<net.minecraft.village.VillagerType>);
+  public net.minecraft.entity.passive.VillagerEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.passive.VillagerEntity>, net.minecraft.world.World, net.minecraft.registry.entry.RegistryEntry<net.minecraft.village.VillagerType>);
+===== net.minecraft.entity.EntityType   ~/(WOLF|VILLAGER|FIREWORK_ROCKET|spawn|create)/
+  public static final net.minecraft.entity.EntityType<net.minecraft.entity.projectile.FireworkRocketEntity> FIREWORK_ROCKET;
+  public static final net.minecraft.entity.EntityType<net.minecraft.entity.passive.VillagerEntity> VILLAGER;
+  public static final net.minecraft.entity.EntityType<net.minecraft.entity.passive.WolfEntity> WOLF;
+  public static final net.minecraft.entity.EntityType<net.minecraft.entity.mob.ZombieVillagerEntity> ZOMBIE_VILLAGER;
+  public T spawnFromItemStack(net.minecraft.server.world.ServerWorld, net.minecraft.item.ItemStack, net.minecraft.entity.LivingEntity, net.minecraft.util.math.BlockPos, net.minecraft.entity.SpawnReason, boolean, boolean);
+  public T spawn(net.minecraft.server.world.ServerWorld, net.minecraft.util.math.BlockPos, net.minecraft.entity.SpawnReason);
+  public T spawn(net.minecraft.server.world.ServerWorld, java.util.function.Consumer<T>, net.minecraft.util.math.BlockPos, net.minecraft.entity.SpawnReason, boolean, boolean);
+  public T create(net.minecraft.server.world.ServerWorld, java.util.function.Consumer<T>, net.minecraft.util.math.BlockPos, net.minecraft.entity.SpawnReason, boolean, boolean);
+  public T create(net.minecraft.world.World, net.minecraft.entity.SpawnReason);
+===== net.minecraft.entity.projectile.FireworkRocketEntity   ~/(FireworkRocketEntity\()/
+  public net.minecraft.entity.projectile.FireworkRocketEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.projectile.FireworkRocketEntity>, net.minecraft.world.World);
+  public net.minecraft.entity.projectile.FireworkRocketEntity(net.minecraft.world.World, double, double, double, net.minecraft.item.ItemStack);
+  public net.minecraft.entity.projectile.FireworkRocketEntity(net.minecraft.world.World, net.minecraft.entity.Entity, double, double, double, net.minecraft.item.ItemStack);
+  public net.minecraft.entity.projectile.FireworkRocketEntity(net.minecraft.world.World, net.minecraft.item.ItemStack, net.minecraft.entity.LivingEntity);
+  public net.minecraft.entity.projectile.FireworkRocketEntity(net.minecraft.world.World, net.minecraft.item.ItemStack, double, double, double, boolean);
+  public net.minecraft.entity.projectile.FireworkRocketEntity(net.minecraft.world.World, net.minecraft.item.ItemStack, net.minecraft.entity.Entity, double, double, double, boolean);
+===== net.minecraft.component.DataComponentTypes   ~/(FIREWORKS|FIREWORK_EXPLOSION)/
+  public static final net.minecraft.component.ComponentType<net.minecraft.component.type.FireworkExplosionComponent> FIREWORK_EXPLOSION;
+  public static final net.minecraft.component.ComponentType<net.minecraft.component.type.FireworksComponent> FIREWORKS;
+===== net.minecraft.component.type.FireworksComponent   ~/./
+  Compiled from "FireworksComponent.java"
+  public final class net.minecraft.component.type.FireworksComponent extends java.lang.Record implements net.minecraft.item.tooltip.TooltipAppender {
+  public static final int MAX_EXPLOSIONS;
+  public static final com.mojang.serialization.Codec<net.minecraft.component.type.FireworksComponent> CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<io.netty.buffer.ByteBuf, net.minecraft.component.type.FireworksComponent> PACKET_CODEC;
+  public net.minecraft.component.type.FireworksComponent(int, java.util.List<net.minecraft.component.type.FireworkExplosionComponent>);
+  public void appendTooltip(net.minecraft.item.Item$TooltipContext, java.util.function.Consumer<net.minecraft.text.Text>, net.minecraft.item.tooltip.TooltipType, net.minecraft.component.ComponentsAccess);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public int flightDuration();
+  public java.util.List<net.minecraft.component.type.FireworkExplosionComponent> explosions();
+  static {};
+  }
+===== net.minecraft.component.type.FireworkExplosionComponent   ~/./
+  Compiled from "FireworkExplosionComponent.java"
+  public final class net.minecraft.component.type.FireworkExplosionComponent extends java.lang.Record implements net.minecraft.item.tooltip.TooltipAppender {
+  public static final net.minecraft.component.type.FireworkExplosionComponent DEFAULT;
+  public static final com.mojang.serialization.Codec<it.unimi.dsi.fastutil.ints.IntList> COLORS_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.component.type.FireworkExplosionComponent> CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<io.netty.buffer.ByteBuf, net.minecraft.component.type.FireworkExplosionComponent> PACKET_CODEC;
+  public net.minecraft.component.type.FireworkExplosionComponent(net.minecraft.component.type.FireworkExplosionComponent$Type, it.unimi.dsi.fastutil.ints.IntList, it.unimi.dsi.fastutil.ints.IntList, boolean, boolean);
+  public void appendTooltip(net.minecraft.item.Item$TooltipContext, java.util.function.Consumer<net.minecraft.text.Text>, net.minecraft.item.tooltip.TooltipType, net.minecraft.component.ComponentsAccess);
+  public void appendOptionalTooltip(java.util.function.Consumer<net.minecraft.text.Text>);
+  public net.minecraft.component.type.FireworkExplosionComponent withFadeColors(it.unimi.dsi.fastutil.ints.IntList);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.component.type.FireworkExplosionComponent$Type shape();
+  public it.unimi.dsi.fastutil.ints.IntList colors();
+  public it.unimi.dsi.fastutil.ints.IntList fadeColors();
+  public boolean hasTrail();
+  public boolean hasTwinkle();
+  static {};
+  }
+===== net.minecraft.item.ItemStack   ~/(set\(|get\(|ItemStack\()/
+  public net.minecraft.item.ItemStack(net.minecraft.item.ItemConvertible);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>, int, net.minecraft.component.ComponentChanges);
+  public net.minecraft.item.ItemStack(net.minecraft.registry.entry.RegistryEntry<net.minecraft.item.Item>, int);
+  public net.minecraft.item.ItemStack(net.minecraft.item.ItemConvertible, int);
+  public <T> T set(net.minecraft.component.ComponentType<T>, T);
+  public <T> T set(net.minecraft.component.Component<T>);
+===== net.minecraft.sound.SoundEvents   ~/(ENTITY_WARDEN_|BLOCK_BEACON_DEACTIVATE|ENTITY_VILLAGER_|ENTITY_WOLF_|BLOCK_NOTE_BLOCK|UI_TOAST)/
+  public static final net.minecraft.sound.SoundEvent BLOCK_BEACON_DEACTIVATE;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_BASEDRUM;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_BASS;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_BELL;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_CHIME;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_FLUTE;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_GUITAR;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_HARP;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_HAT;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_PLING;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_SNARE;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_XYLOPHONE;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_IRON_XYLOPHONE;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_COW_BELL;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_DIDGERIDOO;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_BIT;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_BANJO;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_IMITATE_ZOMBIE;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_IMITATE_SKELETON;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_IMITATE_CREEPER;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_IMITATE_ENDER_DRAGON;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_IMITATE_WITHER_SKELETON;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_NOTE_BLOCK_IMITATE_PIGLIN;
+  public static final net.minecraft.sound.SoundEvent UI_TOAST_CHALLENGE_COMPLETE;
+  public static final net.minecraft.sound.SoundEvent UI_TOAST_IN;
+  public static final net.minecraft.sound.SoundEvent UI_TOAST_OUT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_CELEBRATE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_NO;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_TRADE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_YES;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_ARMORER;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_BUTCHER;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_CARTOGRAPHER;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_CLERIC;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_FARMER;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_FISHERMAN;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_FLETCHER;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_LEATHERWORKER;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_LIBRARIAN;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_MASON;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_SHEPHERD;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_TOOLSMITH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_VILLAGER_WORK_WEAPONSMITH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_AGITATED;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_ANGRY;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_ATTACK_IMPACT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_DIG;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_EMERGE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_HEARTBEAT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_LISTENING;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_LISTENING_ANGRY;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_NEARBY_CLOSE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_NEARBY_CLOSER;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_NEARBY_CLOSEST;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_ROAR;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_SNIFF;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_SONIC_BOOM;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_SONIC_CHARGE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_STEP;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WARDEN_TENDRIL_CLICKS;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WOLF_SHAKE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WOLF_STEP;
+===== net.minecraft.particle.ParticleTypes   ~/(DUST$|FIREWORK|CRIT|LAVA|WAX_OFF)/
+  public static final net.minecraft.particle.SimpleParticleType CRIT;
+  public static final net.minecraft.particle.SimpleParticleType DRIPPING_LAVA;
+  public static final net.minecraft.particle.SimpleParticleType FALLING_LAVA;
+  public static final net.minecraft.particle.SimpleParticleType LANDING_LAVA;
+  public static final net.minecraft.particle.SimpleParticleType FIREWORK;
+  public static final net.minecraft.particle.SimpleParticleType LAVA;
+  public static final net.minecraft.particle.SimpleParticleType DRIPPING_DRIPSTONE_LAVA;
+  public static final net.minecraft.particle.SimpleParticleType FALLING_DRIPSTONE_LAVA;
+  public static final net.minecraft.particle.SimpleParticleType WAX_OFF;
+===== net.minecraft.particle.DustParticleEffect   ~/./
+  Compiled from "DustParticleEffect.java"
+  public class net.minecraft.particle.DustParticleEffect extends net.minecraft.particle.AbstractDustParticleEffect {
+  public static final int RED;
+  public static final net.minecraft.particle.DustParticleEffect DEFAULT;
+  public static final com.mojang.serialization.MapCodec<net.minecraft.particle.DustParticleEffect> CODEC;
+  public static final net.minecraft.network.codec.PacketCodec<net.minecraft.network.RegistryByteBuf, net.minecraft.particle.DustParticleEffect> PACKET_CODEC;
+  public net.minecraft.particle.DustParticleEffect(int, float);
+  public net.minecraft.particle.ParticleType<net.minecraft.particle.DustParticleEffect> getType();
+  public org.joml.Vector3f getColor();
+  static {};
+  }
+===== net.minecraft.util.math.BlockPos   ~/(BlockPos\(|toShortString|getX)/
+  public net.minecraft.util.math.BlockPos(int, int, int);
+  public net.minecraft.util.math.BlockPos(net.minecraft.util.math.Vec3i);
+===== net.minecraft.server.world.ServerWorld   ~/(spawnEntity|getEntitiesByClass)/
+  public boolean spawnEntity(net.minecraft.entity.Entity);
+===== net.minecraft.entity.Entity   ~/(refreshPositionAndAngles|isSneaking|setPosition|getBlockPos)/
+  public final void setPosition(net.minecraft.util.math.Vec3d);
+  public void setPosition(double, double, double);
+  public void refreshPositionAndAngles(net.minecraft.util.math.BlockPos, float, float);
+  public void refreshPositionAndAngles(net.minecraft.util.math.Vec3d, float, float);
+  public void refreshPositionAndAngles(double, double, double, float, float);
+  public final void resetPosition();
+  public boolean isSneaking();
+  public void setPosition(net.minecraft.entity.EntityPosition, java.util.Set<net.minecraft.network.packet.s2c.play.PositionFlag>);
+  public void setPosition(net.minecraft.entity.EntityPosition, net.minecraft.entity.EntityPosition, java.util.Set<net.minecraft.network.packet.s2c.play.PositionFlag>);
+  public net.minecraft.util.math.BlockPos getBlockPos();
+===== net.minecraft.entity.player.PlayerEntity   ~/(isSneaking|getInventory|getArmorItems)/
+  public net.minecraft.entity.player.PlayerInventory getInventory();
+===== net.minecraft.item.Items   ~/(MACE|TOTEM_OF_UNDYING|NETHERITE_)/
+  public static final net.minecraft.item.Item NETHERITE_BLOCK;
+  public static final net.minecraft.item.Item NETHERITE_INGOT;
+  public static final net.minecraft.item.Item NETHERITE_SCRAP;
+  public static final net.minecraft.item.Item NETHERITE_SWORD;
+  public static final net.minecraft.item.Item NETHERITE_SHOVEL;
+  public static final net.minecraft.item.Item NETHERITE_PICKAXE;
+  public static final net.minecraft.item.Item NETHERITE_AXE;
+  public static final net.minecraft.item.Item NETHERITE_HOE;
+  public static final net.minecraft.item.Item NETHERITE_HELMET;
+  public static final net.minecraft.item.Item NETHERITE_CHESTPLATE;
+  public static final net.minecraft.item.Item NETHERITE_LEGGINGS;
+  public static final net.minecraft.item.Item NETHERITE_BOOTS;
+  public static final net.minecraft.item.Item MACE;
+  public static final net.minecraft.item.Item NETHERITE_HORSE_ARMOR;
+  public static final net.minecraft.item.Item NETHERITE_SPEAR;
+  public static final net.minecraft.item.Item TOTEM_OF_UNDYING;
+  public static final net.minecraft.item.Item NETHERITE_NAUTILUS_ARMOR;
+  public static final net.minecraft.item.Item NETHERITE_UPGRADE_SMITHING_TEMPLATE;
+===== net.minecraft.item.ItemStack   ~/(isOf|getItem|getDamage|setDamage|getMaxDamage|isDamageable|damage\()/
+  public net.minecraft.item.Item getItem();
+  public boolean isOf(net.minecraft.item.Item);
+  public boolean isDamageable();
+  public int getDamage();
+  public void setDamage(int);
+  public int getMaxDamage();
+  public void damage(int, net.minecraft.server.world.ServerWorld, net.minecraft.server.network.ServerPlayerEntity, java.util.function.Consumer<net.minecraft.item.Item>);
+  public void damage(int, net.minecraft.entity.player.PlayerEntity);
+  public void damage(int, net.minecraft.entity.LivingEntity, net.minecraft.util.Hand);
+  public void damage(int, net.minecraft.entity.LivingEntity, net.minecraft.entity.EquipmentSlot);
+  public net.minecraft.item.ItemStack damage(int, net.minecraft.item.ItemConvertible, net.minecraft.entity.LivingEntity, net.minecraft.entity.EquipmentSlot);
+  public int getItemBarStep();
+  public int getItemBarColor();
+  public net.minecraft.text.Text getItemName();
+  public net.minecraft.entity.damage.DamageSource getDamageSource(net.minecraft.entity.LivingEntity, java.util.function.Supplier<net.minecraft.entity.damage.DamageSource>);
+===== net.minecraft.entity.player.PlayerEntity   ~/(getOffHandStack|getMainHandStack|getStackInHand|isUsingItem)/
+===== net.minecraft.entity.LivingEntity   ~/(getEquippedStack|equipStack|damageArmor|getOffHandStack|getMainHandStack|getWeaponStack)/
+  protected void damageArmor(net.minecraft.entity.damage.DamageSource, float);
+  public net.minecraft.item.ItemStack getMainHandStack();
+  public net.minecraft.item.ItemStack getOffHandStack();
+  public net.minecraft.item.ItemStack getWeaponStack();
+  public net.minecraft.item.ItemStack getEquippedStack(net.minecraft.entity.EquipmentSlot);
+  public void equipStack(net.minecraft.entity.EquipmentSlot, net.minecraft.item.ItemStack);
+===== net.minecraft.registry.tag.DamageTypeTags   ~/./
+  Compiled from "DamageTypeTags.java"
+  public interface net.minecraft.registry.tag.DamageTypeTags {
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> DAMAGES_HELMET;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_ARMOR;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_SHIELD;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_INVULNERABILITY;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_COOLDOWN;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_EFFECTS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_RESISTANCE;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_ENCHANTMENTS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_FIRE;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_PROJECTILE;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> WITCH_RESISTANT_TO;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_EXPLOSION;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_FALL;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_DROWNING;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_FREEZING;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_LIGHTNING;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> NO_ANGER;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> NO_IMPACT;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> ALWAYS_MOST_SIGNIFICANT_FALL;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> WITHER_IMMUNE_TO;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IGNITES_ARMOR_STANDS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BURNS_ARMOR_STANDS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> AVOIDS_GUARDIAN_THORNS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> ALWAYS_TRIGGERS_SILVERFISH;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> ALWAYS_HURTS_ENDER_DRAGONS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> NO_KNOCKBACK;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> ALWAYS_KILLS_ARMOR_STANDS;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> CAN_BREAK_ARMOR_STAND;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BYPASSES_WOLF_ARMOR;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> IS_PLAYER_ATTACK;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> BURN_FROM_STEPPING;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> PANIC_CAUSES;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> PANIC_ENVIRONMENTAL_CAUSES;
+  public static final net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType> MACE_SMASH;
+  static {};
+  }
+===== net.minecraft.entity.damage.DamageTypes   ~/(EXPLOSION|PLAYER_EXPLOSION|MACE_SMASH|FALL)/
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType> FALL;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType> FALLING_BLOCK;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType> FALLING_ANVIL;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType> FALLING_STALACTITE;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType> EXPLOSION;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType> PLAYER_EXPLOSION;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType> MACE_SMASH;
+===== net.minecraft.entity.damage.DamageSource   ~/(isOf|isIn|getSource|getAttacker|getTypeRegistryEntry)/
+  public net.minecraft.entity.Entity getSource();
+  public net.minecraft.entity.Entity getAttacker();
+  public boolean isIn(net.minecraft.registry.tag.TagKey<net.minecraft.entity.damage.DamageType>);
+  public boolean isOf(net.minecraft.registry.RegistryKey<net.minecraft.entity.damage.DamageType>);
+  public net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.damage.DamageType> getTypeRegistryEntry();
+===== net.minecraft.world.World   ~/(NETHER|OVERWORLD|END|getRegistryKey|getDimension|getDimensionEntry)/
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.world.World> OVERWORLD;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.world.World> NETHER;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.world.World> END;
+  public net.minecraft.world.dimension.DimensionType getDimension();
+  public net.minecraft.registry.entry.RegistryEntry<net.minecraft.world.dimension.DimensionType> getDimensionEntry();
+  public net.minecraft.registry.RegistryKey<net.minecraft.world.World> getRegistryKey();
+===== net.minecraft.registry.RegistryKeys   ~/(WORLD|DIMENSION|DAMAGE_TYPE)/
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.entity.damage.DamageType>> DAMAGE_TYPE;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.dimension.DimensionType>> DIMENSION_TYPE;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.gen.WorldPreset>> WORLD_PRESET;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.World>> WORLD;
+  public static final net.minecraft.registry.RegistryKey<net.minecraft.registry.Registry<net.minecraft.world.dimension.DimensionOptions>> DIMENSION;
+===== net.minecraft.entity.mob.MobEntity   ~/(setTarget|getTarget|isPersistent)/
+  public net.minecraft.entity.LivingEntity getTarget();
+  protected final net.minecraft.entity.LivingEntity getTargetInBrain();
+  public void setTarget(net.minecraft.entity.LivingEntity);
+  public boolean isPersistent();
+===== net.minecraft.entity.mob.HostileEntity   ~/./
+  Compiled from "HostileEntity.java"
+  public abstract class net.minecraft.entity.mob.HostileEntity extends net.minecraft.entity.mob.PathAwareEntity implements net.minecraft.entity.mob.Monster {
+  protected net.minecraft.entity.mob.HostileEntity(net.minecraft.entity.EntityType<? extends net.minecraft.entity.mob.HostileEntity>, net.minecraft.world.World);
+  public net.minecraft.sound.SoundCategory getSoundCategory();
+  public void tickMovement();
+  protected void updateDespawnCounter();
+  protected net.minecraft.sound.SoundEvent getSwimSound();
+  protected net.minecraft.sound.SoundEvent getSplashSound();
+  protected net.minecraft.sound.SoundEvent getHurtSound(net.minecraft.entity.damage.DamageSource);
+  protected net.minecraft.sound.SoundEvent getDeathSound();
+  public net.minecraft.entity.LivingEntity$FallSounds getFallSounds();
+  public float getPathfindingFavor(net.minecraft.util.math.BlockPos, net.minecraft.world.WorldView);
+  public static boolean isSpawnDark(net.minecraft.world.ServerWorldAccess, net.minecraft.util.math.BlockPos, net.minecraft.util.math.random.Random);
+  public static boolean canSpawnInDark(net.minecraft.entity.EntityType<? extends net.minecraft.entity.mob.MobEntity>, net.minecraft.world.ServerWorldAccess, net.minecraft.entity.SpawnReason, net.minecraft.util.math.BlockPos, net.minecraft.util.math.random.Random);
+  public static boolean canSpawnIgnoreLightLevel(net.minecraft.entity.EntityType<? extends net.minecraft.entity.mob.HostileEntity>, net.minecraft.world.WorldAccess, net.minecraft.entity.SpawnReason, net.minecraft.util.math.BlockPos, net.minecraft.util.math.random.Random);
+  public static boolean canSpawnInDarkUnderSky(net.minecraft.entity.EntityType<? extends net.minecraft.entity.mob.MobEntity>, net.minecraft.world.ServerWorldAccess, net.minecraft.entity.SpawnReason, net.minecraft.util.math.BlockPos, net.minecraft.util.math.random.Random);
+  public static net.minecraft.entity.attribute.DefaultAttributeContainer$Builder createHostileAttributes();
+  public boolean shouldDropExperience();
+  protected boolean shouldDropLoot(net.minecraft.server.world.ServerWorld);
+  public boolean isAngryAt(net.minecraft.server.world.ServerWorld, net.minecraft.entity.player.PlayerEntity);
+  public net.minecraft.item.ItemStack getProjectileType(net.minecraft.item.ItemStack);
+  }
+===== net.minecraft.entity.mob.Angerable   ~/(stopAnger|setAngryAt|setTarget)/
+  public abstract void setAngryAt(net.minecraft.entity.LazyEntityReference<net.minecraft.entity.LivingEntity>);
+  public default void stopAnger();
+  public abstract void setTarget(net.minecraft.entity.LivingEntity);
+===== net.minecraft.entity.mob.PathAwareEntity   ~/(setTarget)/
+===== net.minecraft.sound.SoundEvents   ~/(ITEM_MACE|ITEM_SHIELD|ITEM_TOTEM|ENTITY_ZOMBIE_|ENTITY_WITHER_|BLOCK_RESPAWN_ANCHOR|ENTITY_IRON_GOLEM_DAMAGE|ITEM_ARMOR_EQUIP|BLOCK_ANVIL|ENTITY_GENERIC_EXPLODE)/
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_BREAK;
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_DESTROY;
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_FALL;
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_HIT;
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_LAND;
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_PLACE;
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_STEP;
+  public static final net.minecraft.sound.SoundEvent BLOCK_ANVIL_USE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_CHAIN;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_DIAMOND;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_ELYTRA;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_GENERIC;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_GOLD;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_IRON;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_LEATHER;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_COPPER;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_NETHERITE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_TURTLE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_WOLF;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> ITEM_ARMOR_EQUIP_NAUTILUS;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> ENTITY_GENERIC_EXPLODE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_IRON_GOLEM_DAMAGE;
+  public static final net.minecraft.sound.SoundEvent ITEM_MACE_SMASH_AIR;
+  public static final net.minecraft.sound.SoundEvent ITEM_MACE_SMASH_GROUND;
+  public static final net.minecraft.sound.SoundEvent ITEM_MACE_SMASH_GROUND_HEAVY;
+  public static final net.minecraft.sound.SoundEvent BLOCK_RESPAWN_ANCHOR_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent BLOCK_RESPAWN_ANCHOR_CHARGE;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> BLOCK_RESPAWN_ANCHOR_DEPLETE;
+  public static final net.minecraft.sound.SoundEvent BLOCK_RESPAWN_ANCHOR_SET_SPAWN;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> ITEM_SHIELD_BLOCK;
+  public static final net.minecraft.registry.entry.RegistryEntry$Reference<net.minecraft.sound.SoundEvent> ITEM_SHIELD_BREAK;
+  public static final net.minecraft.sound.SoundEvent ITEM_TOTEM_USE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_BREAK_BLOCK;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_SHOOT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_SKELETON_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_SKELETON_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_SKELETON_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_SKELETON_STEP;
+  public static final net.minecraft.sound.SoundEvent ENTITY_WITHER_SPAWN;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_ATTACK_IRON_DOOR;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_BREAK_WOODEN_DOOR;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_CONVERTED_TO_DROWNED;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_DESTROY_EGG;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_HORSE_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_HORSE_ANGRY;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_HORSE_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_HORSE_EAT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_HORSE_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_INFECT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_LAND;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_EAT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT_LAND;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_NAUTILUS_SWIM;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_STEP;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_VILLAGER_AMBIENT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_VILLAGER_CONVERTED;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_VILLAGER_CURE;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_VILLAGER_DEATH;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_VILLAGER_HURT;
+  public static final net.minecraft.sound.SoundEvent ENTITY_ZOMBIE_VILLAGER_STEP;
+===== net.minecraft.particle.ParticleTypes   ~/(SOUL_FIRE_FLAME|SCULK|ASH|WHITE_ASH|LARGE_SMOKE|CRIMSON|WARPED|EXPLOSION)/
+  public static final net.minecraft.particle.SimpleParticleType EXPLOSION_EMITTER;
+  public static final net.minecraft.particle.SimpleParticleType EXPLOSION;
+  public static final net.minecraft.particle.SimpleParticleType SCULK_SOUL;
+  public static final net.minecraft.particle.ParticleType<net.minecraft.particle.SculkChargeParticleEffect> SCULK_CHARGE;
+  public static final net.minecraft.particle.SimpleParticleType SCULK_CHARGE_POP;
+  public static final net.minecraft.particle.SimpleParticleType SOUL_FIRE_FLAME;
+  public static final net.minecraft.particle.ParticleType<net.minecraft.particle.TintedParticleEffect> FLASH;
+  public static final net.minecraft.particle.SimpleParticleType LARGE_SMOKE;
+  public static final net.minecraft.particle.SimpleParticleType SPLASH;
+  public static final net.minecraft.particle.SimpleParticleType ASH;
+  public static final net.minecraft.particle.SimpleParticleType CRIMSON_SPORE;
+  public static final net.minecraft.particle.SimpleParticleType WARPED_SPORE;
+  public static final net.minecraft.particle.SimpleParticleType WHITE_ASH;
+===== net.minecraft.entity.effect.StatusEffects   ~/(RESISTANCE|ABSORPTION|HEALTH_BOOST|STRENGTH|SPEED)/
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> SPEED;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> STRENGTH;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> RESISTANCE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> FIRE_RESISTANCE;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> HEALTH_BOOST;
+  public static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> ABSORPTION;
+
+[Incubating] Problems report is available at: file:///home/runner/work/soulmod/soulmod/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 32s
+1 actionable task: 1 executed
