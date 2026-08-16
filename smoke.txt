@@ -1,0 +1,85 @@
+# smoke test for f6dcc3e399fa419c7ef93d5bb6406ee7243dc977
+
+## did the server start?
+1
+
+## Soul Souls log lines
+Note: /home/runner/work/soulmod/soulmod/src/main/java/com/soulsouls/SoulSouls.java uses or overrides a deprecated API.
+ - Mod 'Soul Souls' (soulsouls) 1.4.0 recommends any version of fabric-api, which is missing!
+	- soulsouls 1.4.0
+[21:49:17] [main/INFO] (Soul Souls) Soul Souls ready
+[21:49:20] [Server thread/INFO] (Soul Souls) Loaded 16 Souls and Soul data for 0 players
+
+## mixin
+
+## errors / exceptions
+53:[21:49:18] [main/ERROR] (Minecraft) No key layers in MapLike[{}]
+
+## generated config
+config/soulsouls.json exists:
+{
+  "config_version": 2,
+  "assign_on_first_join": true,
+  "announce_assignment_to_server": false,
+  "use_scoreboard_teams": true,
+  "rgb_tab_list_names": true,
+  "assignment_sound": "minecraft:entity.ender_dragon.growl",
+  "nameplate_hearts": true,
+  "nameplate_heart": "❤",
+  "assignment_ceremony_seconds": 6.0,
+  "assignment_blindness": true,
+  "assignment_fall_grace_seconds": 10.0,
+  "soul_voice_lines": true,
+  "patience_sounds": true,
+  "death_sound": "minecraft:block.beacon.deactivate",
+  "death_sound_pitch": 2.0,
+  "ability_tick_interval": 5,
+  "autosave_interval_seconds": 60,
+  "determination_refuse_chance": 40.0,
+  "allow_player_reset": true,
+  "souls": {
+    "determination": {
+      "enabled": true,
+      "color": "#FF0000",
+      "heart_left": "",
+      "heart_right": "",
+      "chance": 1.0,
+      "rarity": "legendary",
+      "difficulty": "LEGENDARY",
+      "max_health": 30.0,
+      "values": {
+        "refuse_resistance_seconds": 5.0,
+        "refuse_cooldown_seconds": 300.0,
+        "refuse_health_restored": 6.0,
+        "refuse_requires_no_totem": 1.0,
+        "true_player_radius": 10.0,
+        "true_player_slowness_amplifier": 5.0,
+        "true_player_kills_required": 10.0,
+        "true_player_duration_seconds": 10.0,
+        "true_player_strength_amplifier": 4.0
+      }
+    },
+    "patience": {
+      "enabled": true,
+      "color": "#00FFFF",
+      "heart_left": "",
+      "heart_right": "",
+      "chance": 20.0,
+      "rarity": "common",
+      "difficulty": "NORMAL",
+      "max_health": 20.0,
+      "values": {
+        "patience_fade_minutes": 10.0,
+        "patience_max_bonus_hearts": 10.0,
+        "patience_grow_minutes": 1.0
+      }
+    },
+    "bravery": {
+      "enabled": true,
+      "color": "#FF8000",
+
+## world data dir
+total 12
+drwxr-xr-x  2 runner runner 4096 Aug 16 21:49 .
+drwxr-xr-x 11 runner runner 4096 Aug 16 21:49 ..
+-rw-r--r--  1 runner runner    2 Aug 16 21:49 players.json
