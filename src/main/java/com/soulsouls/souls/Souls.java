@@ -8,6 +8,7 @@ import com.soulsouls.souls.ability.BraveryMomentumAbility;
 import com.soulsouls.souls.ability.BraveryStoredDamageAbility;
 import com.soulsouls.souls.ability.CourageDashAbility;
 import com.soulsouls.souls.ability.DedicationAbility;
+import com.soulsouls.souls.ability.DedicationMissionAbility;
 import com.soulsouls.souls.ability.CuriosityAbility;
 import com.soulsouls.souls.ability.FunAbility;
 import com.soulsouls.souls.ability.FunPartyAbility;
@@ -162,13 +163,14 @@ public final class Souls {
 
         // ---------------------------------------------------------------- Dedication
         SoulRegistry.register(Soul.builder("dedication", "DEDICATION")
-                .color(0xFF9BE0)
+                .color(0x6F47DE)
                 .rarity(SoulRarity.VERY_RARE)
                 .difficulty(SoulDifficulty.EXTREME)
                 .description("Refuses to be finished until it is ready.")
                 .chance(1.0)
                 .maxHealth(20.0)
                 .ability(new DedicationAbility())
+                .ability(new DedicationMissionAbility())
                 .build());
 
         // ---------------------------------------------------------------- Hatred / Regret
@@ -208,7 +210,6 @@ public final class Souls {
         // ---------------------------------------------------------------- Humility
         SoulRegistry.register(Soul.builder("humility", "HUMILITY")
                 .color(0x404040)
-                .hearts("\uD83E\uDE76", "\uD83E\udD0D")
                 .rarity(SoulRarity.UNCOMMON)
                 .difficulty(SoulDifficulty.HARD)
                 .description("It believes it is the weaker one, until it hits back.")
@@ -231,7 +232,6 @@ public final class Souls {
         // ---------------------------------------------------------------- Memory
         SoulRegistry.register(Soul.builder("memory", "MEMORY")
                 .color(0xFFD700)
-                .hearts("\uD83D\udC99", "\uD83D\udC9B")
                 .rarity(SoulRarity.RARE)
                 .difficulty(SoulDifficulty.EASY)
                 .description("It forgets nothing: not a face, not a place it fell.")

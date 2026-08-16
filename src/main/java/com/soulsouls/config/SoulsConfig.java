@@ -34,7 +34,7 @@ public class SoulsConfig {
     // ------------------------------------------------------------------ global settings
 
     /** Bumped by the mod when the format changes; do not edit. */
-    public int config_version = 1;
+    public int config_version = 2;
 
     /** Give players a Soul automatically the first time they join. */
     public boolean assign_on_first_join = true;
@@ -203,8 +203,48 @@ public class SoulsConfig {
         return config;
     }
 
+    /**
+     * Brings an older config file up to date.
+     *
+     * <p>Only ever touches values that the mod itself wrote and that a later version
+     * changed its mind about, and only when they are still exactly what the old version
+     * put there - a value the owner has edited by hand is always left alone.
+     */
+    private void migrate() {
+        if (this.config_version < 2) {
+            // 1.4.0: every Soul's hearts are drawn in that Soul's own hex colour, so the
+            // two Souls that used coloured emoji (which ignore text colour entirely, and
+            // are missing from Minecraft's own font) go back to the shared heart.
+            clearEmojiHearts("humility", "\uD83E\uDE76", "\uD83E\uDD0D");
+            clearEmojiHearts("memory", "\uD83D\uDC99", "\uD83D\uDC9B");
+
+            // 1.4.0: Dedication's colour changed to #6F47DE.
+            SoulConfig dedication = this.souls.get("dedication");
+            if (dedication != null && "#FF9BE0".equalsIgnoreCase(dedication.color)) {
+                dedication.color = "#6F47DE";
+            }
+
+            this.config_version = 2;
+        }
+    }
+
+    private void clearEmojiHearts(String soulId, String oldLeft, String oldRight) {
+        SoulConfig soul = this.souls.get(soulId);
+        if (soul == null) {
+            return;
+        }
+        if (oldLeft.equals(soul.heart_left)) {
+            soul.heart_left = "";
+        }
+        if (oldRight.equals(soul.heart_right)) {
+            soul.heart_right = "";
+        }
+    }
+
     /** Adds anything the file is missing and clamps values that would break the game. */
     private void sanitise() {
+        migrate();
+
         this.ability_tick_interval = Math.max(1, Math.min(100, this.ability_tick_interval));
         this.autosave_interval_seconds = Math.max(5, Math.min(3600, this.autosave_interval_seconds));
         this.determination_refuse_chance = clampPercent(this.determination_refuse_chance);

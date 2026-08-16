@@ -45,7 +45,10 @@ public class RefuseDeathAbility implements SoulAbility {
         return Map.of(
                 "refuse_cooldown_seconds", 300.0,
                 "refuse_health_restored", 6.0,
-                "refuse_resistance_seconds", 5.0
+                "refuse_resistance_seconds", 5.0,
+                // 1: a held Totem of Undying takes priority and Determination stands down,
+                // so the two never spend themselves on the same death. 0: refuse anyway.
+                "refuse_requires_no_totem", 1.0
         );
     }
 
@@ -64,6 +67,10 @@ public class RefuseDeathAbility implements SoulAbility {
                 Text.literal("  Cooldown: ")
                         .formatted(Formatting.GRAY)
                         .append(Text.literal((int) ctx.value("refuse_cooldown_seconds") + "s")
+                                .formatted(Formatting.WHITE)),
+                Text.literal("  Only while you are ").formatted(Formatting.GRAY)
+                        .append(Text.literal(ctx.value("refuse_requires_no_totem") > 0.0
+                                ? "not holding a Totem of Undying" : "holding anything at all")
                                 .formatted(Formatting.WHITE))
         );
     }
@@ -71,6 +78,14 @@ public class RefuseDeathAbility implements SoulAbility {
     @Override
     public boolean allowDeath(AbilityContext ctx, DamageSource source, float amount) {
         if (!ctx.isVulnerable() || !ctx.isReady(COOLDOWN)) {
+            return true;
+        }
+
+        // A Totem of Undying does this job already. Determination steps aside and lets the
+        // totem pop, rather than burning a 5-minute cooldown to save a player who was
+        // never going to die - and rather than wasting the totem to save one who wasn't.
+        if (ctx.value("refuse_requires_no_totem") > 0.0
+                && com.soulsouls.util.SoulCombat.holdingTotem(ctx.player())) {
             return true;
         }
 

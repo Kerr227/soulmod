@@ -70,6 +70,9 @@ public final class SoulManager {
      */
     private final java.util.Set<UUID> deathBypass = new java.util.HashSet<>();
 
+    /** Players whose current hit is a reduced re-application, so ability hooks are skipped. */
+    private final java.util.Set<UUID> damageBypass = new java.util.HashSet<>();
+
     private boolean dirty;
     private long lastSaveMillis = System.currentTimeMillis();
     private int tickCounter;
@@ -333,6 +336,7 @@ public final class SoulManager {
         this.lastPositions.remove(player.getUuid());
         this.movedSinceLastTick.remove(player.getUuid());
         this.deathBypass.remove(player.getUuid());
+        this.damageBypass.remove(player.getUuid());
         saveNow();
     }
 
@@ -429,6 +433,11 @@ public final class SoulManager {
     // ------------------------------------------------------------------ event dispatch
 
     public boolean allowDamage(ServerPlayerEntity player, DamageSource source, float amount) {
+        // A hit an ability already reduced and re-applied. Let it through untouched.
+        if (this.damageBypass.contains(player.getUuid())) {
+            return true;
+        }
+
         PlayerSoulData data = dataOf(player);
 
         // The assignment ceremony lifts the player into the air, so it owes them a safe
@@ -572,6 +581,35 @@ public final class SoulManager {
             player.damage(player.getEntityWorld(), source, Float.MAX_VALUE);
         } finally {
             this.deathBypass.remove(uuid);
+        }
+    }
+
+    /**
+     * Applies a reduced version of a hit that an ability just cancelled.
+     *
+     * <p>Fabric's damage event is all-or-nothing - an ability can refuse a hit but cannot
+     * ask for "half of it". Integrity's 50% TNT resistance is therefore done by cancelling
+     * the blast and immediately re-applying it at the reduced size. This runs while the
+     * player is inside the bypass set, so the re-applied hit does not fire the Soul's
+     * {@code allowDamage} hooks a second time and loop.
+     *
+     * <p>Everything downstream of the damage - armour wear, knockback, hurt animation,
+     * death handling - still happens exactly as vanilla does it, because this is a real
+     * damage call rather than a health edit.
+     */
+    public void damageBypassingSouls(ServerPlayerEntity player, DamageSource source, float amount) {
+        if (amount <= 0.0F) {
+            return;
+        }
+        UUID uuid = player.getUuid();
+        if (!this.damageBypass.add(uuid)) {
+            // Already re-applying a hit for this player: never recurse.
+            return;
+        }
+        try {
+            player.damage(player.getEntityWorld(), source, amount);
+        } finally {
+            this.damageBypass.remove(uuid);
         }
     }
 
